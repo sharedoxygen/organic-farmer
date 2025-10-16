@@ -1,0 +1,327 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-6);
+    gap: var(--spacing-4);
+}
+
+.titleSection {
+    flex: 1;
+}
+
+.title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin: 0 0 var(--spacing-2);
+}
+
+.subtitle {
+    color: var(--text-medium);
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+.headerActions {
+    display: flex;
+    gap: var(--spacing-3);
+    flex-shrink: 0;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-6);
+}
+
+.tab {
+    padding: var(--spacing-3) var(--spacing-4);
+    background: none;
+    border: none;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-medium);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.tab:hover {
+    color: var(--text-dark);
+    background: var(--hover-bg);
+}
+
+.tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: var(--primary-subtle);
+}
+
+.inventorySection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.summary {
+    margin-bottom: var(--spacing-6);
+}
+
+.summaryCard {
+    padding: var(--spacing-6);
+}
+
+.summaryCard h3 {
+    margin: 0 0 var(--spacing-4);
+    color: var(--text-dark);
+}
+
+.summaryStats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.summaryItem {
+    text-align: center;
+}
+
+.summaryNumber {
+    display: block;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-1);
+}
+
+.summaryLabel {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+.seedTable {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.tableHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+}
+
+.tableHeader h3 {
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.tableFilters {
+    display: flex;
+    gap: var(--spacing-3);
+}
+
+.filter {
+    padding: var(--spacing-2) var(--spacing-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    font-size: var(--font-size-sm);
+}
+
+.table {
+    width: 100%;
+}
+
+.tableHead {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr 1fr 1.5fr;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr 1fr 1.5fr;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+    border-bottom: 1px solid var(--border-color-subtle);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.tableRow:hover {
+    background: var(--hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tableRow:active {
+    transform: translateY(0);
+}
+
+.tableCell {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+.varietyInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0_5);
+}
+
+.varietyInfo strong {
+    color: var(--text-dark);
+}
+
+.varietyInfo small {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.stockInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0_5);
+}
+
+.stockCurrent {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+}
+
+.stockMin {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-weight: var(--font-weight-medium);
+    text-transform: capitalize;
+}
+
+.germination {
+    font-weight: var(--font-weight-medium);
+    color: var(--success-color);
+}
+
+.harvestDays {
+    color: var(--text-medium);
+}
+
+.cost {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-dark);
+}
+
+.actionButtons {
+    display: flex;
+    gap: var(--spacing-2);
+    position: relative;
+    z-index: 1;
+}
+
+.actionButtons button {
+    cursor: pointer;
+}
+
+.varietiesSection,
+.ordersSection {
+    padding: var(--spacing-6);
+}
+
+.comingSoon {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--text-medium);
+}
+
+.comingSoonIcon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-4);
+}
+
+.comingSoon h4 {
+    margin: 0 0 var(--spacing-2);
+    color: var(--text-dark);
+}
+
+.comingSoon p {
+    margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .container {
+        padding: var(--spacing-4);
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .summaryStats {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .tableHeader {
+        flex-direction: column;
+        gap: var(--spacing-3);
+        align-items: stretch;
+    }
+
+    .tableFilters {
+        justify-content: stretch;
+    }
+
+    .filter {
+        flex: 1;
+    }
+
+    .tableHead,
+    .tableRow {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-1);
+    }
+
+    .tableCell {
+        justify-content: space-between;
+        padding: var(--spacing-2) 0;
+        border-bottom: 1px solid var(--border-color-subtle);
+    }
+
+    .tableCell::before {
+        content: attr(data-label);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-dark);
+    }
+
+    .actionButtons {
+        justify-content: flex-end;
+    }
+}

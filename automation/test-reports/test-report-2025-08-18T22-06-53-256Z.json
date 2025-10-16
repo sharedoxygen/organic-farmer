@@ -1,0 +1,51 @@
+{
+  "startTime": "2025-08-18T22:05:27.067Z",
+  "endTime": "2025-08-18T22:06:53.256Z",
+  "totalTests": 4,
+  "passedTests": 0,
+  "failedTests": 4,
+  "sections": {
+    "authentication-auth": {
+      "passed": false,
+      "duration": 42436,
+      "error": "page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================"
+    },
+    "navigation-navigation": {
+      "passed": false,
+      "duration": 16852,
+      "error": "page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================"
+    },
+    "planning-crops": {
+      "passed": false,
+      "duration": 16746,
+      "error": "page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================"
+    },
+    "dataIntegrity-integrity": {
+      "passed": false,
+      "duration": 6134,
+      "error": "page.waitForURL: Target page, context or browser has been closed\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================"
+    }
+  },
+  "errors": [
+    "authentication-auth: page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================",
+    "navigation-navigation: page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================",
+    "planning-crops: page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================",
+    "dataIntegrity-integrity: page.waitForURL: Target page, context or browser has been closed\n=========================== logs ===========================\nwaiting for navigation to \"**/dashboard\" until \"load\"\n============================================================"
+  ],
+  "config": {
+    "headless": true,
+    "parallel": false,
+    "baseURL": "http://localhost:3005"
+  },
+  "environment": {
+    "nodeVersion": "v23.7.0",
+    "platform": "darwin",
+    "memory": {
+      "rss": 113262592,
+      "heapTotal": 27738112,
+      "heapUsed": 25707272,
+      "external": 2884939,
+      "arrayBuffers": 365097
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "startTime": "2025-08-18T22:01:54.652Z",
+  "endTime": "2025-08-18T22:04:20.260Z",
+  "totalTests": 4,
+  "passedTests": 0,
+  "failedTests": 4,
+  "sections": {
+    "authentication-auth": {
+      "passed": false,
+      "duration": 73128,
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    },
+    "navigation-navigation": {
+      "passed": false,
+      "duration": 31025,
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    },
+    "planning-crops": {
+      "passed": false,
+      "duration": 30807,
+      "error": "page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    },
+    "dataIntegrity-integrity": {
+      "passed": false,
+      "duration": 6628,
+      "error": "page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    }
+  },
+  "errors": [
+    "authentication-auth: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n",
+    "navigation-navigation: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n",
+    "planning-crops: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n",
+    "dataIntegrity-integrity: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+  ],
+  "config": {
+    "headless": true,
+    "parallel": false,
+    "baseURL": "http://localhost:3005"
+  },
+  "environment": {
+    "nodeVersion": "v23.7.0",
+    "platform": "darwin",
+    "memory": {
+      "rss": 108281856,
+      "heapTotal": 28524544,
+      "heapUsed": 26365408,
+      "external": 2710819,
+      "arrayBuffers": 190977
+    }
+  }
+}

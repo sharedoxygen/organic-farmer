@@ -1,0 +1,471 @@
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.headerLeft h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: var(--color-text);
+}
+
+.headerLeft p {
+    margin: 0.5rem 0 0 0;
+    color: var(--color-text-secondary);
+}
+
+.headerRight {
+    display: flex;
+    gap: 1rem;
+}
+
+.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-secondary);
+}
+
+.activitySummary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summaryCard {
+    padding: 1.5rem;
+    text-align: center;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+}
+
+.summaryCard h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.summaryValue {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.usersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.userCard {
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-bg-card);
+    transition: all 0.2s;
+}
+
+.userCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-primary);
+}
+
+.userHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.userInfo h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text);
+}
+
+.email {
+    margin: 0.25rem 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.userMeta {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.activityBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: white;
+}
+
+.activityBadge.active {
+    background: #10b981;
+    animation: pulse 2s infinite;
+}
+
+.activityBadge.idle {
+    background: #f59e0b;
+}
+
+.activityBadge.inactive {
+    background: #6b7280;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.roleBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: white;
+}
+
+.sessionInfo {
+    text-align: right;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.sessionCount {
+    margin: 0;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.lastActivity {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.75rem;
+}
+
+.userDetails {
+    margin-bottom: 1.5rem;
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.detailRow:last-child {
+    border-bottom: none;
+}
+
+.detailRow span:first-child {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.detailRow span:last-child {
+    color: var(--color-text);
+    font-size: 0.875rem;
+}
+
+.active {
+    color: #10b981;
+    font-weight: 500;
+}
+
+.inactive {
+    color: #f59e0b;
+    font-weight: 500;
+}
+
+.userActions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.userActions button {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.userActions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem;
+}
+
+.emptyState h3 {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.emptyState p {
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modalContent {
+    background: var(--color-bg-card);
+    border-radius: 0.75rem;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-text);
+}
+
+.modalBody {
+    padding: 1.5rem;
+}
+
+.detailSection {
+    margin-bottom: 2rem;
+}
+
+.detailSection:last-child {
+    margin-bottom: 0;
+}
+
+.detailSection h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+}
+
+.detailGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.detailItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detailItem span:first-child {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.detailItem span:last-child {
+    color: var(--color-text);
+    font-size: 0.875rem;
+}
+
+.farmsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.farmItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: var(--color-bg-secondary);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+}
+
+.farmName {
+    font-weight: 500;
+    color: var(--color-text);
+    flex: 1;
+}
+
+.farmRole {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: white;
+    margin: 0 0.5rem;
+}
+
+.farmStatus {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.farmStatus.active {
+    color: #10b981;
+}
+
+.farmStatus.inactive {
+    color: #f59e0b;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .activitySummary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .usersGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .userHeader {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .sessionInfo {
+        text-align: left;
+    }
+
+    .userActions {
+        justify-content: flex-start;
+    }
+
+    .modalContent {
+        margin: 1rem;
+        max-height: 90vh;
+    }
+
+    .detailGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .farmItem {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .farmRole {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .activitySummary {
+        grid-template-columns: 1fr;
+    }
+
+    .userMeta {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .userActions {
+        flex-direction: column;
+    }
+
+    .userActions button {
+        width: 100%;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .error {
+        background: #7f1d1d;
+        border-color: #dc2626;
+        color: #fecaca;
+    }
+
+    .modalOverlay {
+        background: rgba(0, 0, 0, 0.7);
+    }
+}

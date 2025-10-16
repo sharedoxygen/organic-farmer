@@ -1,0 +1,405 @@
+{
+  "startTime": "2025-08-18T16:55:50.773Z",
+  "endTime": "2025-08-18T17:06:41.446Z",
+  "totalTests": 4,
+  "passedTests": 0,
+  "failedTests": 4,
+  "sections": {
+    "authentication-auth": {
+      "passed": false,
+      "duration": 80253,
+      "details": {
+        "passed": [
+          {
+            "name": "Valid Admin Login",
+            "duration": 2764
+          },
+          {
+            "name": "Invalid Login Attempts",
+            "duration": 9929
+          },
+          {
+            "name": "Logout Functionality",
+            "duration": 6515
+          },
+          {
+            "name": "Farm Context Persistence",
+            "duration": 2007
+          }
+        ],
+        "failed": [
+          {
+            "name": "Session Persistence",
+            "error": "page.textContent: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[class*=\"Header_userName\"]')\u001b[22m\n"
+          },
+          {
+            "name": "Farm Selection",
+            "error": "Farm switch failed. Expected: 🌱Curry Island MicrogreensOrganic Farming✓, Got: Curry Island Microgreens"
+          },
+          {
+            "name": "Role-Based Access Control",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Session Validation",
+            "error": "Session should be valid but validation failed"
+          },
+          {
+            "name": "Authentication API",
+            "error": "Could not extract authentication headers"
+          }
+        ],
+        "total": 9,
+        "startTime": null,
+        "endTime": null
+      }
+    },
+    "navigation-navigation": {
+      "passed": false,
+      "duration": 183460,
+      "details": {
+        "passed": [
+          {
+            "name": "Navigate to /dashboard",
+            "duration": 845
+          },
+          {
+            "name": "Navigate to /planning/crops",
+            "duration": 4147
+          },
+          {
+            "name": "Navigate to /planning/calendar",
+            "duration": 4096
+          },
+          {
+            "name": "Navigate to /planning/forecasting",
+            "duration": 4202
+          },
+          {
+            "name": "Navigate to /planning/resources",
+            "duration": 4253
+          },
+          {
+            "name": "Navigate to /production/batches",
+            "duration": 3879
+          },
+          {
+            "name": "Navigate to /production/environments",
+            "duration": 4106
+          },
+          {
+            "name": "Navigate to /production/seeds",
+            "duration": 4237
+          },
+          {
+            "name": "Navigate to /production/harvesting",
+            "duration": 4063
+          },
+          {
+            "name": "Navigate to /production/post-harvest",
+            "duration": 4032
+          },
+          {
+            "name": "Navigate to /quality/control",
+            "duration": 4312
+          },
+          {
+            "name": "Navigate to /quality/food-safety",
+            "duration": 4066
+          },
+          {
+            "name": "Navigate to /quality/organic",
+            "duration": 4052
+          },
+          {
+            "name": "Navigate to /quality/certifications",
+            "duration": 4379
+          },
+          {
+            "name": "Navigate to /quality/audits",
+            "duration": 4346
+          },
+          {
+            "name": "Navigate to /inventory/stock",
+            "duration": 4090
+          },
+          {
+            "name": "Navigate to /inventory/supplies",
+            "duration": 4081
+          },
+          {
+            "name": "Navigate to /inventory/equipment",
+            "duration": 4095
+          },
+          {
+            "name": "Navigate to /inventory/packaging",
+            "duration": 4354
+          },
+          {
+            "name": "Navigate to /sales/orders",
+            "duration": 4294
+          },
+          {
+            "name": "Navigate to /sales/b2b-customers",
+            "duration": 4094
+          },
+          {
+            "name": "Navigate to /sales/b2c-customers",
+            "duration": 4095
+          },
+          {
+            "name": "Navigate to /sales/pricing",
+            "duration": 4131
+          },
+          {
+            "name": "Navigate to /traceability/seed-to-sale",
+            "duration": 1265
+          },
+          {
+            "name": "Navigate to /traceability/lots",
+            "duration": 1043
+          },
+          {
+            "name": "Navigate to /tasks/daily",
+            "duration": 1226
+          },
+          {
+            "name": "Navigate to /tasks/work-orders",
+            "duration": 1278
+          },
+          {
+            "name": "Navigate to /tasks/assignments",
+            "duration": 1064
+          },
+          {
+            "name": "Navigate to /equipment/management",
+            "duration": 1250
+          },
+          {
+            "name": "Navigate to /equipment/maintenance",
+            "duration": 1184
+          },
+          {
+            "name": "Navigate to /equipment/sensors",
+            "duration": 1229
+          },
+          {
+            "name": "Navigate to /analytics/production",
+            "duration": 4087
+          },
+          {
+            "name": "Navigate to /analytics/financial",
+            "duration": 4187
+          },
+          {
+            "name": "Navigate to /analytics/yield",
+            "duration": 4207
+          },
+          {
+            "name": "Navigate to /analytics/market",
+            "duration": 4235
+          },
+          {
+            "name": "Navigate to /integrations",
+            "duration": 1188
+          },
+          {
+            "name": "Navigate to /admin",
+            "duration": 1055
+          },
+          {
+            "name": "Navigate to /admin/farms",
+            "duration": 4395
+          },
+          {
+            "name": "Navigate to /compliance/fda-fsma",
+            "duration": 1187
+          },
+          {
+            "name": "Navigate to /compliance/usda-organic",
+            "duration": 1108
+          },
+          {
+            "name": "Navigate to /settings/users",
+            "duration": 1261
+          },
+          {
+            "name": "Navigate to /settings/notifications",
+            "duration": 1165
+          },
+          {
+            "name": "Navigate to /settings/calculator",
+            "duration": 1119
+          },
+          {
+            "name": "Sidebar Expand/Collapse",
+            "duration": 1078
+          },
+          {
+            "name": "Breadcrumb Navigation",
+            "duration": 6417
+          },
+          {
+            "name": "Browser Navigation",
+            "duration": 4659
+          }
+        ],
+        "failed": [
+          {
+            "name": "Navigate to /sales/delivery",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Navigate to /ai-insights",
+            "error": "Test returned false"
+          }
+        ],
+        "total": 48,
+        "startTime": "2025-08-18T16:57:12.041Z",
+        "endTime": "2025-08-18T17:00:15.421Z"
+      }
+    },
+    "planning-crops": {
+      "passed": false,
+      "duration": 116417,
+      "details": {
+        "passed": [
+          {
+            "name": "Crop Plan CRUD Operations",
+            "duration": 6144
+          },
+          {
+            "name": "Multi-Tenant Isolation",
+            "duration": 1
+          }
+        ],
+        "failed": [
+          {
+            "name": "Crop Planning Page Load",
+            "error": "Expected title to contain \"Crop Planning\", got \"Organic Farm Management System (OFMS)\""
+          },
+          {
+            "name": "Create Crop Plan",
+            "error": "page.waitForSelector: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n"
+          },
+          {
+            "name": "Seed Variety Integration",
+            "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n"
+          },
+          {
+            "name": "Zone Assignment",
+            "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n"
+          },
+          {
+            "name": "Calendar Integration",
+            "error": "this.automation.testCropPlanningComplexWorkflow is not a function"
+          },
+          {
+            "name": "Form Validation",
+            "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n"
+          },
+          {
+            "name": "API Endpoints",
+            "error": "Test returned false"
+          }
+        ],
+        "total": 9,
+        "startTime": "2025-08-18T17:00:16.503Z",
+        "endTime": "2025-08-18T17:02:12.844Z"
+      }
+    },
+    "dataIntegrity-integrity": {
+      "passed": false,
+      "duration": 266525,
+      "details": {
+        "passed": [
+          {
+            "name": "Customer-Order Relationships",
+            "duration": 6353
+          },
+          {
+            "name": "Equipment-WorkOrder Relationships",
+            "duration": 6400
+          }
+        ],
+        "failed": [
+          {
+            "name": "Farm-User Relationships",
+            "error": "Farm-user API call failed: 403 "
+          },
+          {
+            "name": "Batch-SeedVariety Relationships",
+            "error": "Failed to create seed variety for relationship test"
+          },
+          {
+            "name": "Cascade Delete Behavior",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Multi-Tenant Data Isolation",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Cross-Entity Data Consistency",
+            "error": "Test returned false"
+          },
+          {
+            "name": "API Data Round-Trip",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Bulk Operations Integrity",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Concurrent Data Access",
+            "error": "Test returned false"
+          }
+        ],
+        "total": 10,
+        "startTime": "2025-08-18T17:02:13.921Z",
+        "endTime": "2025-08-18T17:06:40.344Z"
+      }
+    }
+  },
+  "errors": [
+    "authentication-auth: Session Persistence - page.textContent: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[class*=\"Header_userName\"]')\u001b[22m\n",
+    "authentication-auth: Farm Selection - Farm switch failed. Expected: 🌱Curry Island MicrogreensOrganic Farming✓, Got: Curry Island Microgreens",
+    "authentication-auth: Role-Based Access Control - Test returned false",
+    "authentication-auth: Session Validation - Session should be valid but validation failed",
+    "authentication-auth: Authentication API - Could not extract authentication headers",
+    "navigation-navigation: Navigate to /sales/delivery - Test returned false",
+    "navigation-navigation: Navigate to /ai-insights - Test returned false",
+    "planning-crops: Crop Planning Page Load - Expected title to contain \"Crop Planning\", got \"Organic Farm Management System (OFMS)\"",
+    "planning-crops: Create Crop Plan - page.waitForSelector: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n",
+    "planning-crops: Seed Variety Integration - page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n",
+    "planning-crops: Zone Assignment - page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n",
+    "planning-crops: Calendar Integration - this.automation.testCropPlanningComplexWorkflow is not a function",
+    "planning-crops: Form Validation - page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal') to be visible\u001b[22m\n",
+    "planning-crops: API Endpoints - Test returned false",
+    "dataIntegrity-integrity: Farm-User Relationships - Farm-user API call failed: 403 ",
+    "dataIntegrity-integrity: Batch-SeedVariety Relationships - Failed to create seed variety for relationship test",
+    "dataIntegrity-integrity: Cascade Delete Behavior - Test returned false",
+    "dataIntegrity-integrity: Multi-Tenant Data Isolation - Test returned false",
+    "dataIntegrity-integrity: Cross-Entity Data Consistency - Test returned false",
+    "dataIntegrity-integrity: API Data Round-Trip - Test returned false",
+    "dataIntegrity-integrity: Bulk Operations Integrity - Test returned false",
+    "dataIntegrity-integrity: Concurrent Data Access - Test returned false"
+  ],
+  "config": {
+    "headless": true,
+    "parallel": false,
+    "baseURL": "http://localhost:3005"
+  },
+  "environment": {
+    "nodeVersion": "v23.7.0",
+    "platform": "darwin",
+    "memory": {
+      "rss": 140263424,
+      "heapTotal": 33472512,
+      "heapUsed": 27259248,
+      "external": 3086173,
+      "arrayBuffers": 572065
+    }
+  }
+}

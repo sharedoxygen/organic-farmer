@@ -1,0 +1,224 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: var(--spacing-8);
+}
+
+.title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-2);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-medium);
+    margin: 0;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--text-medium);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-4);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.filterTabs {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-8);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab {
+    padding: var(--spacing-3) var(--spacing-4);
+    border: none;
+    background: transparent;
+    color: var(--text-medium);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.tab:hover {
+    color: var(--text-dark);
+    background: var(--bg-secondary);
+}
+
+.tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+
+.logsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.logCard {
+    padding: var(--spacing-6);
+}
+
+.logHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-4);
+    gap: var(--spacing-4);
+}
+
+.logMeta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.timestamp {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    font-weight: var(--font-weight-medium);
+}
+
+.user {
+    font-size: var(--font-size-base);
+    color: var(--text-dark);
+    font-weight: var(--font-weight-semibold);
+}
+
+.badges {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+}
+
+.categoryBadge,
+.severityBadge {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.logContent {
+    margin-bottom: var(--spacing-4);
+}
+
+.action {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-2);
+    font-family: monospace;
+}
+
+.description {
+    font-size: var(--font-size-base);
+    color: var(--text-medium);
+    margin-bottom: var(--spacing-2);
+    line-height: 1.5;
+}
+
+.resource {
+    font-size: var(--font-size-sm);
+    color: var(--text-light);
+    font-family: monospace;
+}
+
+.technicalDetails {
+    display: flex;
+    gap: var(--spacing-6);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--spacing-4);
+}
+
+.detail {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+}
+
+.label {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    font-weight: var(--font-weight-medium);
+}
+
+.value {
+    font-size: var(--font-size-sm);
+    color: var(--text-dark);
+    font-family: monospace;
+}
+
+.value.success {
+    color: var(--success-color, #22c55e);
+}
+
+.value.failed {
+    color: var(--error-color, #ef4444);
+}
+
+.value.warning {
+    color: var(--warning-color, #f59e0b);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-12);
+    color: var(--text-medium);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-4);
+    }
+
+    .filterTabs {
+        flex-wrap: wrap;
+    }
+
+    .logHeader {
+        flex-direction: column;
+        gap: var(--spacing-3);
+    }
+
+    .badges {
+        align-self: stretch;
+    }
+
+    .technicalDetails {
+        flex-direction: column;
+        gap: var(--spacing-3);
+    }
+}

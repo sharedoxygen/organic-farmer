@@ -1,0 +1,400 @@
+/* Production Planning Page Styles */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+/* Header Section */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-2);
+}
+
+.titleSection h1 {
+    margin: 0 0 var(--spacing-2) 0;
+    color: var(--text-dark);
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.titleSection p {
+    margin: 0;
+    color: var(--text-medium);
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.planningControl {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.planningControl label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.planningControl select {
+    padding: var(--spacing-2) var(--spacing-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.planningControl select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-subtle);
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-6);
+}
+
+.loading h1 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-4);
+}
+
+.loading p {
+    color: var(--text-medium);
+    font-size: 1.1rem;
+}
+
+/* Summary Card */
+.summaryCard {
+    background: linear-gradient(135deg, var(--primary-subtle), var(--bg-secondary));
+    border: 1px solid var(--primary-color);
+}
+
+.summaryCard h2 {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.customerStats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-3);
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.statNumber {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.statLabel {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    font-weight: 500;
+    margin-top: var(--spacing-1);
+}
+
+/* Production Plan Card */
+.planCard h2 {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--text-dark);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.planTable {
+    overflow-x: auto;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.planTable table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.planTable th {
+    background: var(--bg-secondary);
+    color: var(--text-dark);
+    font-weight: 600;
+    padding: var(--spacing-3);
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.planTable td {
+    padding: var(--spacing-3);
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.planTable tr:hover {
+    background: var(--hover-bg);
+}
+
+.varietyCell {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.productionNeeded {
+    background: var(--warning-subtle);
+    border-left: 4px solid var(--warning-color);
+}
+
+.stockSufficient {
+    background: var(--success-subtle);
+    border-left: 4px solid var(--success-color);
+}
+
+.deficit {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+.surplus {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-8);
+}
+
+.emptyContent h3 {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--text-dark);
+    font-size: 1.4rem;
+}
+
+.emptyContent p {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--text-medium);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.emptyContent ul {
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+    color: var(--text-medium);
+    line-height: 1.8;
+}
+
+.emptyContent li {
+    margin-bottom: var(--spacing-2);
+}
+
+/* Orders Card */
+.ordersCard h2 {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--text-dark);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.orderItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.orderItem:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+}
+
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.orderInfo strong {
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.orderInfo span {
+    color: var(--text-medium);
+    font-size: 0.85rem;
+}
+
+.orderDetails {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    text-align: right;
+}
+
+.orderDate {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+}
+
+.orderTotal {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.orderStatus {
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.orderStatus.confirmed {
+    background: var(--warning-subtle);
+    color: var(--warning-color);
+}
+
+.orderStatus.processing {
+    background: var(--info-subtle);
+    color: var(--info-color);
+}
+
+.orderStatus.completed {
+    background: var(--success-subtle);
+    color: var(--success-color);
+}
+
+.orderStatus.cancelled {
+    background: var(--danger-subtle);
+    color: var(--danger-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-4);
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .planningControl {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .customerStats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .planTable {
+        font-size: 0.8rem;
+    }
+
+    .planTable th,
+    .planTable td {
+        padding: var(--spacing-2);
+    }
+
+    .orderItem {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-2);
+    }
+
+    .orderDetails {
+        justify-content: space-between;
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .customerStats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .statNumber {
+        font-size: 1.5rem;
+    }
+
+    .orderDetails {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-1);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .controls {
+        display: none;
+    }
+
+    .orderItem:hover {
+        background: var(--bg-secondary);
+        border-color: var(--border-color);
+    }
+
+    .planTable tr:hover {
+        background: transparent;
+    }
+}

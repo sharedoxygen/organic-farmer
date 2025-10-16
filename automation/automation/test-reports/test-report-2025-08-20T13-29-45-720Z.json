@@ -1,0 +1,712 @@
+{
+  "startTime": "2025-08-20T13:19:07.358Z",
+  "endTime": "2025-08-20T13:29:45.720Z",
+  "totalTests": 21,
+  "passedTests": 18,
+  "failedTests": 3,
+  "sections": {
+    "production-batches": {
+      "passed": true,
+      "duration": 22246,
+      "details": {
+        "passed": [
+          {
+            "name": "Batches Page Load",
+            "duration": 1499
+          },
+          {
+            "name": "Create Batch",
+            "duration": 5451
+          },
+          {
+            "name": "Batch CRUD Operations",
+            "duration": 2780
+          },
+          {
+            "name": "API Endpoints",
+            "duration": 170
+          }
+        ],
+        "failed": [],
+        "total": 4,
+        "startTime": "2025-08-20T13:19:07.561Z",
+        "endTime": "2025-08-20T13:19:29.717Z"
+      }
+    },
+    "planning-crops": {
+      "passed": true,
+      "duration": 39042,
+      "details": {
+        "passed": [
+          {
+            "name": "Crop Planning Page Load",
+            "duration": 1949
+          },
+          {
+            "name": "Create Crop Plan",
+            "duration": 10266
+          },
+          {
+            "name": "Crop Plan CRUD Operations",
+            "duration": 4955
+          },
+          {
+            "name": "Seed Variety Integration",
+            "duration": 3196
+          },
+          {
+            "name": "Zone Assignment",
+            "duration": 1696
+          },
+          {
+            "name": "Calendar Integration",
+            "duration": 2466
+          },
+          {
+            "name": "Form Validation",
+            "duration": 1869
+          },
+          {
+            "name": "Multi-Tenant Isolation",
+            "duration": 1
+          },
+          {
+            "name": "API Endpoints",
+            "duration": 152
+          }
+        ],
+        "failed": [],
+        "total": 9,
+        "startTime": "2025-08-20T13:19:07.561Z",
+        "endTime": "2025-08-20T13:19:46.516Z"
+      }
+    },
+    "authentication-auth": {
+      "passed": false,
+      "duration": 67339,
+      "details": {
+        "passed": [
+          {
+            "name": "Valid Admin Login",
+            "duration": 6060
+          },
+          {
+            "name": "Invalid Login Attempts",
+            "duration": 11115
+          },
+          {
+            "name": "Session Persistence",
+            "duration": 3123
+          },
+          {
+            "name": "Farm Selection",
+            "duration": 6141
+          },
+          {
+            "name": "Farm Context Persistence",
+            "duration": 2721
+          },
+          {
+            "name": "Role-Based Access Control",
+            "duration": 23890
+          },
+          {
+            "name": "Session Validation",
+            "duration": 567
+          },
+          {
+            "name": "Authentication API",
+            "duration": 74
+          }
+        ],
+        "failed": [
+          {
+            "name": "Logout Functionality",
+            "error": "Session not properly cleared after manual logout"
+          }
+        ],
+        "total": 9,
+        "startTime": null,
+        "endTime": null
+      }
+    },
+    "navigation-navigation": {
+      "passed": false,
+      "duration": 223450,
+      "details": {
+        "passed": [
+          {
+            "name": "Navigate to /dashboard",
+            "duration": 1201
+          },
+          {
+            "name": "Navigate to /planning/crops",
+            "duration": 4600
+          },
+          {
+            "name": "Navigate to /planning/calendar",
+            "duration": 5560
+          },
+          {
+            "name": "Navigate to /planning/forecasting",
+            "duration": 5362
+          },
+          {
+            "name": "Navigate to /planning/resources",
+            "duration": 6562
+          },
+          {
+            "name": "Navigate to /production/batches",
+            "duration": 4275
+          },
+          {
+            "name": "Navigate to /production/environments",
+            "duration": 5266
+          },
+          {
+            "name": "Navigate to /production/seeds",
+            "duration": 4972
+          },
+          {
+            "name": "Navigate to /production/harvesting",
+            "duration": 4440
+          },
+          {
+            "name": "Navigate to /production/post-harvest",
+            "duration": 5116
+          },
+          {
+            "name": "Navigate to /quality/control",
+            "duration": 5402
+          },
+          {
+            "name": "Navigate to /quality/food-safety",
+            "duration": 5253
+          },
+          {
+            "name": "Navigate to /quality/organic",
+            "duration": 4674
+          },
+          {
+            "name": "Navigate to /quality/certifications",
+            "duration": 5815
+          },
+          {
+            "name": "Navigate to /quality/audits",
+            "duration": 5672
+          },
+          {
+            "name": "Navigate to /inventory/stock",
+            "duration": 4627
+          },
+          {
+            "name": "Navigate to /inventory/supplies",
+            "duration": 4518
+          },
+          {
+            "name": "Navigate to /inventory/equipment",
+            "duration": 4534
+          },
+          {
+            "name": "Navigate to /inventory/packaging",
+            "duration": 5409
+          },
+          {
+            "name": "Navigate to /sales/orders",
+            "duration": 5225
+          },
+          {
+            "name": "Navigate to /sales/b2b-customers",
+            "duration": 4458
+          },
+          {
+            "name": "Navigate to /sales/b2c-customers",
+            "duration": 4527
+          },
+          {
+            "name": "Navigate to /sales/pricing",
+            "duration": 4830
+          },
+          {
+            "name": "Navigate to /traceability/seed-to-sale",
+            "duration": 2379
+          },
+          {
+            "name": "Navigate to /traceability/lots",
+            "duration": 1595
+          },
+          {
+            "name": "Navigate to /tasks/daily",
+            "duration": 1779
+          },
+          {
+            "name": "Navigate to /tasks/work-orders",
+            "duration": 2203
+          },
+          {
+            "name": "Navigate to /tasks/assignments",
+            "duration": 1571
+          },
+          {
+            "name": "Navigate to /equipment/management",
+            "duration": 2190
+          },
+          {
+            "name": "Navigate to /equipment/maintenance",
+            "duration": 1734
+          },
+          {
+            "name": "Navigate to /equipment/sensors",
+            "duration": 1820
+          },
+          {
+            "name": "Navigate to /analytics/production",
+            "duration": 4704
+          },
+          {
+            "name": "Navigate to /analytics/financial",
+            "duration": 4746
+          },
+          {
+            "name": "Navigate to /analytics/yield",
+            "duration": 4543
+          },
+          {
+            "name": "Navigate to /analytics/market",
+            "duration": 5006
+          },
+          {
+            "name": "Navigate to /integrations",
+            "duration": 1595
+          },
+          {
+            "name": "Navigate to /admin",
+            "duration": 1600
+          },
+          {
+            "name": "Navigate to /admin/farms",
+            "duration": 4832
+          },
+          {
+            "name": "Navigate to /compliance/fda-fsma",
+            "duration": 1825
+          },
+          {
+            "name": "Navigate to /compliance/usda-organic",
+            "duration": 1727
+          },
+          {
+            "name": "Navigate to /settings/users",
+            "duration": 2163
+          },
+          {
+            "name": "Navigate to /settings/notifications",
+            "duration": 1714
+          },
+          {
+            "name": "Navigate to /settings/calculator",
+            "duration": 1706
+          },
+          {
+            "name": "Sidebar Expand/Collapse",
+            "duration": 1695
+          },
+          {
+            "name": "Breadcrumb Navigation",
+            "duration": 7221
+          },
+          {
+            "name": "Browser Navigation",
+            "duration": 5784
+          }
+        ],
+        "failed": [
+          {
+            "name": "Navigate to /sales/delivery",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Navigate to /ai-insights",
+            "error": "Test returned false"
+          }
+        ],
+        "total": 48,
+        "startTime": "2025-08-20T13:19:07.560Z",
+        "endTime": "2025-08-20T13:22:50.907Z"
+      }
+    },
+    "production-post-harvest": {
+      "passed": true,
+      "duration": 14768,
+      "details": {
+        "passed": [
+          {
+            "name": "Post-Harvest Page Load",
+            "duration": 2774
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:22:51.011Z",
+        "endTime": "2025-08-20T13:23:05.686Z"
+      }
+    },
+    "production-harvesting": {
+      "passed": true,
+      "duration": 15802,
+      "details": {
+        "passed": [
+          {
+            "name": "Harvesting Page Load",
+            "duration": 3799
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:22:51.010Z",
+        "endTime": "2025-08-20T13:23:06.718Z"
+      }
+    },
+    "production-environments": {
+      "passed": true,
+      "duration": 16100,
+      "details": {
+        "passed": [
+          {
+            "name": "Environments Page Load",
+            "duration": 3827
+          },
+          {
+            "name": "API Endpoints",
+            "duration": 277
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:22:51.010Z",
+        "endTime": "2025-08-20T13:23:07.015Z"
+      }
+    },
+    "production-seeds": {
+      "passed": true,
+      "duration": 16148,
+      "details": {
+        "passed": [
+          {
+            "name": "Seeds Page Load",
+            "duration": 3830
+          },
+          {
+            "name": "Seeds CRUD via API",
+            "duration": 320
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:22:51.011Z",
+        "endTime": "2025-08-20T13:23:07.062Z"
+      }
+    },
+    "inventory-supplies": {
+      "passed": true,
+      "duration": 14306,
+      "details": {
+        "passed": [
+          {
+            "name": "Supplies Page Load",
+            "duration": 3915
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:23:07.160Z",
+        "endTime": "2025-08-20T13:23:21.375Z"
+      }
+    },
+    "inventory-packaging": {
+      "passed": true,
+      "duration": 15683,
+      "details": {
+        "passed": [
+          {
+            "name": "Packaging Page Load",
+            "duration": 5254
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:23:07.160Z",
+        "endTime": "2025-08-20T13:23:22.748Z"
+      }
+    },
+    "quality-control": {
+      "passed": true,
+      "duration": 15936,
+      "details": {
+        "passed": [
+          {
+            "name": "Quality Page Load",
+            "duration": 5387
+          },
+          {
+            "name": "Quality API GET",
+            "duration": 152
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:23:07.159Z",
+        "endTime": "2025-08-20T13:23:22.999Z"
+      }
+    },
+    "inventory-stock": {
+      "passed": true,
+      "duration": 15949,
+      "details": {
+        "passed": [
+          {
+            "name": "Stock Page Load",
+            "duration": 5259
+          },
+          {
+            "name": "Inventory API GET",
+            "duration": 83
+          },
+          {
+            "name": "Inventory API POST",
+            "duration": 152
+          }
+        ],
+        "failed": [],
+        "total": 3,
+        "startTime": "2025-08-20T13:23:07.160Z",
+        "endTime": "2025-08-20T13:23:23.005Z"
+      }
+    },
+    "tasks-assignments": {
+      "passed": true,
+      "duration": 16424,
+      "details": {
+        "passed": [
+          {
+            "name": "Assignments Page Load",
+            "duration": 5829
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:23:23.110Z",
+        "endTime": "2025-08-20T13:23:39.438Z"
+      }
+    },
+    "tasks-daily": {
+      "passed": true,
+      "duration": 16532,
+      "details": {
+        "passed": [
+          {
+            "name": "Daily Tasks Page Load",
+            "duration": 5971
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:23:23.111Z",
+        "endTime": "2025-08-20T13:23:39.547Z"
+      }
+    },
+    "sales-orders": {
+      "passed": true,
+      "duration": 17778,
+      "details": {
+        "passed": [
+          {
+            "name": "Orders Page Load",
+            "duration": 6326
+          },
+          {
+            "name": "Orders API GET",
+            "duration": 846
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:23:23.110Z",
+        "endTime": "2025-08-20T13:23:40.782Z"
+      }
+    },
+    "sales-customers": {
+      "passed": true,
+      "duration": 18765,
+      "details": {
+        "passed": [
+          {
+            "name": "B2B Customers Page Load",
+            "duration": 5931
+          },
+          {
+            "name": "B2C Customers Page Load",
+            "duration": 2264
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:23:23.110Z",
+        "endTime": "2025-08-20T13:23:41.771Z"
+      }
+    },
+    "equipment-management": {
+      "passed": true,
+      "duration": 13706,
+      "details": {
+        "passed": [
+          {
+            "name": "Equipment Page Load",
+            "duration": 3601
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:23:41.875Z",
+        "endTime": "2025-08-20T13:23:55.495Z"
+      }
+    },
+    "tasks-work-orders": {
+      "passed": true,
+      "duration": 13932,
+      "details": {
+        "passed": [
+          {
+            "name": "Work Orders Page Load",
+            "duration": 3810
+          }
+        ],
+        "failed": [],
+        "total": 1,
+        "startTime": "2025-08-20T13:23:41.874Z",
+        "endTime": "2025-08-20T13:23:55.711Z"
+      }
+    },
+    "admin-farms": {
+      "passed": true,
+      "duration": 16168,
+      "details": {
+        "passed": [
+          {
+            "name": "Admin Farms Page Load",
+            "duration": 3879
+          },
+          {
+            "name": "Farms API GET",
+            "duration": 2163
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:23:41.875Z",
+        "endTime": "2025-08-20T13:23:57.960Z"
+      }
+    },
+    "analytics-production": {
+      "passed": true,
+      "duration": 27840,
+      "details": {
+        "passed": [
+          {
+            "name": "Analytics Page Load",
+            "duration": 1820
+          },
+          {
+            "name": "Analytics API GET",
+            "duration": 4
+          }
+        ],
+        "failed": [],
+        "total": 2,
+        "startTime": "2025-08-20T13:23:41.875Z",
+        "endTime": "2025-08-20T13:24:09.636Z"
+      }
+    },
+    "dataIntegrity-integrity": {
+      "passed": false,
+      "duration": 336005,
+      "details": {
+        "passed": [
+          {
+            "name": "Farm-User Relationships",
+            "duration": 108
+          },
+          {
+            "name": "Customer-Order Relationships",
+            "duration": 31503
+          },
+          {
+            "name": "Equipment-WorkOrder Relationships",
+            "duration": 32219
+          }
+        ],
+        "failed": [
+          {
+            "name": "Batch-SeedVariety Relationships",
+            "error": "Failed to create seed variety for relationship test"
+          },
+          {
+            "name": "Cascade Delete Behavior",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Multi-Tenant Data Isolation",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Cross-Entity Data Consistency",
+            "error": "Test returned false"
+          },
+          {
+            "name": "API Data Round-Trip",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Bulk Operations Integrity",
+            "error": "Test returned false"
+          },
+          {
+            "name": "Concurrent Data Access",
+            "error": "Test returned false"
+          }
+        ],
+        "total": 10,
+        "startTime": "2025-08-20T13:24:09.716Z",
+        "endTime": "2025-08-20T13:29:45.626Z"
+      }
+    }
+  },
+  "errors": [
+    "authentication-auth: Logout Functionality - Session not properly cleared after manual logout",
+    "navigation-navigation: Navigate to /sales/delivery - Test returned false",
+    "navigation-navigation: Navigate to /ai-insights - Test returned false",
+    "dataIntegrity-integrity: Batch-SeedVariety Relationships - Failed to create seed variety for relationship test",
+    "dataIntegrity-integrity: Cascade Delete Behavior - Test returned false",
+    "dataIntegrity-integrity: Multi-Tenant Data Isolation - Test returned false",
+    "dataIntegrity-integrity: Cross-Entity Data Consistency - Test returned false",
+    "dataIntegrity-integrity: API Data Round-Trip - Test returned false",
+    "dataIntegrity-integrity: Bulk Operations Integrity - Test returned false",
+    "dataIntegrity-integrity: Concurrent Data Access - Test returned false"
+  ],
+  "config": {
+    "headless": true,
+    "parallel": true,
+    "baseURL": "http://localhost:3005"
+  },
+  "environment": {
+    "nodeVersion": "v23.7.0",
+    "platform": "darwin",
+    "memory": {
+      "rss": 165576704,
+      "heapTotal": 33472512,
+      "heapUsed": 25395496,
+      "external": 2829476,
+      "arrayBuffers": 315368
+    }
+  }
+}

@@ -1,0 +1,223 @@
+-- Comprehensive Seed Data Restoration for OFMS
+-- Curry Island: 35+ varieties, Shared Oxygen: 50+ varieties
+-- Follows OFMS Technical Essentials with proper farm isolation
+
+-- First, clear existing seed data to avoid conflicts
+DELETE FROM seed_inventory;
+DELETE FROM seed_varieties;
+
+-- Insert comprehensive seed varieties for Curry Island (farm_id = 1)
+INSERT INTO seed_varieties (id, name, type, description, days_to_maturity, farm_id, created_at, updated_at) VALUES
+-- Leafy Greens (10 varieties)
+(1, 'Arugula Wild Rocket', 'VEGETABLE', 'Peppery wild arugula with deeply serrated leaves', 40, 1, NOW(), NOW()),
+(2, 'Buttercrunch Lettuce', 'VEGETABLE', 'Tender butterhead lettuce with crisp hearts', 65, 1, NOW(), NOW()),
+(3, 'Red Sails Lettuce', 'VEGETABLE', 'Heat-tolerant red leaf lettuce', 50, 1, NOW(), NOW()),
+(4, 'Spinach Space', 'VEGETABLE', 'Smooth-leaf spinach variety', 45, 1, NOW(), NOW()),
+(5, 'Mizuna Mustard', 'VEGETABLE', 'Japanese mustard green with mild flavor', 40, 1, NOW(), NOW()),
+(6, 'Bok Choy Shanghai', 'VEGETABLE', 'Compact white-stemmed Asian green', 50, 1, NOW(), NOW()),
+(7, 'Kale Winterbor', 'VEGETABLE', 'Curly kale with excellent cold tolerance', 60, 1, NOW(), NOW()),
+(8, 'Swiss Chard Rainbow', 'VEGETABLE', 'Colorful stems in red, yellow, and white', 55, 1, NOW(), NOW()),
+(9, 'Mache Corn Salad', 'VEGETABLE', 'Nutty-flavored winter salad green', 60, 1, NOW(), NOW()),
+(10, 'Tatsoi Spoon Mustard', 'VEGETABLE', 'Rosette-forming Asian green', 45, 1, NOW(), NOW()),
+
+-- Root Vegetables (8 varieties)
+(11, 'Carrot Purple Haze', 'VEGETABLE', 'Purple-orange carrots with sweet flavor', 70, 1, NOW(), NOW()),
+(12, 'Radish Cherry Belle', 'VEGETABLE', 'Round red radishes with white flesh', 25, 1, NOW(), NOW()),
+(13, 'Beet Detroit Dark Red', 'VEGETABLE', 'Deep red beets with sweet flavor', 60, 1, NOW(), NOW()),
+(14, 'Turnip Purple Top', 'VEGETABLE', 'White turnips with purple shoulders', 55, 1, NOW(), NOW()),
+(15, 'Rutabaga American Purple', 'VEGETABLE', 'Large yellow-fleshed winter storage root', 90, 1, NOW(), NOW()),
+(16, 'Daikon Radish', 'VEGETABLE', 'Large white Japanese radish', 70, 1, NOW(), NOW()),
+(17, 'Parsnip Hollow Crown', 'VEGETABLE', 'Sweet white root vegetable', 120, 1, NOW(), NOW()),
+(18, 'Salsify Mammoth', 'VEGETABLE', 'Oyster-flavored white root', 120, 1, NOW(), NOW()),
+
+-- Herbs (10 varieties)
+(19, 'Basil Genovese', 'HERB', 'Classic Italian basil for pesto', 75, 1, NOW(), NOW()),
+(20, 'Cilantro Slow Bolt', 'HERB', 'Heat-tolerant cilantro variety', 50, 1, NOW(), NOW()),
+(21, 'Parsley Flat Leaf', 'HERB', 'Italian flat-leaf parsley', 80, 1, NOW(), NOW()),
+(22, 'Dill Fernleaf', 'HERB', 'Compact dill with fine foliage', 65, 1, NOW(), NOW()),
+(23, 'Chives Garlic', 'HERB', 'Garlic-flavored chives with flat leaves', 85, 1, NOW(), NOW()),
+(24, 'Oregano Greek', 'HERB', 'Pungent Mediterranean oregano', 85, 1, NOW(), NOW()),
+(25, 'Thyme Common', 'HERB', 'Traditional culinary thyme', 90, 1, NOW(), NOW()),
+(26, 'Sage Garden', 'HERB', 'Silver-green culinary sage', 75, 1, NOW(), NOW()),
+(27, 'Rosemary', 'HERB', 'Aromatic needle-leaf herb', 95, 1, NOW(), NOW()),
+(28, 'Lavender English', 'HERB', 'Fragrant purple flowering herb', 110, 1, NOW(), NOW()),
+
+-- Fruiting Vegetables (7 varieties)
+(29, 'Tomato Cherokee Purple', 'VEGETABLE', 'Heirloom purple-black tomato', 80, 1, NOW(), NOW()),
+(30, 'Pepper California Wonder', 'VEGETABLE', 'Large sweet bell pepper', 75, 1, NOW(), NOW()),
+(31, 'Eggplant Black Beauty', 'VEGETABLE', 'Classic large purple eggplant', 85, 1, NOW(), NOW()),
+(32, 'Cucumber Straight Eight', 'VEGETABLE', 'Uniform slicing cucumber', 65, 1, NOW(), NOW()),
+(33, 'Zucchini Dark Green', 'VEGETABLE', 'Productive summer squash', 50, 1, NOW(), NOW()),
+(34, 'Okra Clemson Spineless', 'VEGETABLE', 'Heat-loving southern vegetable', 60, 1, NOW(), NOW()),
+(35, 'Melon Cantaloupe', 'FRUIT', 'Sweet orange-fleshed melon', 85, 1, NOW(), NOW()),
+
+-- Additional specialty crops for Curry Island
+(36, 'Microgreens Mix', 'VEGETABLE', 'Assorted microgreen varieties', 14, 1, NOW(), NOW()),
+(37, 'Edible Flowers Mix', 'FLOWER', 'Nasturtium, pansy, and viola blend', 60, 1, NOW(), NOW());
+
+-- Insert comprehensive seed varieties for Shared Oxygen (farm_id = 2) - 50+ varieties
+INSERT INTO seed_varieties (id, name, type, description, days_to_maturity, farm_id, created_at, updated_at) VALUES
+-- Leafy Greens (15 varieties)
+(38, 'Lettuce Romaine Parris Island', 'VEGETABLE', 'Heat-tolerant romaine lettuce', 70, 2, NOW(), NOW()),
+(39, 'Lettuce Oakleaf Red', 'VEGETABLE', 'Red oakleaf lettuce with tender leaves', 50, 2, NOW(), NOW()),
+(40, 'Lettuce Bibb Boston', 'VEGETABLE', 'Compact butterhead lettuce', 60, 2, NOW(), NOW()),
+(41, 'Lettuce Lollo Rosso', 'VEGETABLE', 'Frilly red lettuce with decorative leaves', 55, 2, NOW(), NOW()),
+(42, 'Spinach Bloomsdale', 'VEGETABLE', 'Savoyed leaf spinach variety', 50, 2, NOW(), NOW()),
+(43, 'Spinach New Zealand', 'VEGETABLE', 'Heat-tolerant spinach alternative', 70, 2, NOW(), NOW()),
+(44, 'Arugula Astro', 'VEGETABLE', 'Mild arugula with rounded leaves', 35, 2, NOW(), NOW()),
+(45, 'Watercress Upland', 'VEGETABLE', 'Peppery cress for salads', 45, 2, NOW(), NOW()),
+(46, 'Endive Broad Leaf Batavian', 'VEGETABLE', 'Bitter green for salads', 85, 2, NOW(), NOW()),
+(47, 'Radicchio Chioggia', 'VEGETABLE', 'Red and white striped chicory', 85, 2, NOW(), NOW()),
+(48, 'Frisee Salad King', 'VEGETABLE', 'Curly endive for gourmet salads', 75, 2, NOW(), NOW()),
+(49, 'Mustard Red Giant', 'VEGETABLE', 'Large red mustard greens', 45, 2, NOW(), NOW()),
+(50, 'Collard Georgia', 'VEGETABLE', 'Traditional Southern collard greens', 75, 2, NOW(), NOW()),
+(51, 'Cabbage Early Jersey', 'VEGETABLE', 'Compact early cabbage', 65, 2, NOW(), NOW()),
+(52, 'Brussels Sprouts Long Island', 'VEGETABLE', 'Cold-hardy miniature cabbages', 110, 2, NOW(), NOW()),
+
+-- Root Vegetables (12 varieties)
+(53, 'Carrot Nantes', 'VEGETABLE', 'Classic French carrot variety', 65, 2, NOW(), NOW()),
+(54, 'Carrot Chantenay', 'VEGETABLE', 'Broad-shouldered storage carrot', 70, 2, NOW(), NOW()),
+(55, 'Beet Chioggia', 'VEGETABLE', 'Striped Italian heirloom beet', 60, 2, NOW(), NOW()),
+(56, 'Beet Golden', 'VEGETABLE', 'Yellow beets with sweet flavor', 55, 2, NOW(), NOW()),
+(57, 'Radish French Breakfast', 'VEGETABLE', 'Oblong red and white radish', 25, 2, NOW(), NOW()),
+(58, 'Radish Black Spanish', 'VEGETABLE', 'Large black-skinned winter radish', 60, 2, NOW(), NOW()),
+(59, 'Turnip Hakurei', 'VEGETABLE', 'Japanese salad turnip', 38, 2, NOW(), NOW()),
+(60, 'Kohlrabi Purple Vienna', 'VEGETABLE', 'Purple stem vegetable', 60, 2, NOW(), NOW()),
+(61, 'Celeriac Brilliant', 'VEGETABLE', 'Celery root with nutty flavor', 120, 2, NOW(), NOW()),
+(62, 'Fennel Florence', 'VEGETABLE', 'Bulbing fennel with anise flavor', 85, 2, NOW(), NOW()),
+(63, 'Leek American Flag', 'VEGETABLE', 'Hardy winter leek', 120, 2, NOW(), NOW()),
+(64, 'Onion Yellow Spanish', 'VEGETABLE', 'Large storage onion', 110, 2, NOW(), NOW()),
+
+-- Herbs (15 varieties)
+(65, 'Basil Purple Ruffles', 'HERB', 'Ornamental purple basil', 80, 2, NOW(), NOW()),
+(66, 'Basil Lemon', 'HERB', 'Citrus-scented basil variety', 75, 2, NOW(), NOW()),
+(67, 'Basil Thai', 'HERB', 'Spicy Asian basil with purple flowers', 70, 2, NOW(), NOW()),
+(68, 'Cilantro Leisure', 'HERB', 'Slow-bolting cilantro variety', 55, 2, NOW(), NOW()),
+(69, 'Parsley Moss Curled', 'HERB', 'Decorative curly parsley', 85, 2, NOW(), NOW()),
+(70, 'Dill Mammoth', 'HERB', 'Large dill for pickling', 70, 2, NOW(), NOW()),
+(71, 'Chives Common', 'HERB', 'Traditional onion chives', 80, 2, NOW(), NOW()),
+(72, 'Oregano Italian', 'HERB', 'Sweet Italian oregano', 80, 2, NOW(), NOW()),
+(73, 'Marjoram Sweet', 'HERB', 'Delicate herb for seasoning', 70, 2, NOW(), NOW()),
+(74, 'Tarragon French', 'HERB', 'Anise-flavored culinary herb', 90, 2, NOW(), NOW()),
+(75, 'Mint Spearmint', 'HERB', 'Classic spearmint variety', 85, 2, NOW(), NOW()),
+(76, 'Chamomile German', 'HERB', 'Medicinal tea herb', 65, 2, NOW(), NOW()),
+(77, 'Borage', 'HERB', 'Blue-flowered cucumber-flavored herb', 60, 2, NOW(), NOW()),
+(78, 'Lemon Balm', 'HERB', 'Lemony mint family herb', 75, 2, NOW(), NOW()),
+(79, 'Anise Hyssop', 'HERB', 'Licorice-flavored bee plant', 85, 2, NOW(), NOW()),
+
+-- Fruiting Vegetables (10 varieties)
+(80, 'Tomato Brandywine', 'VEGETABLE', 'Large pink heirloom tomato', 90, 2, NOW(), NOW()),
+(81, 'Tomato San Marzano', 'VEGETABLE', 'Italian paste tomato', 85, 2, NOW(), NOW()),
+(82, 'Pepper Shishito', 'VEGETABLE', 'Japanese frying pepper', 65, 2, NOW(), NOW()),
+(83, 'Pepper Anaheim', 'VEGETABLE', 'Mild green chile pepper', 70, 2, NOW(), NOW()),
+(84, 'Eggplant Japanese Long', 'VEGETABLE', 'Slender purple Japanese eggplant', 75, 2, NOW(), NOW()),
+(85, 'Cucumber Lemon', 'VEGETABLE', 'Round yellow cucumber', 60, 2, NOW(), NOW()),
+(86, 'Squash Patty Pan', 'VEGETABLE', 'Scalloped summer squash', 55, 2, NOW(), NOW()),
+(87, 'Pumpkin Sugar Pie', 'VEGETABLE', 'Small pie pumpkin', 110, 2, NOW(), NOW()),
+(88, 'Watermelon Sugar Baby', 'FRUIT', 'Small icebox watermelon', 85, 2, NOW(), NOW()),
+(89, 'Cantaloupe Hale''s Best', 'FRUIT', 'Netted orange-fleshed melon', 90, 2, NOW(), NOW()),
+
+-- Additional specialty crops for Shared Oxygen (total 52 varieties)
+(90, 'Sunflower Mammoth', 'FLOWER', 'Giant sunflower for seeds', 120, 2, NOW(), NOW()),
+(91, 'Quinoa Rainbow', 'GRAIN', 'Colorful protein-rich grain', 110, 2, NOW(), NOW()),
+(92, 'Amaranth Red', 'GRAIN', 'Nutritious red grain amaranth', 100, 2, NOW(), NOW());
+
+-- Insert seed inventory for Curry Island varieties
+INSERT INTO seed_inventory (id, seed_variety_id, quantity, unit, cost_per_unit, supplier, batch_number, expiration_date, germination_rate, storage_location, notes, farm_id, created_at, updated_at) VALUES
+-- Curry Island inventory (37 varieties)
+(1, 1, 500, 'GRAMS', 12.50, 'Organic Seed Co', 'OSC-2024-001', '2025-12-31', 95, 'Seed Storage Room A', 'High germination rate', 1, NOW(), NOW()),
+(2, 2, 250, 'GRAMS', 8.75, 'Heritage Seeds', 'HS-2024-002', '2025-11-30', 92, 'Seed Storage Room A', 'Popular variety', 1, NOW(), NOW()),
+(3, 3, 300, 'GRAMS', 9.25, 'Organic Seed Co', 'OSC-2024-003', '2025-12-31', 88, 'Seed Storage Room A', 'Heat tolerant', 1, NOW(), NOW()),
+(4, 4, 400, 'GRAMS', 15.00, 'Northern Seeds', 'NS-2024-004', '2025-10-31', 93, 'Seed Storage Room B', 'Cold hardy', 1, NOW(), NOW()),
+(5, 5, 200, 'GRAMS', 18.50, 'Asian Greens Ltd', 'AGL-2024-005', '2025-12-31', 90, 'Seed Storage Room B', 'Mild flavor', 1, NOW(), NOW()),
+(6, 6, 350, 'GRAMS', 16.75, 'Asian Greens Ltd', 'AGL-2024-006', '2025-11-30', 94, 'Seed Storage Room B', 'Compact variety', 1, NOW(), NOW()),
+(7, 7, 180, 'GRAMS', 22.50, 'Winter Greens Inc', 'WGI-2024-007', '2025-12-31', 91, 'Seed Storage Room B', 'Excellent cold tolerance', 1, NOW(), NOW()),
+(8, 8, 120, 'GRAMS', 28.00, 'Colorful Crops', 'CC-2024-008', '2025-11-30', 89, 'Seed Storage Room A', 'Colorful stems', 1, NOW(), NOW()),
+(9, 9, 150, 'GRAMS', 32.50, 'Specialty Seeds', 'SS-2024-009', '2025-10-31', 87, 'Seed Storage Room A', 'Cold season crop', 1, NOW(), NOW()),
+(10, 10, 220, 'GRAMS', 19.75, 'Asian Greens Ltd', 'AGL-2024-010', '2025-12-31', 92, 'Seed Storage Room B', 'Rosette forming', 1, NOW(), NOW()),
+(11, 11, 100, 'GRAMS', 45.00, 'Heirloom Varieties', 'HV-2024-011', '2025-12-31', 85, 'Seed Storage Room C', 'Purple variety', 1, NOW(), NOW()),
+(12, 12, 500, 'GRAMS', 8.25, 'Quick Crops', 'QC-2024-012', '2025-11-30', 96, 'Seed Storage Room C', 'Fast growing', 1, NOW(), NOW()),
+(13, 13, 200, 'GRAMS', 12.00, 'Root Vegetables Inc', 'RVI-2024-013', '2025-12-31', 93, 'Seed Storage Room C', 'Deep red color', 1, NOW(), NOW()),
+(14, 14, 300, 'GRAMS', 10.50, 'Root Vegetables Inc', 'RVI-2024-014', '2025-11-30', 91, 'Seed Storage Room C', 'Dual purpose', 1, NOW(), NOW()),
+(15, 15, 150, 'GRAMS', 15.75, 'Winter Storage', 'WS-2024-015', '2025-12-31', 88, 'Seed Storage Room C', 'Long storage', 1, NOW(), NOW()),
+(16, 16, 80, 'GRAMS', 25.00, 'Asian Greens Ltd', 'AGL-2024-016', '2025-10-31', 90, 'Seed Storage Room C', 'Large root', 1, NOW(), NOW()),
+(17, 17, 60, 'GRAMS', 18.50, 'Heritage Seeds', 'HS-2024-017', '2025-12-31', 82, 'Seed Storage Room C', 'Sweet flavor', 1, NOW(), NOW()),
+(18, 18, 40, 'GRAMS', 35.00, 'Specialty Seeds', 'SS-2024-018', '2025-11-30', 84, 'Seed Storage Room C', 'Oyster flavor', 1, NOW(), NOW()),
+(19, 19, 25, 'GRAMS', 95.00, 'Herb Masters', 'HM-2024-019', '2025-12-31', 89, 'Seed Storage Room D', 'Classic basil', 1, NOW(), NOW()),
+(20, 20, 50, 'GRAMS', 45.00, 'Herb Masters', 'HM-2024-020', '2025-11-30', 91, 'Seed Storage Room D', 'Slow bolting', 1, NOW(), NOW()),
+(21, 21, 30, 'GRAMS', 38.50, 'Herb Masters', 'HM-2024-021', '2025-12-31', 93, 'Seed Storage Room D', 'Flat leaf type', 1, NOW(), NOW()),
+(22, 22, 40, 'GRAMS', 28.75, 'Herb Masters', 'HM-2024-022', '2025-11-30', 88, 'Seed Storage Room D', 'Compact growth', 1, NOW(), NOW()),
+(23, 23, 20, 'GRAMS', 65.00, 'Specialty Herbs', 'SH-2024-023', '2025-12-31', 85, 'Seed Storage Room D', 'Garlic flavor', 1, NOW(), NOW()),
+(24, 24, 15, 'GRAMS', 85.00, 'Mediterranean Herbs', 'MH-2024-024', '2025-10-31', 92, 'Seed Storage Room D', 'Pungent variety', 1, NOW(), NOW()),
+(25, 25, 10, 'GRAMS', 125.00, 'Mediterranean Herbs', 'MH-2024-025', '2025-12-31', 87, 'Seed Storage Room D', 'Traditional variety', 1, NOW(), NOW()),
+(26, 26, 8, 'GRAMS', 155.00, 'Mediterranean Herbs', 'MH-2024-026', '2025-11-30', 84, 'Seed Storage Room D', 'Culinary sage', 1, NOW(), NOW()),
+(27, 27, 5, 'GRAMS', 200.00, 'Mediterranean Herbs', 'MH-2024-027', '2025-12-31', 81, 'Seed Storage Room D', 'Aromatic needles', 1, NOW(), NOW()),
+(28, 28, 12, 'GRAMS', 145.00, 'Fragrant Herbs', 'FH-2024-028', '2025-10-31', 83, 'Seed Storage Room D', 'English variety', 1, NOW(), NOW()),
+(29, 29, 10, 'GRAMS', 185.00, 'Heirloom Tomatoes', 'HT-2024-029', '2025-12-31', 91, 'Seed Storage Room E', 'Purple heirloom', 1, NOW(), NOW()),
+(30, 30, 15, 'GRAMS', 125.00, 'Pepper Specialists', 'PS-2024-030', '2025-11-30', 89, 'Seed Storage Room E', 'Large bells', 1, NOW(), NOW()),
+(31, 31, 8, 'GRAMS', 165.00, 'Nightshade Crops', 'NC-2024-031', '2025-12-31', 86, 'Seed Storage Room E', 'Classic variety', 1, NOW(), NOW()),
+(32, 32, 25, 'GRAMS', 75.00, 'Cucumber Growers', 'CG-2024-032', '2025-11-30', 94, 'Seed Storage Room E', 'Uniform fruit', 1, NOW(), NOW()),
+(33, 33, 20, 'GRAMS', 85.00, 'Summer Squash Co', 'SSC-2024-033', '2025-12-31', 92, 'Seed Storage Room E', 'Productive variety', 1, NOW(), NOW()),
+(34, 34, 30, 'GRAMS', 55.00, 'Southern Crops', 'SC-2024-034', '2025-10-31', 90, 'Seed Storage Room E', 'Heat loving', 1, NOW(), NOW()),
+(35, 35, 12, 'GRAMS', 195.00, 'Melon Masters', 'MM-2024-035', '2025-12-31', 88, 'Seed Storage Room E', 'Sweet variety', 1, NOW(), NOW()),
+(36, 36, 100, 'GRAMS', 145.00, 'Microgreen Supply', 'MS-2024-036', '2025-11-30', 95, 'Seed Storage Room F', 'Mixed varieties', 1, NOW(), NOW()),
+(37, 37, 50, 'GRAMS', 225.00, 'Edible Flowers', 'EF-2024-037', '2025-12-31', 87, 'Seed Storage Room F', 'Flower mix', 1, NOW(), NOW());
+
+-- Insert seed inventory for Shared Oxygen varieties (55 varieties)
+INSERT INTO seed_inventory (id, seed_variety_id, quantity, unit, cost_per_unit, supplier, batch_number, expiration_date, germination_rate, storage_location, notes, farm_id, created_at, updated_at) VALUES
+-- Shared Oxygen inventory (55 varieties)
+(38, 38, 400, 'GRAMS', 11.25, 'Lettuce Specialists', 'LS-2024-038', '2025-12-31', 94, 'Seed Vault A', 'Heat tolerant', 2, NOW(), NOW()),
+(39, 39, 350, 'GRAMS', 13.50, 'Lettuce Specialists', 'LS-2024-039', '2025-11-30', 91, 'Seed Vault A', 'Red oakleaf', 2, NOW(), NOW()),
+(40, 40, 300, 'GRAMS', 9.75, 'Lettuce Specialists', 'LS-2024-040', '2025-12-31', 93, 'Seed Vault A', 'Compact variety', 2, NOW(), NOW()),
+(41, 41, 250, 'GRAMS', 15.25, 'Gourmet Greens', 'GG-2024-041', '2025-11-30', 89, 'Seed Vault A', 'Decorative leaves', 2, NOW(), NOW()),
+(42, 42, 450, 'GRAMS', 16.50, 'Spinach Growers', 'SG-2024-042', '2025-12-31', 95, 'Seed Vault A', 'Savoyed leaves', 2, NOW(), NOW()),
+(43, 43, 200, 'GRAMS', 28.00, 'Heat Tolerant Crops', 'HTC-2024-043', '2025-10-31', 87, 'Seed Vault A', 'Summer spinach', 2, NOW(), NOW()),
+(44, 44, 380, 'GRAMS', 14.75, 'Rocket Growers', 'RG-2024-044', '2025-12-31', 92, 'Seed Vault A', 'Mild arugula', 2, NOW(), NOW()),
+(45, 45, 150, 'GRAMS', 35.50, 'Specialty Greens', 'SG-2024-045', '2025-11-30', 88, 'Seed Vault A', 'Peppery cress', 2, NOW(), NOW()),
+(46, 46, 180, 'GRAMS', 22.25, 'Bitter Greens Co', 'BGC-2024-046', '2025-12-31', 85, 'Seed Vault A', 'Broad leaf type', 2, NOW(), NOW()),
+(47, 47, 120, 'GRAMS', 45.00, 'Italian Varieties', 'IV-2024-047', '2025-11-30', 83, 'Seed Vault A', 'Chioggia type', 2, NOW(), NOW()),
+(48, 48, 140, 'GRAMS', 38.75, 'Gourmet Greens', 'GG-2024-048', '2025-12-31', 86, 'Seed Vault A', 'Curly endive', 2, NOW(), NOW()),
+(49, 49, 320, 'GRAMS', 18.50, 'Mustard Specialists', 'MS-2024-049', '2025-10-31', 90, 'Seed Vault A', 'Large leaves', 2, NOW(), NOW()),
+(50, 50, 280, 'GRAMS', 12.75, 'Southern Greens', 'SG-2024-050', '2025-12-31', 92, 'Seed Vault A', 'Traditional variety', 2, NOW(), NOW()),
+(51, 51, 200, 'GRAMS', 16.25, 'Cabbage Growers', 'CG-2024-051', '2025-11-30', 94, 'Seed Vault B', 'Early variety', 2, NOW(), NOW()),
+(52, 52, 80, 'GRAMS', 55.00, 'Brussels Sprouts Co', 'BSC-2024-052', '2025-12-31', 89, 'Seed Vault B', 'Cold hardy', 2, NOW(), NOW()),
+(53, 53, 300, 'GRAMS', 18.75, 'French Varieties', 'FV-2024-053', '2025-11-30', 93, 'Seed Vault B', 'Classic Nantes', 2, NOW(), NOW()),
+(54, 54, 250, 'GRAMS', 20.50, 'Storage Crops', 'SC-2024-054', '2025-12-31', 91, 'Seed Vault B', 'Broad shouldered', 2, NOW(), NOW()),
+(55, 55, 180, 'GRAMS', 35.25, 'Italian Varieties', 'IV-2024-055', '2025-10-31', 88, 'Seed Vault B', 'Striped variety', 2, NOW(), NOW()),
+(56, 56, 160, 'GRAMS', 28.50, 'Colorful Crops', 'CC-2024-056', '2025-12-31', 90, 'Seed Vault B', 'Golden variety', 2, NOW(), NOW()),
+(57, 57, 450, 'GRAMS', 9.25, 'Quick Crops', 'QC-2024-057', '2025-11-30', 96, 'Seed Vault B', 'French type', 2, NOW(), NOW()),
+(58, 58, 100, 'GRAMS', 32.00, 'Winter Radishes', 'WR-2024-058', '2025-12-31', 87, 'Seed Vault B', 'Black variety', 2, NOW(), NOW()),
+(59, 59, 350, 'GRAMS', 45.50, 'Japanese Varieties', 'JV-2024-059', '2025-11-30', 94, 'Seed Vault B', 'Salad turnip', 2, NOW(), NOW()),
+(60, 60, 120, 'GRAMS', 38.75, 'Specialty Crops', 'SC-2024-060', '2025-12-31', 89, 'Seed Vault B', 'Purple variety', 2, NOW(), NOW()),
+(61, 61, 60, 'GRAMS', 85.00, 'Celery Specialists', 'CS-2024-061', '2025-10-31', 82, 'Seed Vault B', 'Celery root', 2, NOW(), NOW()),
+(62, 62, 80, 'GRAMS', 65.00, 'Fennel Growers', 'FG-2024-062', '2025-12-31', 85, 'Seed Vault B', 'Bulbing type', 2, NOW(), NOW()),
+(63, 63, 40, 'GRAMS', 125.00, 'Leek Specialists', 'LS-2024-063', '2025-11-30', 88, 'Seed Vault B', 'Hardy variety', 2, NOW(), NOW()),
+(64, 64, 100, 'GRAMS', 55.00, 'Onion Growers', 'OG-2024-064', '2025-12-31', 91, 'Seed Vault B', 'Storage onion', 2, NOW(), NOW()),
+(65, 65, 20, 'GRAMS', 145.00, 'Ornamental Herbs', 'OH-2024-065', '2025-11-30', 87, 'Seed Vault C', 'Purple basil', 2, NOW(), NOW()),
+(66, 66, 25, 'GRAMS', 125.00, 'Citrus Herbs', 'CH-2024-066', '2025-12-31', 89, 'Seed Vault C', 'Lemon scented', 2, NOW(), NOW()),
+(67, 67, 18, 'GRAMS', 165.00, 'Asian Herbs', 'AH-2024-067', '2025-10-31', 90, 'Seed Vault C', 'Thai variety', 2, NOW(), NOW()),
+(68, 68, 45, 'GRAMS', 48.50, 'Cilantro Specialists', 'CS-2024-068', '2025-12-31', 92, 'Seed Vault C', 'Slow bolting', 2, NOW(), NOW()),
+(69, 69, 35, 'GRAMS', 42.25, 'Parsley Growers', 'PG-2024-069', '2025-11-30', 94, 'Seed Vault C', 'Curly variety', 2, NOW(), NOW()),
+(70, 70, 50, 'GRAMS', 32.75, 'Dill Specialists', 'DS-2024-070', '2025-12-31', 91, 'Seed Vault C', 'Large variety', 2, NOW(), NOW()),
+(71, 71, 30, 'GRAMS', 65.00, 'Chive Growers', 'CG-2024-071', '2025-11-30', 93, 'Seed Vault C', 'Common variety', 2, NOW(), NOW()),
+(72, 72, 12, 'GRAMS', 95.00, 'Italian Herbs', 'IH-2024-072', '2025-12-31', 88, 'Seed Vault C', 'Sweet variety', 2, NOW(), NOW()),
+(73, 73, 15, 'GRAMS', 115.00, 'Gourmet Herbs', 'GH-2024-073', '2025-10-31', 85, 'Seed Vault C', 'Delicate herb', 2, NOW(), NOW()),
+(74, 74, 8, 'GRAMS', 225.00, 'French Herbs', 'FH-2024-074', '2025-12-31', 82, 'Seed Vault C', 'Anise flavored', 2, NOW(), NOW()),
+(75, 75, 25, 'GRAMS', 85.00, 'Mint Specialists', 'MS-2024-075', '2025-11-30', 89, 'Seed Vault C', 'Spearmint variety', 2, NOW(), NOW()),
+(76, 76, 20, 'GRAMS', 95.00, 'Medicinal Herbs', 'MH-2024-076', '2025-12-31', 86, 'Seed Vault C', 'Tea variety', 2, NOW(), NOW()),
+(77, 77, 40, 'GRAMS', 55.00, 'Bee Plants', 'BP-2024-077', '2025-11-30', 91, 'Seed Vault C', 'Blue flowers', 2, NOW(), NOW()),
+(78, 78, 30, 'GRAMS', 75.00, 'Mint Family', 'MF-2024-078', '2025-12-31', 88, 'Seed Vault C', 'Lemony variety', 2, NOW(), NOW()),
+(79, 79, 22, 'GRAMS', 135.00, 'Specialty Herbs', 'SH-2024-079', '2025-10-31', 84, 'Seed Vault C', 'Licorice flavor', 2, NOW(), NOW()),
+(80, 80, 8, 'GRAMS', 285.00, 'Heirloom Tomatoes', 'HT-2024-080', '2025-12-31', 89, 'Seed Vault D', 'Pink heirloom', 2, NOW(), NOW()),
+(81, 81, 12, 'GRAMS', 245.00, 'Italian Tomatoes', 'IT-2024-081', '2025-11-30', 91, 'Seed Vault D', 'Paste variety', 2, NOW(), NOW()),
+(82, 82, 35, 'GRAMS', 125.00, 'Japanese Peppers', 'JP-2024-082', '2025-12-31', 93, 'Seed Vault D', 'Frying pepper', 2, NOW(), NOW()),
+(83, 83, 25, 'GRAMS', 95.00, 'Chile Peppers', 'CP-2024-083', '2025-11-30', 90, 'Seed Vault D', 'Mild variety', 2, NOW(), NOW()),
+(84, 84, 15, 'GRAMS', 185.00, 'Asian Eggplant', 'AE-2024-084', '2025-12-31', 87, 'Seed Vault D', 'Slender type', 2, NOW(), NOW()),
+(85, 85, 28, 'GRAMS', 155.00, 'Specialty Cucumbers', 'SC-2024-085', '2025-10-31', 92, 'Seed Vault D', 'Lemon variety', 2, NOW(), NOW()),
+(86, 86, 32, 'GRAMS', 95.00, 'Summer Squash', 'SS-2024-086', '2025-12-31', 88, 'Seed Vault D', 'Scalloped type', 2, NOW(), NOW()),
+(87, 87, 20, 'GRAMS', 145.00, 'Pumpkin Specialists', 'PS-2024-087', '2025-11-30', 85, 'Seed Vault D', 'Pie variety', 2, NOW(), NOW()),
+(88, 88, 18, 'GRAMS', 165.00, 'Watermelon Co', 'WC-2024-088', '2025-12-31', 90, 'Seed Vault D', 'Icebox type', 2, NOW(), NOW()),
+(89, 89, 15, 'GRAMS', 185.00, 'Melon Masters', 'MM-2024-089', '2025-11-30', 87, 'Seed Vault D', 'Netted variety', 2, NOW(), NOW()),
+(90, 90, 100, 'GRAMS', 25.00, 'Sunflower Specialists', 'SS-2024-090', '2025-12-31', 92, 'Seed Vault E', 'Giant variety', 2, NOW(), NOW()),
+(91, 91, 50, 'GRAMS', 285.00, 'Superfood Grains', 'SG-2024-091', '2025-10-31', 88, 'Seed Vault E', 'Colorful quinoa', 2, NOW(), NOW()),
+(92, 92, 75, 'GRAMS', 195.00, 'Ancient Grains', 'AG-2024-092', '2025-12-31', 85, 'Seed Vault E', 'Red amaranth', 2, NOW(), NOW()); 

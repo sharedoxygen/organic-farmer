@@ -1,0 +1,32 @@
+.container {
+  padding: 24px;
+}
+.title {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.card {
+  background: var(--panel-bg, #111827);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px;
+}
+.metric {
+  font-size: 24px;
+  margin-top: 8px;
+}
+.section {
+  margin-top: 20px;
+}
+.list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+
+

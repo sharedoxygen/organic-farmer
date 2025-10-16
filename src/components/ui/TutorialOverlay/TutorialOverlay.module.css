@@ -1,0 +1,217 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 9998;
+    cursor: pointer;
+}
+
+.spotlight {
+    position: fixed;
+    background-color: transparent;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.tutorialHighlight {
+    position: relative;
+    z-index: 10000;
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        outline-color: var(--primary-color);
+    }
+
+    50% {
+        outline-color: var(--primary-light);
+    }
+
+    100% {
+        outline-color: var(--primary-color);
+    }
+}
+
+.tooltip {
+    position: fixed;
+    width: 320px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 10001;
+    animation: fadeIn var(--transition-normal);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3) var(--spacing-4);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+}
+
+.closeButton {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.closeButton:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.content {
+    padding: var(--spacing-4);
+}
+
+.content p {
+    margin: 0 0 var(--spacing-3) 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.action {
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.progress {
+    height: 4px;
+    background-color: var(--bg-secondary);
+    margin: 0 var(--spacing-4);
+}
+
+.progressBar {
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width var(--transition-normal);
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+.stepInfo {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.skipButton {
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.skipButton:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+.prevButton,
+.nextButton {
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.prevButton:hover:not(:disabled),
+.nextButton:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color-hover);
+}
+
+.prevButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.nextButton {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    border-color: var(--primary-color);
+}
+
+.nextButton:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .tooltip {
+        width: 280px;
+        max-width: calc(100vw - var(--spacing-4));
+    }
+
+    .content {
+        padding: var(--spacing-3);
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: var(--spacing-2);
+    }
+
+    .actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

@@ -1,0 +1,51 @@
+{
+  "startTime": "2025-08-18T21:56:54.796Z",
+  "endTime": "2025-08-18T21:59:46.256Z",
+  "totalTests": 4,
+  "passedTests": 0,
+  "failedTests": 4,
+  "sections": {
+    "authentication-auth": {
+      "passed": false,
+      "duration": 73812,
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    },
+    "navigation-navigation": {
+      "passed": false,
+      "duration": 31218,
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    },
+    "planning-crops": {
+      "passed": false,
+      "duration": 31208,
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    },
+    "dataIntegrity-integrity": {
+      "passed": false,
+      "duration": 31201,
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+    }
+  },
+  "errors": [
+    "authentication-auth: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n",
+    "navigation-navigation: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n",
+    "planning-crops: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n",
+    "dataIntegrity-integrity: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]') to be visible\u001b[22m\n"
+  ],
+  "config": {
+    "headless": true,
+    "parallel": false,
+    "baseURL": "http://localhost:3005"
+  },
+  "environment": {
+    "nodeVersion": "v23.7.0",
+    "platform": "darwin",
+    "memory": {
+      "rss": 109199360,
+      "heapTotal": 28491776,
+      "heapUsed": 26937352,
+      "external": 2729326,
+      "arrayBuffers": 209484
+    }
+  }
+}

@@ -1,0 +1,273 @@
+/* Modal Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--spacing-4);
+}
+
+/* Modal Container */
+.modal {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+}
+
+/* Modal Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-6);
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--primary-subtle), var(--bg-secondary));
+}
+
+.header h2 {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.header h2::before {
+    content: '🌱';
+    font-size: 1.25rem;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-medium);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.closeButton:hover {
+    background: var(--hover-bg);
+    color: var(--text-dark);
+}
+
+/* Form Styling */
+.form {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+/* Form Sections */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.section h3 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: var(--spacing-2);
+    border-bottom: 2px solid var(--primary-subtle);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.section h3::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* Form Rows and Fields */
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-4);
+}
+
+@media (max-width: 768px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.field label {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.field input,
+.field select {
+    padding: var(--spacing-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.field input:focus,
+.field select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-subtle);
+    background: var(--bg-secondary);
+}
+
+.field input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Error Styling */
+.field input.error,
+.field select.error {
+    border-color: var(--danger-color);
+    background: var(--danger-subtle);
+}
+
+.errorText {
+    color: var(--danger-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Form Actions */
+.actions {
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: flex-end;
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+@media (max-width: 768px) {
+    .actions {
+        flex-direction: column-reverse;
+    }
+}
+
+/* Special Styling for Organic Checkbox */
+.field label input[type="checkbox"]+span {
+    margin-left: var(--spacing-2);
+}
+
+.field input[type="checkbox"]:checked+span {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+/* Number Input Styling */
+.field input[type="number"] {
+    font-family: 'SF Mono', Monaco, monospace;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    .overlay {
+        padding: var(--spacing-2);
+    }
+
+    .modal {
+        max-height: 95vh;
+    }
+
+    .header {
+        padding: var(--spacing-4);
+    }
+
+    .form {
+        padding: var(--spacing-4);
+        gap: var(--spacing-4);
+    }
+
+    .section {
+        gap: var(--spacing-3);
+    }
+
+    .row {
+        gap: var(--spacing-3);
+    }
+}
+
+/* Loading State */
+.field input:disabled,
+.field select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--bg-tertiary);
+}
+
+/* Form Validation Visual Feedback */
+.field input:valid:not(:placeholder-shown) {
+    border-color: var(--success-color);
+}
+
+.field input:invalid:not(:placeholder-shown):not(:focus) {
+    border-color: var(--warning-color);
+}
+
+/* Hover Effects */
+.field input:hover:not(:disabled):not(:focus),
+.field select:hover:not(:disabled):not(:focus) {
+    border-color: var(--border-color-hover);
+    background: var(--hover-bg);
+}
+
+/* Professional Farm Theme Colors */
+.section:nth-child(1) h3::before {
+    background: var(--success-color);
+}
+
+.section:nth-child(2) h3::before {
+    background: var(--primary-color);
+}
+
+.section:nth-child(3) h3::before {
+    background: var(--warning-color);
+}
+
+.section:nth-child(4) h3::before {
+    background: var(--info-color);
+}

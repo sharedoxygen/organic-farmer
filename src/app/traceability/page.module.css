@@ -1,0 +1,507 @@
+.container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.header h1 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.reportButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 0.95rem;
+    background: var(--color-primary);
+    color: white;
+}
+
+.reportButton:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+}
+
+.reportButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Search Section */
+.searchCard {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.searchCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 0.5rem;
+}
+
+.searchForm {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.searchType {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    min-width: 150px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.searchButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 0.95rem;
+    background: var(--color-success);
+    color: white;
+    white-space: nowrap;
+}
+
+.searchButton:hover:not(:disabled) {
+    background: var(--color-success-dark);
+    transform: translateY(-1px);
+}
+
+.searchButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Summary Card */
+.summaryCard {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.summaryHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.summaryHeader h3 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.complianceBadges {
+    display: flex;
+    gap: 1rem;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.badge.compliant {
+    background: var(--color-success);
+    color: white;
+}
+
+.badge.nonCompliant {
+    background: var(--color-error);
+    color: white;
+}
+
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.summaryItem h4 {
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.summaryItem p {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.summaryItem small {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.gradeA {
+    color: var(--color-success) !important;
+    font-size: 1.5rem !important;
+}
+
+/* Traceability Chain */
+.chainCard {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.chainCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 0.5rem;
+}
+
+.chainTimeline {
+    position: relative;
+}
+
+.chainTimeline::before {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-primary);
+    opacity: 0.3;
+}
+
+.chainStage {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.stageNumber {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.stageContent {
+    flex: 1;
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border-left: 4px solid var(--color-primary);
+}
+
+.stageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stageHeader h4 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.stageDate {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    background: var(--bg-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.stageAction {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.stageDetails {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.stageDetails span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    background: var(--bg-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.stageDocuments {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    background: var(--bg-primary);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.stageDocuments strong {
+    color: var(--text-primary);
+}
+
+/* Additional Info Section */
+.additionalInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.qualityCard,
+.distributionCard {
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.qualityCard h3,
+.distributionCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 0.5rem;
+}
+
+.qualityList,
+.distributionList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.qualityItem,
+.distributionItem {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border-left: 4px solid var(--color-success);
+}
+
+.qualityHeader,
+.distributionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.qualityDate {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.qualityResult {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.qualityResult.pass {
+    background: var(--color-success);
+    color: white;
+}
+
+.qualityResult.fail {
+    background: var(--color-error);
+    color: white;
+}
+
+.distributionHeader h4 {
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.distributionQuantity {
+    background: var(--color-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.qualityItem p,
+.distributionItem p {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.qualityItem strong,
+.distributionItem strong {
+    color: var(--text-primary);
+}
+
+/* Instructions Card */
+.instructionsCard {
+    padding: 2rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+}
+
+.instructionsCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 0.5rem;
+}
+
+.instructions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.instructionItem {
+    background: var(--bg-primary);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+}
+
+.instructionItem h4 {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.instructionItem p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.instructionItem ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.instructionItem li {
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.instructionItem li:last-child {
+    border-bottom: none;
+}
+
+.instructionItem code {
+    background: var(--color-primary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .searchForm {
+        flex-direction: column;
+    }
+
+    .summaryGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .complianceBadges {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .chainStage {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .chainTimeline::before {
+        display: none;
+    }
+
+    .stageDetails {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .additionalInfo {
+        grid-template-columns: 1fr;
+    }
+
+    .instructions {
+        grid-template-columns: 1fr;
+    }
+
+    .qualityHeader,
+    .distributionHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

@@ -1,0 +1,621 @@
+/* Modern Business Header Styles */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-2);
+    z-index: 200;
+    backdrop-filter: blur(8px);
+    transition: all var(--transition-fast);
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+/* MOBILE-ONLY HAMBURGER MENU */
+.menuButton {
+    display: none;
+    /* Hidden by default on desktop */
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.menuButton:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.menuButton:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+/* Sections */
+.section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+/* Farm Selector Styles */
+.farmSelector {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.farmButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+    min-width: 180px;
+}
+
+.farmButton:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.farmIcon {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.farmInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.farmLabel {
+    font-size: var(--font-size-xs);
+    color: var(--text-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
+
+.farmName {
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+.farmDropdown {
+    position: absolute;
+    top: calc(100% + var(--spacing-1));
+    right: 0;
+    min-width: 280px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.farmMenuHeader {
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.farmMenuHeader strong {
+    color: var(--text-dark);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.farmCount {
+    font-size: var(--font-size-xs);
+    color: var(--text-medium);
+    background: var(--primary-bg);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-full);
+}
+
+.farmMenuItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+
+.farmMenuItem:hover {
+    background: var(--hover-bg);
+}
+
+.farmMenuItem.activeFarm {
+    background: var(--primary-bg);
+    color: var(--primary-color);
+}
+
+.farmItemIcon {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.farmItemInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.farmItemName {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    line-height: 1.2;
+    color: inherit;
+}
+
+.farmItemType {
+    font-size: var(--font-size-xs);
+    color: var(--text-medium);
+    text-transform: capitalize;
+}
+
+.activeFarm .farmItemType {
+    color: var(--primary-light);
+}
+
+.activeIndicator {
+    color: var(--success-color);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+}
+
+/* Overlay for dropdown */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background: transparent;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .farmButton {
+        min-width: 120px;
+        padding: var(--spacing-2);
+    }
+    
+    .farmName {
+        font-size: var(--font-size-xs);
+    }
+    
+    .farmLabel {
+        display: none; /* Hide "Farm:" label on mobile */
+    }
+    
+    .farmDropdown {
+        min-width: 240px;
+        right: -20px; /* Adjust positioning for mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .farmButton {
+        min-width: 100px;
+        flex-direction: column;
+        gap: var(--spacing-1);
+        padding: var(--spacing-1) var(--spacing-2);
+    }
+    
+    .farmInfo {
+        align-items: center;
+    }
+    
+    .farmName {
+        font-size: var(--font-size-xs);
+        text-align: center;
+    }
+}
+
+.sectionButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+}
+
+.sectionButton:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.sectionLabel {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+.notificationButton {
+    position: relative;
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.notificationButton:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.notificationBadge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: var(--danger-color);
+    color: var(--text-on-danger);
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    padding: 2px 6px;
+    border-radius: var(--border-radius-full);
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.settingsButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+}
+
+.settingsButton:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+/* User Section */
+.userSection {
+    position: relative;
+}
+
+.userButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    background: none;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--border-radius-lg);
+    transition: all var(--transition-fast);
+    color: var(--text-medium);
+}
+
+.userButton:hover {
+    border-color: var(--primary-color);
+    background: var(--hover-bg);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.userName {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.userRole {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+
+.userAvatar {
+    width: 36px;
+    height: 36px;
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+/* Dropdowns */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 250;
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow-hover);
+    padding: var(--spacing-2);
+    min-width: 200px;
+    z-index: 300;
+    animation: slideDown 0.2s ease-out;
+}
+
+.userDropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow-hover);
+    padding: var(--spacing-4);
+    min-width: 280px;
+    z-index: 300;
+    animation: slideDown 0.2s ease-out;
+}
+
+.dropdownItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    text-align: left;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    /* For anchor tags */
+}
+
+.dropdownItem:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.dropdownIcon {
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.userDetails {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    padding: var(--spacing-3);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+}
+
+.userDetailAvatar {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.userDetailInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    min-width: 0;
+    flex: 1;
+}
+
+.userDetailName {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.userDetailEmail {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+
+.userDetailRole {
+    font-size: var(--font-size-xs);
+    color: var(--primary-color);
+    background: var(--primary-subtle);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    width: fit-content;
+    font-weight: var(--font-weight-medium);
+}
+
+.dropdownDivider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--spacing-3) 0;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE DESIGN - Show hamburger menu ONLY on mobile */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 var(--spacing-4);
+    }
+
+    /* Show hamburger menu on mobile */
+    .menuButton {
+        display: flex !important;
+    }
+
+    /* Hide section labels on mobile */
+    .sectionLabel {
+        display: none;
+    }
+
+    /* Hide user info text on mobile */
+    .userInfo {
+        display: none;
+    }
+
+    .userButton {
+        padding: var(--spacing-2);
+        min-width: 40px;
+        justify-content: center;
+    }
+
+    /* Adjust spacing */
+    .right {
+        gap: var(--spacing-2);
+    }
+
+    .section {
+        gap: var(--spacing-1);
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 0 var(--spacing-3);
+    }
+
+    .dropdown,
+    .userDropdown {
+        left: var(--spacing-3);
+        right: var(--spacing-3);
+        min-width: auto;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .header {
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .userButton:focus,
+    .menuButton:focus,
+    .notificationButton:focus,
+    .settingsButton:focus,
+    .sectionButton:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+}

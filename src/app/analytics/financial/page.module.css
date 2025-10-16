@@ -1,0 +1,238 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: var(--spacing-8);
+}
+
+.title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-2);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-medium);
+    margin: 0;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--text-medium);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-4);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.error {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--text-medium);
+}
+
+.periodSelector {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-8);
+    padding: var(--spacing-1);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    width: fit-content;
+}
+
+.periodButton {
+    padding: var(--spacing-2) var(--spacing-4);
+    border: none;
+    background: transparent;
+    color: var(--text-medium);
+    border-radius: var(--border-radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.periodButton:hover {
+    background: var(--bg-primary);
+    color: var(--text-dark);
+}
+
+.periodButton.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-8);
+}
+
+.metricCard {
+    padding: var(--spacing-6);
+}
+
+.metricHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-4);
+}
+
+.metricHeader h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.metricPeriod {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    background: var(--bg-secondary);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-md);
+    text-transform: capitalize;
+}
+
+.metricValue {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-2);
+}
+
+.metricChange {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+.detailsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-6);
+}
+
+.expenseCard,
+.profitabilityCard {
+    padding: var(--spacing-6);
+}
+
+.expenseCard h3,
+.profitabilityCard h3 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin: 0 0 var(--spacing-6) 0;
+}
+
+.expenseList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.expenseItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.expenseCategory {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-dark);
+}
+
+.expenseAmount {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-color);
+}
+
+.expenseBar {
+    height: 6px;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+}
+
+.expenseFill {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+    border-radius: var(--border-radius-full);
+}
+
+.profitabilityList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.profitabilityItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profitabilityItem:last-child {
+    border-bottom: none;
+}
+
+.profitabilityLabel {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-dark);
+}
+
+.profitabilityValue {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-4);
+    }
+
+    .metricsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .detailsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .periodSelector {
+        width: 100%;
+        justify-content: center;
+    }
+}

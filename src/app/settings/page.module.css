@@ -1,0 +1,326 @@
+/* Settings Page Styles */
+
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.header {
+    margin-bottom: var(--spacing-xl);
+    text-align: left;
+}
+
+.title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.utilitiesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.utilityCard {
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--card-bg);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.utilityCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+.utilityContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-align: center;
+}
+
+.utilityIcon {
+    font-size: 2.25rem;
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+}
+
+.utilityInfo {
+    flex: 1;
+    margin-bottom: var(--spacing-md);
+}
+
+.utilityTitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-sm) 0;
+    white-space: normal;
+}
+
+.utilityDescription {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 var(--spacing-md) 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.categoryBadge {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.utilityAction {
+    margin-top: auto;
+}
+
+.actionButton {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 110px;
+}
+
+.actionButton:hover {
+    background: var(--primary-color-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.actionButton:active {
+    transform: translateY(0);
+}
+
+/* Recent Activity Section */
+.recentActivity {
+    margin-top: var(--spacing-8);
+}
+
+.activityHeader {
+    padding: var(--spacing-6) var(--spacing-6) var(--spacing-4);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activityHeader h2 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.viewAllLink {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+}
+
+.viewAllLink:hover {
+    background: var(--primary-subtle);
+}
+
+.activityList {
+    padding: var(--spacing-4) var(--spacing-6) var(--spacing-6);
+}
+
+.activityItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4) 0;
+    border-bottom: 1px solid var(--border-color-subtle);
+}
+
+.activityItem:last-child {
+    border-bottom: none;
+}
+
+.activityIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.activityContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.activityDescription {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    margin: 0 0 var(--spacing-1) 0;
+    line-height: var(--line-height-snug);
+}
+
+.activityTime {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-weight: var(--font-weight-medium);
+}
+
+.activityStatus {
+    background: var(--success-subtle);
+    color: var(--success-color);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    white-space: nowrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+
+    .utilitiesGrid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .utilityCard {
+        padding: var(--spacing-lg);
+        height: auto;
+        min-height: 220px;
+    }
+
+    .title {
+        font-size: 1.75rem;
+    }
+}
+
+/* Dark Theme Support */
+:global(.theme-dark) .moduleCard {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+:global(.theme-dark) .title {
+    color: #f8fafc !important;
+}
+
+:global(.theme-dark) .subtitle {
+    color: #94a3b8 !important;
+}
+
+:global(.theme-dark) .moduleTitle {
+    color: #f8fafc !important;
+}
+
+:global(.theme-dark) .moduleDescription {
+    color: #94a3b8 !important;
+}
+
+:global(.theme-dark) .activityHeader h2 {
+    color: #f8fafc !important;
+}
+
+:global(.theme-dark) .activityDescription {
+    color: #e2e8f0 !important;
+}
+
+/* Settings cards section */
+.settingsSection {
+    padding: var(--spacing-6);
+}
+
+/* Modal content with reduced padding */
+.modalContent {
+    padding: var(--spacing-4) var(--spacing-6);
+}
+
+/* Coming Soon Styles */
+.comingSoonCard {
+    opacity: 0.7;
+    background: linear-gradient(135deg, var(--card-bg) 0%, #f8fafc 100%);
+}
+
+.comingSoonCard:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comingSoonBadge {
+    background: #f59e0b;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.comingSoonButton {
+    background: #6b7280 !important;
+    color: white !important;
+    cursor: not-allowed !important;
+}
+
+.comingSoonButton:hover {
+    background: #6b7280 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Dark theme support for coming soon items */
+:global(.theme-dark) .comingSoonCard {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+:global(.theme-dark) .comingSoonBadge {
+    background: #f59e0b;
+    color: #000;
+}

@@ -1,0 +1,286 @@
+/* Feedback Response Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.modalContainer {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.modalHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 2rem 2rem 1rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.headerContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+}
+
+.headerIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-md);
+    background: var(--primary-color-alpha);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.headerText {
+    flex: 1;
+}
+
+.title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.closeButton {
+    padding: 0.5rem;
+    border: none;
+    background: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+}
+
+.closeButton:hover {
+    background: var(--bg-hover);
+    color: var(--text-dark);
+}
+
+/* Body */
+.modalBody {
+    padding: 2rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.feedbackContext {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.contextTitle {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin: 0 0 1rem 0;
+}
+
+.contextContent {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-sm);
+    padding: 1rem;
+}
+
+.contextMeta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.contextType {
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-color-alpha);
+    color: var(--primary-color);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+.contextUser {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+.contextDescription {
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Response Form */
+.responseForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.formLabel {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    font-size: var(--font-size-sm);
+}
+
+.required {
+    color: var(--danger-color);
+}
+
+.messageTextarea {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    color: var(--text-dark);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 150px;
+    transition: all var(--transition-base);
+}
+
+.messageTextarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.messageTextarea:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkboxLabel {
+    font-size: var(--font-size-sm);
+    color: var(--text-dark);
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkboxHint {
+    font-size: var(--font-size-xs);
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.4;
+    margin-left: 1.75rem;
+}
+
+/* Footer */
+.modalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem 2rem 2rem 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.cancelButton,
+.submitButton {
+    min-width: 120px;
+}
+
+.spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modalOverlay {
+        padding: 1rem;
+    }
+    
+    .modalHeader,
+    .modalBody,
+    .modalFooter {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    
+    .contextMeta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .modalFooter {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+    }
+    
+    .cancelButton,
+    .submitButton {
+        width: 100%;
+        min-width: unset;
+    }
+}

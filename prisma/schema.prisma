@@ -1,0 +1,1013 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PartyType {
+  PERSON
+  ORGANIZATION
+}
+
+enum PartyRoleType {
+  FARM
+  CUSTOMER_B2B
+  CUSTOMER_B2C
+  USER
+  SUPPLIER
+  DISTRIBUTOR
+  EMPLOYEE
+  SYSTEM_ADMIN
+}
+
+enum ContactType {
+  EMAIL
+  PHONE
+  MOBILE
+  FAX
+  ADDRESS
+  URL
+  SOCIAL
+  OTHER
+}
+
+enum RelationshipType {
+  OWNS
+  MANAGES
+  EMPLOYS
+  SUPPLIES
+  DISTRIBUTES
+  MEMBER_OF
+  PARENT_OF
+  SUBSIDIARY_OF
+  RELATED_TO
+}
+
+model parties {
+  id          String    @id @default(uuid())
+  displayName String
+  legalName   String?
+  partyType   PartyType
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  roles             party_roles[]
+  contacts          party_contacts[]
+  relationshipsFrom party_relationships[] @relation("PartyRelationshipsFrom")
+  relationshipsTo   party_relationships[] @relation("PartyRelationshipsTo")
+}
+
+model party_roles {
+  id        String        @id @default(uuid())
+  partyId   String
+  roleType  PartyRoleType
+  farm_id   String?
+  metadata  Json?
+  createdAt DateTime      @default(now())
+
+  party parties @relation(fields: [partyId], references: [id], onDelete: Cascade)
+  farms farms?  @relation("PartyRoleFarm", fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([partyId])
+  @@index([farm_id])
+}
+
+model party_contacts {
+  id        String      @id @default(uuid())
+  partyId   String
+  type      ContactType
+  label     String?
+  value     String
+  isPrimary Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  party parties @relation(fields: [partyId], references: [id], onDelete: Cascade)
+
+  @@index([partyId])
+}
+
+model party_relationships {
+  id             String           @id @default(uuid())
+  partyId        String
+  relatedPartyId String
+  relationship   RelationshipType
+  metadata       Json?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  party        parties @relation("PartyRelationshipsFrom", fields: [partyId], references: [id], onDelete: Cascade)
+  relatedParty parties @relation("PartyRelationshipsTo", fields: [relatedPartyId], references: [id], onDelete: Cascade)
+
+  @@index([partyId])
+  @@index([relatedPartyId])
+}
+
+model batches {
+  id                             String           @id
+  batchNumber                    String
+  growingMedium                  String
+  expectedHarvestDate            DateTime
+  actualHarvestDate              DateTime?
+  lightHours                     Float?
+  organicCompliant               Boolean          @default(false)
+  qualityGrade                   String?
+  notes                          String?
+  createdAt                      DateTime         @default(now())
+  updatedAt                      DateTime
+  bufferZoneDistance             Float?
+  correctionActions              String?
+  createdBy                      String
+  environmentalHumidity          Float?
+  environmentalTemp              Float?
+  fertilizersUsed                String
+  growingZone                    String
+  harvestContainers              String
+  inspectionDate                 DateTime?
+  inspectorName                  String?
+  irrigationSource               String
+  labelingCompliance             Boolean          @default(false)
+  organicIntegrity               Boolean          @default(false)
+  pestControlMethods             String
+  plantDate                      DateTime
+  quantity                       Float
+  seedVarietyId                  String
+  soilAmendments                 String?
+  storageConditions              String
+  transportationMethod           String
+  unit                           String
+  updatedBy                      String
+  violationsFound                String?
+  status                         String
+  farm_id                        String
+  users_batches_createdByTousers users            @relation("batches_createdByTousers", fields: [createdBy], references: [id])
+  farms                          farms            @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  seed_varieties                 seed_varieties   @relation(fields: [seedVarietyId], references: [id])
+  users_batches_updatedByTousers users            @relation("batches_updatedByTousers", fields: [updatedBy], references: [id])
+  quality_checks                 quality_checks[]
+  tasks                          tasks[]
+  assignments                    assignments[]
+  work_orders                    work_orders[]
+
+  @@unique([farm_id, batchNumber])
+  @@index([farm_id])
+}
+
+model customers {
+  id                               String   @id
+  partyId                          String?  @unique
+  name                             String
+  email                            String
+  phone                            String?
+  city                             String
+  state                            String
+  zipCode                          String
+  taxId                            String?
+  createdAt                        DateTime @default(now())
+  updatedAt                        DateTime
+  businessName                     String?
+  businessType                     String?
+  contactPerson                    String?
+  country                          String
+  createdBy                        String
+  creditLimit                      Float?
+  orderFrequency                   String
+  packagingReqs                    String?
+  paymentTerms                     String
+  preferredVarieties               String
+  status                           String
+  street                           String
+  type                             String
+  updatedBy                        String
+  farm_id                          String
+  users_customers_createdByTousers users    @relation("customers_createdByTousers", fields: [createdBy], references: [id])
+  farms                            farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users_customers_updatedByTousers users    @relation("customers_updatedByTousers", fields: [updatedBy], references: [id])
+  orders                           orders[]
+
+  @@unique([farm_id, email])
+  @@index([farm_id])
+}
+
+model equipment {
+  id                               String        @id
+  name                             String
+  type                             String
+  model                            String
+  manufacturer                     String
+  serialNumber                     String        @unique
+  location                         String
+  installDate                      DateTime
+  warrantyExpiration               DateTime?
+  status                           String
+  maintenanceFrequency             String
+  lastMaintenance                  DateTime?
+  nextMaintenance                  DateTime
+  specifications                   String?
+  powerConsumption                 Float?
+  maintenanceCost                  Float?
+  replacementCost                  Float?
+  createdAt                        DateTime      @default(now())
+  updatedAt                        DateTime
+  createdBy                        String
+  updatedBy                        String
+  farm_id                          String
+  users_equipment_createdByTousers users         @relation("equipment_createdByTousers", fields: [createdBy], references: [id])
+  farms                            farms         @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users_equipment_updatedByTousers users         @relation("equipment_updatedByTousers", fields: [updatedBy], references: [id])
+  tasks                            tasks[]
+  work_orders                      work_orders[]
+
+  @@index([farm_id])
+}
+
+model financial_records {
+  id            String   @id
+  type          String
+  category      String
+  description   String
+  amount        Float
+  date          DateTime
+  orderId       String?
+  supplierId    String?
+  reference     String
+  taxDeductible Boolean  @default(false)
+  paymentMethod String
+  status        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+  createdBy     String
+  farm_id       String
+  users         users    @relation(fields: [createdBy], references: [id])
+  farms         farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+}
+
+model growing_environments {
+  id                String   @id
+  name              String
+  type              String
+  location          String
+  maxBatches        Int
+  totalArea         Float
+  areaUnit          String
+  currentTemp       Float
+  currentHumidity   Float
+  currentLightLevel Float
+  currentCO2        Float?
+  currentPH         Float?
+  targetTempMin     Float
+  targetTempMax     Float
+  targetHumidityMin Float
+  targetHumidityMax Float
+  targetLightHours  Float
+  targetCO2         Float?
+  targetPH          Float?
+  equipmentIds      String
+  status            String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+  createdBy         String
+  farm_id           String
+  users             users    @relation(fields: [createdBy], references: [id])
+  farms             farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+}
+
+model inventory_items {
+  id                                     String          @id
+  name                                   String
+  category                               String
+  sku                                    String?
+  currentStock                           Float
+  minStockLevel                          Float
+  maxStockLevel                          Float
+  unit                                   String
+  costPerUnit                            Float
+  supplier                               String
+  location                               String
+  expirationDate                         DateTime?
+  status                                 String
+  createdAt                              DateTime        @default(now())
+  updatedAt                              DateTime
+  createdBy                              String
+  updatedBy                              String
+  seedVarietyId                          String?
+  farm_id                                String
+  users_inventory_items_createdByTousers users           @relation("inventory_items_createdByTousers", fields: [createdBy], references: [id])
+  farms                                  farms           @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  seed_varieties                         seed_varieties? @relation(fields: [seedVarietyId], references: [id])
+  users_inventory_items_updatedByTousers users           @relation("inventory_items_updatedByTousers", fields: [updatedBy], references: [id])
+
+  @@unique([farm_id, sku])
+  @@index([farm_id])
+}
+
+model order_items {
+  id                  String         @id
+  orderId             String
+  productName         String
+  quantity            Float
+  unitPrice           Float
+  totalPrice          Float
+  qualityRequirements String?
+  seedVarietyId       String
+  unit                String
+  farm_id             String
+  farms               farms          @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  orders              orders         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  seed_varieties      seed_varieties @relation(fields: [seedVarietyId], references: [id])
+
+  @@index([farm_id])
+}
+
+model orders {
+  id                            String        @id
+  orderNumber                   String
+  customerId                    String
+  customerPartyId               String?
+  orderDate                     DateTime
+  requestedDeliveryDate         DateTime
+  actualDeliveryDate            DateTime?
+  subtotal                      Float
+  shippingCost                  Float
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime
+  createdBy                     String
+  deliveryMethod                String
+  notes                         String?
+  tax                           Float
+  total                         Float
+  updatedBy                     String
+  paymentStatus                 String
+  status                        String
+  farm_id                       String
+  order_items                   order_items[]
+  users_orders_createdByTousers users         @relation("orders_createdByTousers", fields: [createdBy], references: [id])
+  customers                     customers     @relation(fields: [customerId], references: [id])
+  farms                         farms         @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users_orders_updatedByTousers users         @relation("orders_updatedByTousers", fields: [updatedBy], references: [id])
+
+  @@unique([farm_id, orderNumber])
+  @@index([farm_id])
+  @@index([customerPartyId])
+}
+
+model quality_checks {
+  id                    String    @id
+  batchId               String
+  inspectorId           String
+  checkDate             DateTime
+  contaminationType     String?
+  notes                 String?
+  createdAt             DateTime  @default(now())
+  contaminationAction   String?
+  contaminationSeverity String?
+  correctiveActions     String
+  followUpDate          DateTime?
+  followUpRequired      Boolean   @default(false)
+  measurementLength     Float?
+  measurementWeight     Float?
+  status                String
+  uniformity            Float?
+  updatedAt             DateTime
+  visualAppearance      String?
+  visualColor           String?
+  visualTexture         String?
+  checkType             String
+  farm_id               String
+  batches               batches   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  farms                 farms     @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users                 users     @relation(fields: [inspectorId], references: [id])
+
+  @@index([farm_id])
+}
+
+model seed_varieties {
+  id                                    String            @id
+  name                                  String
+  scientificName                        String
+  supplier                              String
+  stockQuantity                         Float
+  minStockLevel                         Float
+  unit                                  String
+  costPerUnit                           Float
+  germinationRate                       Float
+  daysToGermination                     Int
+  daysToHarvest                         Int
+  storageTemp                           Float
+  storageHumidity                       Float
+  lightExposure                         String
+  lastOrderDate                         DateTime?
+  status                                String
+  isOrganic                             Boolean           @default(false)
+  organicCertNumber                     String?
+  certifyingAgent                       String?
+  certificationDate                     DateTime?
+  certExpiration                        DateTime?
+  lotNumber                             String
+  treatmentUsed                         String?
+  treatmentDate                         DateTime?
+  prohibitedSubstances                  String?
+  seedSource                            String
+  supplierCertification                 String?
+  commercialAvailability                String?
+  equivalentVariety                     String?
+  nonOrganicJustification               String?
+  auditTrail                            String
+  usdaCompliant                         Boolean           @default(false)
+  createdAt                             DateTime          @default(now())
+  updatedAt                             DateTime
+  createdBy                             String
+  updatedBy                             String
+  farm_id                               String
+  batches                               batches[]
+  crop_plans                            crop_plans[]
+  inventory_items                       inventory_items[]
+  order_items                           order_items[]
+  users_seed_varieties_createdByTousers users             @relation("seed_varieties_createdByTousers", fields: [createdBy], references: [id])
+  farms                                 farms             @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users_seed_varieties_updatedByTousers users             @relation("seed_varieties_updatedByTousers", fields: [updatedBy], references: [id])
+
+  @@index([farm_id])
+}
+
+model tasks {
+  id                 String     @id
+  title              String
+  description        String
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime
+  actualDuration     Int?
+  assignedBy         String
+  assignedTo         String
+  category           String
+  completedAt        DateTime?
+  completedBy        String?
+  completionNotes    String?
+  dependencies       String
+  dueDate            DateTime
+  estimatedDuration  Int
+  relatedBatchId     String?
+  relatedEquipmentId String?
+  priority           String
+  status             String
+  farm_id            String
+  users              users      @relation(fields: [assignedBy], references: [id])
+  farms              farms      @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  batches            batches?   @relation(fields: [relatedBatchId], references: [id])
+  equipment          equipment? @relation(fields: [relatedEquipmentId], references: [id])
+
+  @@index([farm_id])
+}
+
+model assignments {
+  id                                 String    @id
+  title                              String
+  description                        String?
+  assignedTo                         String[]
+  teamLead                           String
+  priority                           String
+  status                             String
+  startDate                          DateTime
+  endDate                            DateTime
+  estimatedHours                     Float
+  actualHours                        Float?
+  progress                           Int       @default(0)
+  category                           String
+  location                           String
+  batchId                            String?
+  zoneId                             String?
+  notes                              String?
+  isRecurring                        Boolean   @default(false)
+  recurringPattern                   String?
+  completedAt                        DateTime?
+  createdBy                          String
+  updatedBy                          String
+  createdAt                          DateTime  @default(now())
+  updatedAt                          DateTime  @updatedAt
+  farm_id                            String
+  farms                              farms     @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  batches                            batches?  @relation(fields: [batchId], references: [id])
+  zones                              zones?    @relation(fields: [zoneId], references: [id])
+  users_assignments_teamLeadTousers  users     @relation("assignments_teamLeadTousers", fields: [teamLead], references: [id])
+  users_assignments_createdByTousers users     @relation("assignments_createdByTousers", fields: [createdBy], references: [id])
+  users_assignments_updatedByTousers users     @relation("assignments_updatedByTousers", fields: [updatedBy], references: [id])
+
+  @@index([farm_id])
+}
+
+model work_orders {
+  id                                  String     @id
+  workOrderNumber                     String
+  title                               String
+  description                         String?
+  type                                String
+  priority                            String
+  status                              String
+  assignedTo                          String?
+  dueDate                             DateTime
+  estimatedHours                      Float
+  actualHours                         Float?
+  batchId                             String?
+  zoneId                              String?
+  equipmentId                         String?
+  instructions                        String?
+  notes                               String?
+  materialsCost                       Float      @default(0)
+  laborCost                           Float      @default(0)
+  totalCost                           Float      @default(0)
+  completedAt                         DateTime?
+  createdBy                           String
+  updatedBy                           String
+  createdAt                           DateTime   @default(now())
+  updatedAt                           DateTime   @updatedAt
+  farm_id                             String
+  farms                               farms      @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  batches                             batches?   @relation(fields: [batchId], references: [id])
+  zones                               zones?     @relation(fields: [zoneId], references: [id])
+  equipment                           equipment? @relation(fields: [equipmentId], references: [id])
+  users_work_orders_assignedToTousers users?     @relation("work_orders_assignedToTousers", fields: [assignedTo], references: [id])
+  users_work_orders_createdByTousers  users      @relation("work_orders_createdByTousers", fields: [createdBy], references: [id])
+  users_work_orders_updatedByTousers  users      @relation("work_orders_updatedByTousers", fields: [updatedBy], references: [id])
+
+  @@unique([farm_id, workOrderNumber])
+  @@index([farm_id])
+}
+
+model users {
+  id                                                      String                 @id
+  partyId                                                 String?                @unique
+  email                                                   String                 @unique
+  isActive                                                Boolean                @default(true)
+  createdAt                                               DateTime               @default(now())
+  updatedAt                                               DateTime               @updatedAt
+  department                                              String
+  employeeId                                              String?                @unique
+  firstName                                               String
+  hireDate                                                DateTime
+  lastLogin                                               DateTime?
+  lastName                                                String
+  managerId                                               String?
+  password                                                String
+  permissions                                             String
+  phone                                                   String?
+  position                                                String
+  roles                                                   String
+  is_system_admin                                         Boolean                @default(false)
+  system_role                                             String?
+  owned_farms                                             farms[]                @relation("FarmOwner")
+  batches_batches_createdByTousers                        batches[]              @relation("batches_createdByTousers")
+  batches_batches_updatedByTousers                        batches[]              @relation("batches_updatedByTousers")
+  crop_plans_crop_plans_createdByTousers                  crop_plans[]           @relation("crop_plans_createdByTousers")
+  crop_plans_crop_plans_updatedByTousers                  crop_plans[]           @relation("crop_plans_updatedByTousers")
+  customers_customers_createdByTousers                    customers[]            @relation("customers_createdByTousers")
+  customers_customers_updatedByTousers                    customers[]            @relation("customers_updatedByTousers")
+  demand_forecasts_demand_forecasts_created_byTousers     demand_forecasts[]     @relation("demand_forecasts_created_by")
+  demand_forecasts_demand_forecasts_updated_byTousers     demand_forecasts[]     @relation("demand_forecasts_updated_by")
+  equipment_equipment_createdByTousers                    equipment[]            @relation("equipment_createdByTousers")
+  equipment_equipment_updatedByTousers                    equipment[]            @relation("equipment_updatedByTousers")
+  farm_users                                              farm_users[]
+  financial_records                                       financial_records[]
+  food_safety_checks_food_safety_checks_created_byTousers food_safety_checks[]   @relation("food_safety_checks_created_byTousers")
+  food_safety_checks_food_safety_checks_updated_byTousers food_safety_checks[]   @relation("food_safety_checks_updated_byTousers")
+  growing_environments                                    growing_environments[]
+  inventory_items_inventory_items_createdByTousers        inventory_items[]      @relation("inventory_items_createdByTousers")
+  inventory_items_inventory_items_updatedByTousers        inventory_items[]      @relation("inventory_items_updatedByTousers")
+  orders_orders_createdByTousers                          orders[]               @relation("orders_createdByTousers")
+  orders_orders_updatedByTousers                          orders[]               @relation("orders_updatedByTousers")
+  organic_compliance_organic_compliance_created_byTousers organic_compliance[]   @relation("organic_compliance_created_byTousers")
+  organic_compliance_organic_compliance_updated_byTousers organic_compliance[]   @relation("organic_compliance_updated_byTousers")
+  quality_checks                                          quality_checks[]
+  seed_varieties_seed_varieties_createdByTousers          seed_varieties[]       @relation("seed_varieties_createdByTousers")
+  seed_varieties_seed_varieties_updatedByTousers          seed_varieties[]       @relation("seed_varieties_updatedByTousers")
+  tasks                                                   tasks[]
+  assignments_assignments_teamLeadTousers                 assignments[]          @relation("assignments_teamLeadTousers")
+  assignments_assignments_createdByTousers                assignments[]          @relation("assignments_createdByTousers")
+  assignments_assignments_updatedByTousers                assignments[]          @relation("assignments_updatedByTousers")
+  work_orders_work_orders_assignedToTousers               work_orders[]          @relation("work_orders_assignedToTousers")
+  work_orders_work_orders_createdByTousers                work_orders[]          @relation("work_orders_createdByTousers")
+  work_orders_work_orders_updatedByTousers                work_orders[]          @relation("work_orders_updatedByTousers")
+  manager                                                 users?                 @relation("UserManager", fields: [managerId], references: [id])
+  directReports                                           users[]                @relation("UserManager")
+  zones_zones_createdByTousers                            zones[]                @relation("zones_createdByTousers")
+  zones_zones_updatedByTousers                            zones[]                @relation("zones_updatedByTousers")
+  feedback_submissions                                    feedback_submissions[]
+  feedback_responses                                      feedback_responses[]   @relation("FeedbackResponses")
+  // Traceability back-relations
+  recall_cases_initiated                                  recall_cases[]         @relation("recall_cases_initiatedByTousers")
+  custody_events_performed                                custody_events[]       @relation("custody_events_performedByTousers")
+}
+
+model farms {
+  id                  String    @id @default(uuid())
+  partyId             String?   @unique
+  farm_name           String
+  business_name       String?
+  subdomain           String?   @unique
+  owner_id            String
+  subscription_plan   String?
+  subscription_status String?
+  trial_ends_at       DateTime?
+  settings            Json?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  // For Hierarchy
+  parent_farm_id String?
+  parent_farm    farms?  @relation("FarmHierarchy", fields: [parent_farm_id], references: [id], onDelete: NoAction)
+  sub_farms      farms[] @relation("FarmHierarchy")
+
+  owner                users                  @relation("FarmOwner", fields: [owner_id], references: [id], onDelete: NoAction)
+  partyRoles           party_roles[]          @relation("PartyRoleFarm")
+  audit_logs           audit_logs[]
+  batches              batches[]
+  crop_plans           crop_plans[]
+  customer_feedback    customer_feedback[]
+  customers            customers[]
+  demand_forecasts     demand_forecasts[]
+  equipment            equipment[]
+  farm_users           farm_users[]
+  financial_records    financial_records[]
+  food_safety_checks   food_safety_checks[]
+  growing_environments growing_environments[]
+  inventory_items      inventory_items[]
+  inventory_logs       inventory_logs[]
+  order_items          order_items[]
+  orders               orders[]
+  organic_compliance   organic_compliance[]
+  quality_checks       quality_checks[]
+  seed_varieties       seed_varieties[]
+  suppliers            suppliers[]
+  tasks                tasks[]
+  zones                zones[]
+  assignments          assignments[]
+  work_orders          work_orders[]
+  feedback_submissions feedback_submissions[]
+  // Traceability relations
+  recall_cases         recall_cases[]
+  recall_items         recall_items[]
+  custody_events       custody_events[]
+}
+
+model farm_users {
+  farm_id     String
+  user_id     String
+  role        FarmRole
+  permissions Json?
+  is_active   Boolean  @default(true)
+  joined_at   DateTime @default(now())
+  farms       farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@id([farm_id, user_id])
+}
+
+model suppliers {
+  id        String   @id @default(uuid())
+  partyId   String?  @unique
+  name      String
+  contact   String?
+  email     String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  farm_id   String
+  farms     farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+}
+
+enum FarmRole {
+  OWNER
+  ADMIN
+  MANAGER
+  FARM_MANAGER
+  OPERATIONS_MANAGER
+  PRODUCTION_LEAD
+  QUALITY_LEAD
+  TEAM_MEMBER
+  QUALITY_SPECIALIST
+  SENIOR_GROWER
+  HARVEST_SPECIALIST
+  WORKER
+}
+
+model audit_logs {
+  id        String   @id @default(uuid())
+  action    String
+  entity    String
+  entityId  String
+  userId    String
+  timestamp DateTime @default(now())
+  details   Json?
+  farm_id   String
+  farms     farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+}
+
+model inventory_logs {
+  id        String   @id @default(uuid())
+  itemId    String
+  itemType  String
+  change    Float
+  reason    String?
+  userId    String
+  timestamp DateTime @default(now())
+  farm_id   String
+  farms     farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+}
+
+model customer_feedback {
+  id         String   @id @default(uuid())
+  customerId String
+  feedback   String
+  rating     Int
+  createdAt  DateTime @default(now())
+  farm_id    String
+  farms      farms    @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+}
+
+model crop_plans {
+  id                                String         @id @default(uuid())
+  farm_id                           String
+  zone_id                           String?
+  seed_variety_id                   String
+  crop_name                         String
+  plan_name                         String
+  plan_type                         String         @default("production")
+  status                            String         @default("planned")
+  priority                          String         @default("medium")
+  planned_start_date                DateTime
+  planned_end_date                  DateTime
+  actual_start_date                 DateTime?
+  actual_end_date                   DateTime?
+  planned_quantity                  Float          @default(0)
+  planned_unit                      String         @default("trays")
+  actual_quantity                   Float?
+  actual_unit                       String?
+  expected_yield                    Float          @default(0)
+  actual_yield                      Float?
+  growing_method                    String         @default("soil")
+  notes                             String?
+  created_at                        DateTime       @default(now())
+  updated_at                        DateTime       @updatedAt
+  created_by                        String
+  updated_by                        String
+  users_crop_plans_createdByTousers users          @relation("crop_plans_createdByTousers", fields: [created_by], references: [id])
+  farms                             farms          @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  seed_varieties                    seed_varieties @relation(fields: [seed_variety_id], references: [id])
+  users_crop_plans_updatedByTousers users          @relation("crop_plans_updatedByTousers", fields: [updated_by], references: [id])
+  zones                             zones?         @relation(fields: [zone_id], references: [id])
+
+  @@index([farm_id])
+}
+
+model zones {
+  id                           String        @id @default(uuid())
+  farm_id                      String
+  name                         String
+  type                         String
+  capacity                     Int           @default(0)
+  area                         Float?
+  area_unit                    String?
+  description                  String?
+  status                       String        @default("active")
+  created_at                   DateTime      @default(now())
+  updated_at                   DateTime      @updatedAt
+  created_by                   String
+  updated_by                   String
+  crop_plans                   crop_plans[]
+  users_zones_createdByTousers users         @relation("zones_createdByTousers", fields: [created_by], references: [id])
+  farms                        farms         @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users_zones_updatedByTousers users         @relation("zones_updatedByTousers", fields: [updated_by], references: [id])
+  assignments                  assignments[]
+  work_orders                  work_orders[]
+
+  @@index([farm_id])
+}
+
+model food_safety_checks {
+  id                                         String    @id @default(dbgenerated("(gen_random_uuid())::text")) @db.VarChar
+  farm_id                                    String    @db.VarChar
+  check_type                                 String    @db.VarChar
+  title                                      String    @db.VarChar
+  status                                     String?   @default("compliant") @db.VarChar
+  last_check_date                            DateTime? @db.Timestamp(6)
+  frequency                                  String    @db.VarChar
+  next_due_date                              DateTime? @db.Timestamp(6)
+  description                                String?
+  notes                                      String?
+  created_at                                 DateTime? @default(now()) @db.Timestamp(6)
+  updated_at                                 DateTime? @default(now()) @db.Timestamp(6)
+  created_by                                 String    @db.VarChar
+  updated_by                                 String    @db.VarChar
+  users_food_safety_checks_created_byTousers users     @relation("food_safety_checks_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  farms                                      farms     @relation(fields: [farm_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_food_safety_checks_updated_byTousers users     @relation("food_safety_checks_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([farm_id])
+}
+
+model organic_compliance {
+  id                                         String    @id @default(dbgenerated("(gen_random_uuid())::text")) @db.VarChar
+  farm_id                                    String    @db.VarChar
+  compliance_area                            String    @db.VarChar
+  title                                      String    @db.VarChar
+  status                                     String?   @default("compliant") @db.VarChar
+  details                                    String?
+  cert_number                                String?   @db.VarChar
+  expiry_date                                DateTime? @db.Date
+  notes                                      String?
+  created_at                                 DateTime? @default(now()) @db.Timestamp(6)
+  updated_at                                 DateTime? @default(now()) @db.Timestamp(6)
+  created_by                                 String    @db.VarChar
+  updated_by                                 String    @db.VarChar
+  users_organic_compliance_created_byTousers users     @relation("organic_compliance_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  farms                                      farms     @relation(fields: [farm_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_organic_compliance_updated_byTousers users     @relation("organic_compliance_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([farm_id])
+}
+
+model demand_forecasts {
+  id                     String   @id @default(uuid())
+  farm_id                String
+  crop_type              String
+  crop_variety           String?
+  forecast_period_days   Int
+  forecast_data          String   @db.Text // JSON string containing predictions array
+  model_type             String
+  model_accuracy         Float
+  confidence_threshold   Float
+  total_predicted_demand Float
+  average_price_estimate Float
+  demand_trend           String
+  market_conditions      String?
+  contributing_factors   String?
+  recommendations        String?
+  status                 String
+  created_at             DateTime @default(now()) @db.Timestamp(6)
+  updated_at             DateTime @default(now()) @db.Timestamp(6)
+  created_by             String
+  updated_by             String
+
+  // Relations
+  farms                             farms @relation(fields: [farm_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_demand_forecasts_created_by users @relation("demand_forecasts_created_by", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_demand_forecasts_updated_by users @relation("demand_forecasts_updated_by", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([farm_id])
+  @@index([crop_type])
+  @@index([status])
+  @@index([created_at])
+}
+
+// Feedback System Models
+model feedback_submissions {
+  id          String           @id @default(uuid())
+  farm_id     String? // Nullable for system admin feedback
+  user_id     String
+  title       String
+  category    String? // Page/section where feedback originates
+  type        FeedbackType
+  description String
+  priority    FeedbackPriority @default(NORMAL)
+  status      FeedbackStatus   @default(OPEN)
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+
+  // Metadata
+  user_agent String? // Browser/device info
+  url        String? // Page URL where feedback was submitted
+  screenshot String? // Screenshot attachment URL
+  metadata   Json? // Additional context data
+
+  // Relationships
+  farm      farms?               @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  user      users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  responses feedback_responses[]
+
+  @@index([farm_id])
+  @@index([user_id])
+  @@index([status])
+  @@index([type])
+  @@index([priority])
+  @@index([created_at])
+}
+
+model feedback_responses {
+  id          String   @id @default(uuid())
+  feedback_id String
+  admin_id    String
+  message     String
+  is_internal Boolean  @default(false) // Internal notes vs user-visible responses
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relationships
+  feedback feedback_submissions @relation(fields: [feedback_id], references: [id], onDelete: Cascade)
+  admin    users                @relation("FeedbackResponses", fields: [admin_id], references: [id])
+
+  @@index([feedback_id])
+  @@index([admin_id])
+  @@index([created_at])
+}
+
+// Feedback Enums
+enum FeedbackType {
+  BUG
+  ENHANCEMENT
+  GENERAL
+  SUPPORT
+  BILLING
+  SECURITY
+}
+
+enum FeedbackStatus {
+  OPEN
+  REVIEW
+  IN_PROGRESS
+  IMPLEMENTED
+  CLOSED
+  ON_HOLD
+}
+
+enum FeedbackPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// ===== TRACEABILITY: RECALLS & CHAIN OF CUSTODY =====
+
+model recall_cases {
+  id           String   @id @default(uuid())
+  farm_id      String
+  recallNumber String
+  status       String   @default("OPEN") // OPEN, CLOSED, IN_PROGRESS
+  reason       String?
+  scope        String? // e.g., batch|lot|order
+  initiatedAt  DateTime @default(now())
+  initiatedBy  String
+  notes        String?
+
+  // Relations
+  farms farms          @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users users          @relation("recall_cases_initiatedByTousers", fields: [initiatedBy], references: [id])
+  items recall_items[]
+
+  @@unique([farm_id, recallNumber])
+  @@index([farm_id])
+}
+
+model recall_items {
+  id         String  @id @default(uuid())
+  caseId     String
+  farm_id    String
+  entityType String // batch | lot | order | inventory
+  entityId   String
+  quantity   Float?
+  unit       String?
+  status     String? // located | notified | returned | destroyed
+  notes      String?
+
+  // Relations
+  recall_cases recall_cases @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  farms        farms        @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+
+  @@index([farm_id])
+  @@index([caseId])
+}
+
+model custody_events {
+  id          String   @id @default(uuid())
+  farm_id     String
+  entityType  String // batch | lot | order | package
+  entityId    String
+  stage       String // HARVEST | PROCESSING | DISTRIBUTION | RECEIPT | etc.
+  timestamp   DateTime @default(now())
+  performedBy String
+  location    String?
+  signature   String?
+  notes       String?
+
+  // Relations
+  farms farms @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  users users @relation("custody_events_performedByTousers", fields: [performedBy], references: [id])
+
+  @@index([farm_id])
+  @@index([entityType, entityId])
+}

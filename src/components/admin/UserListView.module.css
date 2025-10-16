@@ -1,0 +1,279 @@
+/* User List View - Card-based Layout following OFMS Design System */
+
+.container {
+    padding: var(--spacing-6);
+    background: var(--bg-primary);
+    min-height: 100vh;
+}
+
+/* Bulk Actions Header */
+.bulkActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-4);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.selectAll {
+    display: flex;
+    align-items: center;
+}
+
+.selectAllLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+.selectAllLabel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.selectedActions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.selectedCount {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    background: var(--accent-bg);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+}
+
+/* User Cards Grid */
+.userGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.userCard {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-4);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.userCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+/* Card Header */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-3);
+    padding-bottom: var(--spacing-2);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.userSelect {
+    display: flex;
+    align-items: center;
+}
+
+.userSelect input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.userActions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+/* User Information */
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.userPrimary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.userName {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.userEmail {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    margin: 0;
+    word-break: break-all;
+}
+
+.userMeta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.roleBadge {
+    display: flex;
+    align-items: center;
+}
+
+.roleLabel {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--accent-bg);
+    color: var(--text-medium);
+}
+
+/* Role-specific badge colors */
+.roleLabel.owner {
+    background: var(--success-bg);
+    color: var(--success-color);
+}
+
+.roleLabel.farm_manager {
+    background: var(--primary-bg);
+    color: var(--primary-color);
+}
+
+.roleLabel.team_lead {
+    background: var(--warning-bg);
+    color: var(--warning-color);
+}
+
+.roleLabel.specialist_lead {
+    background: var(--info-bg);
+    color: var(--info-color);
+}
+
+.roleLabel.team_member {
+    background: var(--accent-bg);
+    color: var(--text-medium);
+}
+
+.roleLabel.specialist {
+    background: var(--purple-bg);
+    color: var(--purple-color);
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.userDepartment {
+    font-size: var(--font-size-xs);
+    color: var(--text-medium);
+    font-weight: var(--font-weight-medium);
+}
+
+.lastLogin {
+    font-size: var(--font-size-xs);
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.emptyStateContent {
+    text-align: center;
+    color: var(--text-medium);
+}
+
+.emptyStateContent h3 {
+    font-size: var(--font-size-lg);
+    margin: 0 0 var(--spacing-2) 0;
+    color: var(--text-dark);
+}
+
+.emptyStateContent p {
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-4);
+    }
+
+    .userGrid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-3);
+    }
+
+    .bulkActions {
+        flex-direction: column;
+        gap: var(--spacing-3);
+        align-items: stretch;
+    }
+
+    .selectedActions {
+        justify-content: center;
+    }
+
+    .cardHeader {
+        flex-direction: column;
+        gap: var(--spacing-2);
+    }
+
+    .userActions {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .userGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .userCard {
+        padding: var(--spacing-3);
+    }
+
+    .userActions {
+        flex-direction: column;
+        gap: var(--spacing-2);
+    }
+}

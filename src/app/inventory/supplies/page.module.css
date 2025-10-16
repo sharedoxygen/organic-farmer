@@ -1,0 +1,132 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-8);
+}
+
+.titleSection h1 {
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-2);
+}
+
+.titleSection p {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-3);
+}
+
+.primaryButton {
+    background: var(--accent-coral);
+    color: white;
+    border: none;
+    padding: var(--spacing-3) var(--spacing-5);
+    border-radius: var(--border-radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.primaryButton:hover {
+    background: #d13e2a;
+    transform: translateY(-1px);
+}
+
+.suppliesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-8);
+}
+
+.supplyCard {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-6);
+    transition: all var(--transition-fast);
+}
+
+.supplyCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.supplyHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-4);
+}
+
+.supplyName {
+    color: var(--text-dark);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+.stockLevel {
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+}
+
+.stockLevel.inStock {
+    background: var(--success-subtle);
+    color: var(--success-color);
+}
+
+.stockLevel.lowStock {
+    background: var(--warning-subtle);
+    color: var(--warning-color);
+}
+
+.stockLevel.outOfStock {
+    background: var(--danger-subtle);
+    color: var(--danger-color);
+}
+
+.supplyDetails {
+    margin-bottom: var(--spacing-4);
+}
+
+.supplyDetails p {
+    margin: var(--spacing-1) 0;
+    color: var(--text-medium);
+    font-size: var(--font-size-sm);
+}
+
+.supplyActions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.actionButton {
+    flex: 1;
+    padding: var(--spacing-2) var(--spacing-3);
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-medium);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+}
+
+.actionButton:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}

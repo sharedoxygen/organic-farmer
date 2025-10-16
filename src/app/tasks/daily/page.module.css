@@ -1,0 +1,424 @@
+/* OFMS Task Management - Modern Business Interface */
+
+.container {
+  padding: var(--spacing-6);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-6);
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--text-medium);
+  margin: 0;
+}
+
+.primaryButton {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.primaryButton:hover {
+  background: color-mix(in srgb, var(--primary-color) 85%, black);
+}
+
+.controls {
+  margin-bottom: var(--spacing-6);
+}
+
+.filterButtons {
+  display: flex;
+  gap: var(--spacing-2);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.filterButton {
+  padding: var(--spacing-3) var(--spacing-4);
+  border: none;
+  background: transparent;
+  color: var(--text-medium);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.filterButton:hover {
+  color: var(--text-dark);
+  background: var(--bg-secondary);
+}
+
+.filterButton.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+
+/* SPACE-EFFICIENT TASK GRID */
+.tasksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.taskCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-4);
+  transition: all var(--transition-fast);
+}
+
+.taskCard:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-4);
+  gap: var(--spacing-3);
+}
+
+.taskInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  flex: 1;
+}
+
+.taskIcon {
+  font-size: var(--font-size-lg);
+  margin-top: var(--spacing-1);
+}
+
+.taskTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-1) 0;
+  line-height: 1.3;
+}
+
+.taskType {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  align-items: flex-end;
+}
+
+.priorityBadge,
+.statusBadge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-sm);
+  text-transform: capitalize;
+  white-space: nowrap;
+  color: white;
+}
+
+.cardBody {
+  margin-bottom: var(--spacing-4);
+}
+
+.description {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
+  margin: 0 0 var(--spacing-4) 0;
+  line-height: 1.5;
+}
+
+/* COMPACT TASK DETAILS GRID */
+.taskDetails {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-3);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  color: var(--text-medium);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-size: var(--font-size-sm);
+  color: var(--text-dark);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--spacing-2);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--spacing-3);
+}
+
+.actionButton,
+.startButton,
+.completeButton {
+  flex: 1;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.actionButton {
+  background: var(--bg-secondary);
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+}
+
+.actionButton:hover {
+  background: var(--bg-tertiary);
+}
+
+.startButton {
+  background: var(--info-color, #3b82f6);
+  color: white;
+}
+
+.startButton:hover {
+  background: color-mix(in srgb, var(--info-color, #3b82f6) 85%, black);
+}
+
+.completeButton {
+  background: var(--success-color, #22c55e);
+  color: white;
+}
+
+.completeButton:hover {
+  background: color-mix(in srgb, var(--success-color, #22c55e) 85%, black);
+}
+
+/* FORM STYLING - OFMS Design System */
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.formSection h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-dark);
+  margin: 0;
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Priority Badge Colors */
+.priorityBadge.LOW {
+  background: var(--success-color);
+}
+
+.priorityBadge.MEDIUM {
+  background: var(--warning-color);
+}
+
+.priorityBadge.HIGH {
+  background: var(--info-color);
+}
+
+.priorityBadge.URGENT {
+  background: var(--danger-color);
+}
+
+/* Status Badge Colors */
+.statusBadge.PENDING {
+  background: var(--text-muted);
+}
+
+.statusBadge.IN_PROGRESS {
+  background: var(--info-color);
+}
+
+.statusBadge.COMPLETED {
+  background: var(--success-color);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-4);
+  }
+
+  .tasksGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filterButtons {
+    flex-wrap: wrap;
+  }
+
+  .taskDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .badges {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+  }
+}
+
+/* Task Details Modal */
+.loadingDetails,
+.errorDetails {
+  padding: var(--spacing-6);
+  text-align: center;
+  color: var(--text-medium);
+}
+
+.detailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+.detailsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.detailsSection h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-dark);
+  margin: 0;
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.detailLabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-medium);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue {
+  font-size: var(--font-size-base);
+  color: var(--text-dark);
+  font-weight: var(--font-weight-medium);
+}
+
+.detailBadge {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: white;
+  text-transform: capitalize;
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Theme Support */
+.theme-dark .taskCard {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.theme-dark .taskCard:hover {
+  border-color: var(--primary-color);
+}
+
+.theme-dark .formSection h4 {
+  color: var(--text-dark);
+  border-bottom-color: var(--border-color);
+}

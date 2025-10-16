@@ -1,0 +1,38 @@
+{
+  "name": "ofms-automation",
+  "version": "1.0.0",
+  "description": "Browser automation for OFMS data entry",
+  "scripts": {
+    "demo": "node ofms-data-entry.js",
+    "demo:headless": "HEADLESS=true node ofms-data-entry.js",
+    "demo:comprehensive": "node run-comprehensive-demo.js",
+    "demo:comprehensive:headless": "HEADLESS=true node run-comprehensive-demo.js",
+    "generate-tests": "node generate-crud-tests.js",
+    "test:login": "node test-login.js",
+    "test:auth": "node tests/01-authentication/auth.test.js",
+    "test:crops": "node tests/04-planning/crops.test.js",
+    "test:all": "npm run generate-tests && node run-all-tests.js",
+    "test:all:headless": "HEADLESS=true npm run generate-tests && node run-all-tests.js",
+    "test:planning": "node run-section-tests.js planning",
+    "test:production": "node run-section-tests.js production",
+    "test:quality": "node run-section-tests.js quality",
+    "test:inventory": "node run-section-tests.js inventory",
+    "test:sales": "node run-section-tests.js sales",
+    "test:admin": "node run-section-tests.js admin",
+    "test:api": "node test-api-endpoints.js",
+    "test:integrity": "node tests/99-data-integrity/integrity.test.js",
+    "test:real-crud": "node real-crud-test.js",
+    "test:real-crud:headless": "HEADLESS=true node real-crud-test.js",
+    "test:parallel": "PARALLEL=true npm run test:all",
+    "test:ci": "HEADLESS=true PARALLEL=true npm run generate-tests && npm run test:all",
+    "help": "echo 'OFMS Comprehensive Test Suite Commands:\n\n🔬 COMPREHENSIVE TESTING:\n  npm run test:all          - Run all tests (headed)\n  npm run test:all:headless - Run all tests (headless)\n  npm run test:ci           - CI/CD optimized run\n\n📋 SECTION TESTING:\n  npm run test:auth         - Authentication tests\n  npm run test:planning     - Planning & Forecasting\n  npm run test:production   - Production Operations\n  npm run test:quality      - Quality & Compliance\n  npm run test:inventory    - Inventory Management\n  npm run test:sales        - Sales & Orders\n  npm run test:admin        - Admin functions\n\n🎯 SPECIALIZED TESTING:\n  npm run test:api          - API endpoint testing\n  npm run test:integrity    - Data integrity testing\n  npm run test:real-crud    - Real CRUD with dashboard verification\n  npm run test:parallel     - Parallel execution\n\n🎭 ORIGINAL DEMO:\n  npm run demo              - Original demo script\n  npm run demo:headless     - Demo without browser UI\n  npm run demo:comprehensive - Enhanced demo with all tests\n'"
+  },
+  "keywords": [
+    "automation",
+    "playwright",
+    "ofms",
+    "data-entry"
+  ],
+  "author": "OFMS Team",
+  "license": "MIT"
+}

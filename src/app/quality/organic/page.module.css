@@ -1,0 +1,318 @@
+.container {
+    padding: 2rem;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.auditButton,
+.reportButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.auditButton {
+    background: var(--color-success);
+    color: white;
+}
+
+.reportButton {
+    background: var(--color-primary);
+    color: white;
+}
+
+.overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.certCard,
+.complianceCard,
+.nextAuditCard {
+    padding: 2rem;
+    text-align: center;
+}
+
+.certCard h3,
+.complianceCard h3,
+.nextAuditCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.certStatus {
+    margin-bottom: 1rem;
+}
+
+.certNumber {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-success);
+    margin-bottom: 0.25rem;
+}
+
+.certExpiry {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.complianceRate .rate {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-success);
+    margin-bottom: 0.5rem;
+}
+
+.complianceRate .rateLabel {
+    display: block;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.nextAudit .auditDate {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.nextAudit .auditType {
+    display: block;
+    color: var(--text-secondary);
+}
+
+.complianceGrid {
+    margin-bottom: 3rem;
+}
+
+.complianceGrid h2 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.complianceGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.complianceItemCard {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.complianceItemCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.itemHeader h3 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.statusBadge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: white;
+}
+
+.statusBadge.compliant {
+    background: var(--color-success);
+}
+
+.statusBadge.actionrequired {
+    background: var(--color-warning);
+}
+
+.itemDetails {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.itemDetails p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.certDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.certDetails span {
+    color: var(--text-secondary);
+}
+
+.certDetails strong {
+    color: var(--text-primary);
+}
+
+.itemActions {
+    padding: 1rem 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.viewDocsButton,
+.updateButton {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+}
+
+.updateButton {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.auditHistory {
+    margin-bottom: 2rem;
+}
+
+.historyCard {
+    padding: 2rem;
+}
+
+.historyCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.auditList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auditItem {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+}
+
+.auditDate {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.auditDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.inspector {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.result {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.result.passed {
+    color: var(--color-success);
+}
+
+.result.passedwithminorcorrections {
+    color: var(--color-warning);
+}
+
+.violations {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.nextAuditDate {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.documentation {
+    margin-top: 2rem;
+}
+
+.docsCard {
+    padding: 2rem;
+}
+
+.docsCard h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.docsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.docItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+}
+
+.docItem span:first-child {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.docItem span:last-child {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}

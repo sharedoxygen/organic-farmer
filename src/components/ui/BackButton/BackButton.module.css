@@ -1,0 +1,60 @@
+/* BackButton Styles */
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    color: var(--text-dark);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--spacing-4);
+}
+
+.backButton:hover {
+    background: var(--primary-subtle);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateX(-2px);
+}
+
+.backButton:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-subtle);
+}
+
+.backButton:active {
+    transform: translateX(-4px);
+}
+
+.icon {
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    transition: transform var(--transition-fast);
+}
+
+.backButton:hover .icon {
+    transform: translateX(-2px);
+}
+
+.label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .backButton {
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+    }
+    
+    .icon {
+        font-size: var(--font-size-lg);
+    }
+}

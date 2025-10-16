@@ -1,0 +1,337 @@
+{
+  "farms": [
+    {
+      "name": "Shared Oxygen Farms",
+      "businessName": "Shared Oxygen Cannabis Co.",
+      "type": "cannabis",
+      "owner": "admin@ofms.com"
+    },
+    {
+      "name": "Curry Island Microgreens",
+      "businessName": "Curry Island Produce",
+      "type": "microgreens",
+      "owner": "admin@ofms.com"
+    }
+  ],
+
+  "users": {
+    "admin": {
+      "email": "admin@ofms.com",
+      "password": "REDACTED_TEST_PASSWORD",
+      "firstName": "System",
+      "lastName": "Administrator",
+      "role": "ADMIN"
+    },
+    "manager": {
+      "email": "manager@ofms.com",
+      "password": "REDACTED_TEST_PASSWORD",
+      "firstName": "Farm",
+      "lastName": "Manager",
+      "role": "MANAGER"
+    },
+    "worker": {
+      "email": "worker@ofms.com",
+      "password": "REDACTED_TEST_PASSWORD",
+      "firstName": "Farm",
+      "lastName": "Worker",
+      "role": "WORKER"
+    }
+  },
+
+  "seedVarieties": {
+    "cannabis": [
+      {
+        "name": "Blue Dream",
+        "scientificName": "Cannabis sativa L.",
+        "supplier": "Elite Genetics",
+        "stockQuantity": 100,
+        "minStockLevel": 20,
+        "costPerUnit": 25.0,
+        "germinationRate": 0.92,
+        "daysToHarvest": 70,
+        "thcContent": 18.5,
+        "cbdContent": 0.8
+      },
+      {
+        "name": "OG Kush",
+        "scientificName": "Cannabis indica L.",
+        "supplier": "Premium Seeds",
+        "stockQuantity": 75,
+        "minStockLevel": 15,
+        "costPerUnit": 30.0,
+        "germinationRate": 0.89,
+        "daysToHarvest": 60,
+        "thcContent": 22.1,
+        "cbdContent": 0.5
+      },
+      {
+        "name": "Gelato",
+        "scientificName": "Cannabis hybrid",
+        "supplier": "Hybrid Genetics",
+        "stockQuantity": 50,
+        "minStockLevel": 10,
+        "costPerUnit": 35.0,
+        "germinationRate": 0.95,
+        "daysToHarvest": 65,
+        "thcContent": 20.3,
+        "cbdContent": 1.2
+      }
+    ],
+    "microgreens": [
+      {
+        "name": "Arugula Microgreens",
+        "scientificName": "Eruca sativa",
+        "supplier": "Organic Seed Co",
+        "stockQuantity": 200,
+        "minStockLevel": 50,
+        "costPerUnit": 3.99,
+        "germinationRate": 0.98,
+        "daysToHarvest": 14
+      },
+      {
+        "name": "Kale Microgreens",
+        "scientificName": "Brassica oleracea",
+        "supplier": "Green Thumb Seeds",
+        "stockQuantity": 150,
+        "minStockLevel": 30,
+        "costPerUnit": 4.25,
+        "germinationRate": 0.96,
+        "daysToHarvest": 16
+      },
+      {
+        "name": "Radish Microgreens",
+        "scientificName": "Raphanus sativus",
+        "supplier": "Quick Grow Seeds",
+        "stockQuantity": 180,
+        "minStockLevel": 40,
+        "costPerUnit": 3.75,
+        "germinationRate": 0.97,
+        "daysToHarvest": 12
+      }
+    ]
+  },
+
+  "customers": {
+    "cannabis": [
+      {
+        "name": "California Cannabis Co.",
+        "contactPerson": "Alice Johnson",
+        "email": "alice@cacannabis.com",
+        "phone": "(555) 111-2222",
+        "businessName": "California Cannabis Co.",
+        "businessType": "Dispensary",
+        "type": "B2B",
+        "paymentTerms": "Net 30",
+        "creditLimit": 50000
+      },
+      {
+        "name": "Bay Area Dispensary",
+        "contactPerson": "Bob Wilson",
+        "email": "bob@baydispensary.com",
+        "phone": "(555) 333-4444",
+        "businessName": "Bay Area Wellness",
+        "businessType": "Dispensary",
+        "type": "B2B",
+        "paymentTerms": "Net 15",
+        "creditLimit": 25000
+      }
+    ],
+    "microgreens": [
+      {
+        "name": "Farm to Table Restaurant",
+        "contactPerson": "Chef Maria Rodriguez",
+        "email": "maria@farmtotable.com",
+        "phone": "(555) 555-6666",
+        "businessName": "Farm to Table Bistro",
+        "businessType": "Restaurant",
+        "type": "B2B",
+        "paymentTerms": "Net 7",
+        "creditLimit": 5000
+      },
+      {
+        "name": "Whole Foods Market",
+        "contactPerson": "David Kim",
+        "email": "david.kim@wholefoods.com",
+        "phone": "(555) 777-8888",
+        "businessName": "Whole Foods Market",
+        "businessType": "Grocery Chain",
+        "type": "B2B",
+        "paymentTerms": "Net 30",
+        "creditLimit": 100000
+      }
+    ]
+  },
+
+  "equipment": [
+    {
+      "name": "LED Grow Light Panel",
+      "model": "HortiBloom Pro 600W",
+      "manufacturer": "HortiTech",
+      "serialNumber": "HB600-2024-001",
+      "category": "Lighting",
+      "status": "Active",
+      "purchaseDate": "2024-01-15",
+      "warrantyExpiry": "2027-01-15"
+    },
+    {
+      "name": "Climate Controller",
+      "model": "EnviroMax 3000",
+      "manufacturer": "GrowTech",
+      "serialNumber": "EM3000-2024-005",
+      "category": "Environmental Control",
+      "status": "Active",
+      "purchaseDate": "2024-02-20",
+      "warrantyExpiry": "2026-02-20"
+    }
+  ],
+
+  "environments": [
+    {
+      "name": "Grow Room A",
+      "type": "INDOOR",
+      "location": "Building 1, Floor 2",
+      "maxBatches": 20,
+      "totalArea": 500,
+      "areaUnit": "sq_ft",
+      "targetTempMin": 68,
+      "targetTempMax": 78,
+      "targetHumidityMin": 40,
+      "targetHumidityMax": 60,
+      "targetLightHours": 18
+    },
+    {
+      "name": "Propagation Room",
+      "type": "INDOOR",
+      "location": "Building 1, Floor 1",
+      "maxBatches": 10,
+      "totalArea": 200,
+      "areaUnit": "sq_ft",
+      "targetTempMin": 72,
+      "targetTempMax": 80,
+      "targetHumidityMin": 65,
+      "targetHumidityMax": 75,
+      "targetLightHours": 24
+    }
+  ],
+
+  "zones": [
+    {
+      "name": "Zone A-1",
+      "type": "GROWING",
+      "location": "Grow Room A, Section 1",
+      "maxCapacity": 100,
+      "currentUtilization": 75,
+      "status": "Active"
+    },
+    {
+      "name": "Zone A-2",
+      "type": "GROWING",
+      "location": "Grow Room A, Section 2",
+      "maxCapacity": 100,
+      "currentUtilization": 50,
+      "status": "Active"
+    },
+    {
+      "name": "Prop-1",
+      "type": "PROPAGATION",
+      "location": "Propagation Room",
+      "maxCapacity": 50,
+      "currentUtilization": 30,
+      "status": "Active"
+    }
+  ],
+
+  "batches": [
+    {
+      "batchNumber": "BD-2024-001",
+      "seedVariety": "Blue Dream",
+      "quantity": 50,
+      "unit": "plants",
+      "plantDate": "2024-01-15",
+      "expectedHarvestDate": "2024-03-25",
+      "growingMedium": "soil",
+      "zone": "Zone A-1",
+      "status": "Growing"
+    }
+  ],
+
+  "testScenarios": {
+    "login": {
+      "validCredentials": [
+        { "email": "admin@ofms.com", "password": "REDACTED_TEST_PASSWORD" }
+      ],
+      "invalidCredentials": [
+        { "email": "invalid@test.com", "password": "wrongpassword" },
+        { "email": "admin@ofms.com", "password": "wrongpassword" },
+        { "email": "", "password": "" }
+      ]
+    },
+
+    "formValidation": {
+      "seedVariety": {
+        "valid": {
+          "name": "Test Seed",
+          "scientificName": "Test species",
+          "supplier": "Test Supplier"
+        },
+        "invalid": {
+          "emptyName": {
+            "name": "",
+            "scientificName": "Test",
+            "supplier": "Test"
+          },
+          "invalidEmail": { "name": "Test", "contactEmail": "invalid-email" }
+        }
+      }
+    },
+
+    "navigationPaths": [
+      "/dashboard",
+      "/planning/crops",
+      "/planning/calendar",
+      "/planning/forecasting",
+      "/planning/resources",
+      "/production/batches",
+      "/production/environments",
+      "/production/seeds",
+      "/production/harvesting",
+      "/production/post-harvest",
+      "/quality/control",
+      "/quality/food-safety",
+      "/quality/organic",
+      "/quality/certifications",
+      "/quality/audits",
+      "/inventory/stock",
+      "/inventory/supplies",
+      "/inventory/equipment",
+      "/inventory/packaging",
+      "/sales/orders",
+      "/sales/b2b-customers",
+      "/sales/b2c-customers",
+      "/sales/pricing",
+      "/sales/delivery",
+      "/traceability/seed-to-sale",
+      "/traceability/lots",
+      "/tasks/daily",
+      "/tasks/work-orders",
+      "/tasks/assignments",
+      "/equipment/management",
+      "/equipment/maintenance",
+      "/equipment/sensors",
+      "/analytics/production",
+      "/analytics/financial",
+      "/analytics/yield",
+      "/analytics/market",
+      "/ai-insights",
+      "/integrations",
+      "/admin",
+      "/admin/farms",
+      "/compliance/fda-fsma",
+      "/compliance/usda-organic",
+      "/settings/users",
+      "/settings/notifications",
+      "/settings/calculator"
+    ]
+  }
+}
+

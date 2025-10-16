@@ -1,0 +1,346 @@
+/* Crop Plan Modal Styles - OFMS Design System */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    padding: var(--spacing-4);
+}
+
+.modal {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-xl);
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-2xl);
+    border: 1px solid var(--border-color);
+}
+
+/* Header */
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-6);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+}
+
+.modalHeader h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.modalHeader h2::before {
+    content: '🌾';
+    font-size: var(--font-size-xl);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: var(--font-size-3xl);
+    color: var(--text-light);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-fast);
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    background: var(--hover-bg);
+    color: var(--text-dark);
+}
+
+/* Body */
+.modalBody {
+    padding: var(--spacing-6);
+}
+
+.error {
+    background: var(--danger-subtle);
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+    padding: var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-4);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Form Grid */
+.formGrid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.formSection h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    margin: 0;
+    padding-bottom: var(--spacing-2);
+    border-bottom: 2px solid var(--primary-color);
+    position: relative;
+}
+
+.formSection h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--primary-color);
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-4);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.formGroup label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    padding: var(--spacing-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    color: var(--text-medium);
+    background: var(--card-bg);
+    transition: var(--transition-fast);
+    font-family: var(--font-family-base);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: var(--focus-ring);
+}
+
+.formGroup input:hover,
+.formGroup select:hover,
+.formGroup textarea:hover {
+    border-color: var(--border-color-hover);
+}
+
+.formGroup select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-3) center;
+    background-size: 16px;
+    padding-right: var(--spacing-10);
+    appearance: none;
+}
+
+.formGroup textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: var(--line-height-relaxed);
+}
+
+.formGroup input[type="number"] {
+    text-align: right;
+}
+
+.formGroup input[type="date"] {
+    font-family: var(--font-family-base);
+}
+
+/* Footer */
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    padding: var(--spacing-6);
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+}
+
+.cancelButton,
+.saveButton {
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-family-base);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border: 1px solid;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}
+
+.cancelButton {
+    background: var(--card-bg);
+    color: var(--text-medium);
+    border-color: var(--border-color);
+}
+
+.cancelButton:hover {
+    background: var(--hover-bg-secondary);
+    border-color: var(--border-color-hover);
+}
+
+.cancelButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.saveButton {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    border-color: var(--primary-color);
+}
+
+.saveButton:hover:not(:disabled) {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.saveButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal {
+        max-width: 95vw;
+        margin: var(--spacing-2);
+    }
+
+    .modalHeader,
+    .modalBody,
+    .modalFooter {
+        padding: var(--spacing-4);
+    }
+
+    .formRow {
+        grid-template-columns: 1fr;
+    }
+
+    .modalFooter {
+        flex-direction: column;
+    }
+
+    .cancelButton,
+    .saveButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modalOverlay {
+        padding: var(--spacing-2);
+    }
+
+    .modal {
+        max-height: 95vh;
+    }
+
+    .modalHeader h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    .formSection h3 {
+        font-size: var(--font-size-base);
+    }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+
+    .formGroup input,
+    .formGroup select,
+    .formGroup textarea {
+        background: var(--bg-tertiary);
+        color: var(--text-medium);
+    }
+
+    .formGroup select {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+    }
+}
+
+/* Focus-visible support for better accessibility */
+.cancelButton:focus-visible,
+.saveButton:focus-visible,
+.closeButton:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Loading state for buttons */
+.saveButton:disabled::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: var(--spacing-2);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

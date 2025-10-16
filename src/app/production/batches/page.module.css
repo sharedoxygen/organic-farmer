@@ -1,0 +1,692 @@
+/* Modern Business-Grade Production Batch Management - Consistent Green Agricultural Theme */
+
+.container {
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    padding: var(--spacing-6);
+}
+
+/* Standard Header - Same as Analytics/Sales/Integrations */
+.header {
+    margin-bottom: var(--spacing-6);
+}
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+}
+
+.title {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.headerActions {
+    display: flex;
+    gap: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+/* Statistics Grid */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.statCard {
+    padding: var(--spacing-4);
+    text-align: center;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-fast);
+}
+
+.statCard:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.statIcon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-2);
+}
+
+.statValue {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.statLabel {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Filters Section */
+.filtersCard {
+    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-4);
+}
+
+.filtersContent {
+    display: flex;
+    gap: var(--spacing-4);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.searchSection {
+    flex: 1;
+    min-width: 250px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: var(--spacing-3);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.searchInput::placeholder {
+    color: var(--text-placeholder);
+}
+
+.filterSection {
+    display: flex;
+    gap: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+.filterSelect {
+    padding: var(--spacing-2) var(--spacing-3);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 140px;
+}
+
+.filterSelect:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Batches Section */
+.batchesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.batchCard {
+    padding: var(--spacing-5);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-fast);
+}
+
+.batchCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.batchHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.batchNumber {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.batchIcon {
+    font-size: var(--font-size-xl);
+}
+
+.batchStatus {
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.batchInfo {
+    margin-bottom: var(--spacing-4);
+}
+
+.seedVariety {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-3);
+}
+
+.batchDetails {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-sm);
+}
+
+.label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.value.urgent {
+    color: var(--error-color);
+    font-weight: 700;
+}
+
+.batchMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-3);
+}
+
+.batchNotes {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    border-left: 4px solid var(--primary-color);
+    margin-bottom: var(--spacing-3);
+}
+
+.batchNotes strong {
+    color: var(--text-primary);
+}
+
+.batchActions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: flex-end;
+}
+
+/* Loading States */
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-light);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-4);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingState h1 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+    margin: 0 0 var(--spacing-2) 0;
+}
+
+.loadingState p {
+    font-size: var(--font-size-lg);
+    color: var(--text-medium);
+    margin: 0;
+}
+
+/* Error States */
+.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    padding: var(--spacing-12);
+}
+
+.error h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--danger-color, #ef4444);
+    margin: 0 0 var(--spacing-4) 0;
+}
+
+.error p {
+    font-size: var(--font-size-lg);
+    color: var(--text-medium);
+    margin: 0 0 var(--spacing-6) 0;
+}
+
+.retryButton {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.retryButton:hover {
+    background: color-mix(in srgb, var(--primary-color) 85%, black);
+    transform: translateY(-1px);
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-6);
+    background-color: var(--bg-secondary);
+    border: 2px dashed var(--border-light);
+}
+
+.emptyIcon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-4);
+    opacity: 0.6;
+}
+
+.emptyState h3 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.emptyState p {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-6);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Modals */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--spacing-4);
+}
+
+.modal {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-2xl);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-6);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modalHeader h2 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: var(--font-size-2xl);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.modalContent {
+    padding: var(--spacing-6);
+    overflow-y: auto;
+}
+
+.modalActions {
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: flex-end;
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--border-light);
+}
+
+/* Modal Details View */
+.detailsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-6);
+}
+
+.detailSection {
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.detailSection h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-3);
+    padding-bottom: var(--spacing-2);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-2) 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.detailRow:last-child {
+    border-bottom: none;
+}
+
+.detailLabel {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.detailValue {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Modal Forms */
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.formField {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.formField label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+    padding: var(--spacing-3);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.formField input:focus,
+.formField select:focus,
+.formField textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.readOnlyInput {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-secondary) !important;
+    cursor: not-allowed;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .batchesGrid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-4);
+    }
+
+    .title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .subtitle {
+        font-size: var(--font-size-base);
+    }
+
+    .headerContent {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .headerActions {
+        justify-content: flex-end;
+    }
+
+    .filtersContent {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterSection {
+        justify-content: stretch;
+    }
+
+    .filterSelect {
+        flex: 1;
+        min-width: auto;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .batchesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .batchDetails {
+        grid-template-columns: 1fr;
+    }
+
+    .batchMeta {
+        flex-direction: column;
+        gap: var(--spacing-1);
+    }
+
+    .batchActions {
+        justify-content: stretch;
+    }
+
+    .batchActions>* {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: var(--spacing-2);
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .batchCard {
+        padding: var(--spacing-4);
+    }
+
+    .batchHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-2);
+    }
+
+    .modalOverlay {
+        padding: var(--spacing-2);
+    }
+
+    .modal {
+        max-height: 95vh;
+    }
+
+    .modalHeader {
+        padding: var(--spacing-4);
+    }
+
+    .modalContent {
+        padding: var(--spacing-4);
+    }
+
+    .modalActions {
+        flex-direction: column;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+
+    .statCard,
+    .filtersCard {
+        border: 2px solid var(--border-color);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .container {
+        background: white;
+    }
+
+    .header {
+        background: white;
+        color: black;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    .headerActions,
+    .filtersSection {
+        display: none;
+    }
+
+    .batchesGrid {
+        grid-template-columns: 1fr;
+    }
+}

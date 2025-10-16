@@ -1,0 +1,362 @@
+.container {
+    padding: var(--spacing-lg);
+    max-height: 80vh;
+    overflow: auto;
+    background: var(--gray-50);
+}
+
+/* Header */
+.hierarchyHeader {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    border: 2px solid var(--border-color);
+}
+
+.hierarchyHeader h3 {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.hierarchyHeader p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-xxl);
+    color: var(--text-secondary);
+}
+
+.emptyIcon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.5;
+}
+
+.emptyState h3 {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--text-primary);
+}
+
+.emptyState p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* No Hierarchy Message */
+.noHierarchyMessage {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background: var(--warning-light);
+    border: 2px solid var(--warning-color);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.noHierarchyMessage h3 {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--warning-dark);
+    font-size: 1.3rem;
+}
+
+.noHierarchyMessage p {
+    margin: 0;
+    color: var(--warning-dark);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Main Org Chart */
+.orgChart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+    min-height: 400px;
+}
+
+/* Tree Node Container */
+.treeNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* User Card */
+.userCard {
+    background: var(--card-bg);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-medium);
+    position: relative;
+    min-width: 200px;
+    max-width: 250px;
+    text-align: center;
+}
+
+.userCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-dark);
+}
+
+/* Level-specific styling */
+.level0 .userCard {
+    border-color: var(--primary-color);
+    background: linear-gradient(145deg, var(--card-bg), var(--primary-light));
+}
+
+.level1 .userCard {
+    border-color: var(--secondary-color);
+    background: linear-gradient(145deg, var(--card-bg), var(--secondary-light));
+}
+
+.level2 .userCard {
+    border-color: var(--success-color);
+    background: linear-gradient(145deg, var(--card-bg), var(--success-light));
+}
+
+.level3 .userCard {
+    border-color: var(--info-color);
+    background: linear-gradient(145deg, var(--card-bg), var(--info-light));
+}
+
+.level4 .userCard {
+    border-color: var(--warning-color);
+    background: linear-gradient(145deg, var(--card-bg), var(--warning-light));
+}
+
+/* Avatar */
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin: 0 auto var(--spacing-sm);
+    position: relative;
+}
+
+/* Card Content */
+.cardContent {
+    margin-bottom: var(--spacing-sm);
+}
+
+.userName {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.userTitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Status Dot */
+.statusDot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--card-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.statusDot.active {
+    background-color: var(--success-color);
+}
+
+.statusDot.inactive {
+    background-color: var(--gray-400);
+}
+
+/* Edit Button */
+.editBtn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 0.8rem;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.editBtn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
+}
+
+/* Children Container */
+.childrenContainer {
+    margin-top: var(--spacing-lg);
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Vertical line from parent */
+.verticalLine {
+    width: 2px;
+    height: 30px;
+    background: var(--border-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Horizontal connector line */
+.horizontalLine {
+    height: 2px;
+    background: var(--border-color);
+    width: 80%;
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+}
+
+/* Children Grid */
+.childrenGrid {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Child Wrapper */
+.childWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Child Connector */
+.childConnector {
+    width: 2px;
+    height: 20px;
+    background: var(--border-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Role Grouping (Fallback) */
+.roleGrouping {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.roleGroup {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+}
+
+.roleGroup h4 {
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.roleUsers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+
+    .childrenGrid {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .userCard {
+        min-width: 180px;
+        max-width: 200px;
+    }
+
+    .userName {
+        font-size: 0.8rem;
+    }
+
+    .userTitle {
+        font-size: 0.7rem;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .userCard {
+        min-width: 160px;
+        max-width: 180px;
+        padding: var(--spacing-sm);
+    }
+
+    .avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 0.9rem;
+    }
+
+    .userName {
+        font-size: 0.75rem;
+    }
+
+    .userTitle {
+        font-size: 0.65rem;
+    }
+
+    .editBtn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+    }
+}

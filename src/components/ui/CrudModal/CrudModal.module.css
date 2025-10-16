@@ -1,0 +1,379 @@
+/* Reusable CRUD Modal Styles */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--spacing-4);
+}
+
+.modal {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-6);
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dark);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    background: var(--error-subtle);
+    color: var(--error-color);
+}
+
+.closeButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.modalContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-6);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-6);
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    gap: var(--spacing-4);
+}
+
+.rightActions {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+}
+
+.deleteButton {
+    background: var(--error-color) !important;
+    color: white !important;
+}
+
+.deleteButton:hover {
+    background: var(--error-dark) !important;
+}
+
+/* View Mode Styles */
+.viewContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.viewSection {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-5);
+    border: 1px solid var(--border-color);
+}
+
+.sectionTitle {
+    margin: 0 0 var(--spacing-4) 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    padding-bottom: var(--spacing-3);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.viewGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.viewItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.viewLabel {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.viewValue {
+    font-size: var(--font-size-base);
+    color: var(--text-dark);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-2) var(--spacing-3);
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+}
+
+/* Form Mode Styles */
+.formSections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.formSection {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-5);
+    border: 1px solid var(--border-color);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.formField {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.formField.fullWidth {
+    grid-column: 1 / -1;
+}
+
+.formField.hasError .fieldInput,
+.formField.hasError .fieldTextarea,
+.formField.hasError .fieldSelect {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 3px var(--error-subtle);
+}
+
+.fieldLabel {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.required {
+    color: var(--error-color);
+    margin-left: var(--spacing-1);
+}
+
+.fieldInput,
+.fieldTextarea {
+    padding: var(--spacing-3) var(--spacing-4);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    background: var(--bg-primary);
+    color: var(--text-dark);
+    transition: all var(--transition-fast);
+    font-family: inherit;
+}
+
+.fieldInput:focus,
+.fieldTextarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-subtle);
+}
+
+.fieldInput:disabled,
+.fieldTextarea:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-light);
+    cursor: not-allowed;
+}
+
+.fieldTextarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Checkbox Styles */
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    cursor: pointer;
+    padding: var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+}
+
+.checkboxLabel:hover {
+    background: var(--bg-secondary);
+}
+
+.checkboxInput {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.checkboxText {
+    font-size: var(--font-size-base);
+    color: var(--text-dark);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Error Styles */
+.fieldError {
+    font-size: var(--font-size-sm);
+    color: var(--error-color);
+    font-weight: var(--font-weight-medium);
+    margin-top: var(--spacing-1);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.fieldError::before {
+    content: '⚠️';
+    font-size: var(--font-size-xs);
+}
+
+.submitError {
+    background: var(--error-subtle);
+    color: var(--error-color);
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--error-color);
+    margin-bottom: var(--spacing-4);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modalOverlay {
+        padding: var(--spacing-2);
+    }
+
+    .modal {
+        max-height: 95vh;
+    }
+
+    .modalHeader,
+    .modalContent,
+    .modalActions {
+        padding: var(--spacing-4);
+    }
+
+    .formGrid,
+    .viewGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .modalActions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rightActions {
+        justify-content: stretch;
+        flex-direction: column;
+    }
+}
+
+/* Dark Theme Support */
+.theme-dark .modal {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+.theme-dark .modalHeader {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    border-bottom-color: #4b5563;
+}
+
+.theme-dark .viewSection,
+.theme-dark .formSection {
+    background: #374151;
+    border-color: #4b5563;
+}
+
+.theme-dark .viewValue,
+.theme-dark .fieldInput,
+.theme-dark .fieldTextarea {
+    background: #1f2937;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+.theme-dark .fieldInput:focus,
+.theme-dark .fieldTextarea:focus {
+    border-color: #34d399;
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
+}
+
+.theme-dark .checkboxLabel:hover {
+    background: #4b5563;
+}
+
+.theme-dark .modalActions {
+    background: #374151;
+    border-top-color: #4b5563;
+}
+
+/* Animation */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal {
+    animation: modalFadeIn 0.2s ease-out;
+}

@@ -1,0 +1,28 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="90" cy="90" r="80" fill="rgba(5, 150, 105, 0.1)" stroke="#059669" stroke-width="8"/>
+  
+  <!-- Simplified microgreens sprouts scaled for Apple touch icon -->
+  <g transform="translate(45, 50)">
+    <!-- Central sprout -->
+    <path d="M45 72 Q45 50 45 40" stroke="#059669" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <circle cx="45" cy="40" r="12" fill="#059669"/>
+    <ellipse cx="35" cy="33" rx="12" ry="6" fill="#34d399"/>
+    <ellipse cx="55" cy="33" rx="12" ry="6" fill="#10b981"/>
+    
+    <!-- Left sprout -->
+    <path d="M18 78 Q18 56 18 45" stroke="#059669" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <circle cx="18" cy="45" r="9" fill="#059669"/>
+    <ellipse cx="12" cy="39" rx="9" ry="4" fill="#34d399"/>
+    <ellipse cx="24" cy="39" rx="9" ry="4" fill="#10b981"/>
+    
+    <!-- Right sprout -->
+    <path d="M72 78 Q72 62 72 50" stroke="#059669" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <circle cx="72" cy="50" r="9" fill="#059669"/>
+    <ellipse cx="66" cy="44" rx="9" ry="4" fill="#34d399"/>
+    <ellipse cx="78" cy="44" rx="9" ry="4" fill="#10b981"/>
+    
+    <!-- Soil base -->
+    <rect x="0" y="78" width="90" height="18" rx="9" fill="#8b4513"/>
+  </g>
+</svg>
