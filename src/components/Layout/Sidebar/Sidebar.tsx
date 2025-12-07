@@ -196,18 +196,11 @@ const navigationItems: NavItem[] = [
                 label: 'Order Management',
                 href: '/sales/orders',
                 icon: '📋',
-                badge: '5',
             },
             {
-                id: 'b2b-customers',
-                label: 'B2B Customers',
-                href: '/sales/b2b-customers',
-                icon: '🏢',
-            },
-            {
-                id: 'b2c-customers',
-                label: 'B2C Customers',
-                href: '/sales/b2c-customers',
+                id: 'customers',
+                label: 'Customers',
+                href: '/sales/customers',
                 icon: '👥',
             },
             {

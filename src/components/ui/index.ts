@@ -2,6 +2,7 @@
 export { default as Button } from './Button/Button';
 export { default as Card } from './Card/Card';
 export { default as ThemeToggle } from './ThemeToggle/ThemeToggle';
+export { default as BackButton } from './BackButton/BackButton';
 export { Modal } from './Modal/Modal';
 export { EditableCard } from './EditableCard/EditableCard';
 export { default as ExpandableCard } from './ExpandableCard/ExpandableCard';

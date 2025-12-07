@@ -1,10 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/AuthProvider';
-
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useTenant } from '@/components/TenantProvider';
 import { Card } from '@/components/ui';
 import styles from './page.module.css';
 
@@ -20,38 +17,58 @@ interface TraceabilityItem {
 }
 
 export default function TraceabilityPage(): JSX.Element {
-    // Demo traceability data (in real app, this would come from API)
-    const traceabilityItems: TraceabilityItem[] = [
-        {
-            id: '1',
-            batchNumber: 'B2024-001',
-            variety: 'Arugula',
-            status: 'Harvested',
-            plantDate: '2024-01-15',
-            harvestDate: '2024-02-05',
-            quantity: 45,
-            location: 'Zone A'
-        },
-        {
-            id: '2',
-            batchNumber: 'B2024-002',
-            variety: 'Basil',
-            status: 'Growing',
-            plantDate: '2024-01-20',
-            quantity: 30,
-            location: 'Zone B'
-        },
-        {
-            id: '3',
-            batchNumber: 'B2024-003',
-            variety: 'Kale',
-            status: 'Packaged',
-            plantDate: '2024-01-10',
-            harvestDate: '2024-01-31',
-            quantity: 55,
-            location: 'Zone C'
+    const { currentFarm } = useTenant();
+    const [traceabilityItems, setTraceabilityItems] = useState<TraceabilityItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchTraceabilityData = useCallback(async () => {
+        if (!currentFarm?.id) return;
+
+        try {
+            setLoading(true);
+
+            // Fetch batches for traceability
+            const batchesRes = await fetch('/api/batches?limit=100', {
+                headers: { 'X-Farm-ID': currentFarm.id }
+            });
+            const batchesData = await batchesRes.json();
+            const batches = batchesData.data || [];
+
+            // Transform batches to traceability items
+            const items: TraceabilityItem[] = batches.map((batch: any) => ({
+                id: batch.id,
+                batchNumber: batch.batchNumber,
+                variety: batch.seed_varieties?.name || 'Unknown',
+                status: batch.status,
+                plantDate: batch.plantDate ? new Date(batch.plantDate).toLocaleDateString() : 'N/A',
+                harvestDate: batch.actualHarvestDate ? new Date(batch.actualHarvestDate).toLocaleDateString() : undefined,
+                quantity: batch.quantity || 0,
+                location: batch.growingZone || 'Unknown'
+            }));
+
+            setTraceabilityItems(items);
+
+        } catch (error) {
+            console.error('Error fetching traceability data:', error);
+        } finally {
+            setLoading(false);
         }
-    ];
+    }, [currentFarm?.id]);
+
+    useEffect(() => {
+        fetchTraceabilityData();
+    }, [fetchTraceabilityData]);
+
+    // Calculate stats
+    const growingCount = traceabilityItems.filter(item =>
+        ['PLANTED', 'GERMINATING', 'GROWING'].includes(item.status)
+    ).length;
+    const packagedCount = traceabilityItems.filter(item =>
+        item.status === 'PACKAGED'
+    ).length;
+    const completedCount = traceabilityItems.filter(item =>
+        ['HARVESTED', 'SOLD'].includes(item.status)
+    ).length;
 
     return (
         <div className={styles.container}>
@@ -66,7 +83,9 @@ export default function TraceabilityPage(): JSX.Element {
                         <div className={styles.statIcon}>📊</div>
                         <div className={styles.statContent}>
                             <h3>Total Batches</h3>
-                            <p className={styles.statValue}>{traceabilityItems.length}</p>
+                            <p className={styles.statValue}>
+                                {loading ? '...' : traceabilityItems.length}
+                            </p>
                         </div>
                     </Card>
 
@@ -75,7 +94,7 @@ export default function TraceabilityPage(): JSX.Element {
                         <div className={styles.statContent}>
                             <h3>Currently Growing</h3>
                             <p className={styles.statValue}>
-                                {traceabilityItems.filter(item => item.status === 'Growing').length}
+                                {loading ? '...' : growingCount}
                             </p>
                         </div>
                     </Card>
@@ -85,7 +104,7 @@ export default function TraceabilityPage(): JSX.Element {
                         <div className={styles.statContent}>
                             <h3>Ready to Ship</h3>
                             <p className={styles.statValue}>
-                                {traceabilityItems.filter(item => item.status === 'Packaged').length}
+                                {loading ? '...' : packagedCount}
                             </p>
                         </div>
                     </Card>
@@ -95,7 +114,7 @@ export default function TraceabilityPage(): JSX.Element {
                         <div className={styles.statContent}>
                             <h3>Completed</h3>
                             <p className={styles.statValue}>
-                                {traceabilityItems.filter(item => item.status === 'Harvested').length}
+                                {loading ? '...' : completedCount}
                             </p>
                         </div>
                     </Card>
@@ -106,36 +125,42 @@ export default function TraceabilityPage(): JSX.Element {
                         <h2>Batch Tracking</h2>
                     </div>
                     <div className={styles.tableContent}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Batch #</th>
-                                    <th>Variety</th>
-                                    <th>Status</th>
-                                    <th>Plant Date</th>
-                                    <th>Harvest Date</th>
-                                    <th>Quantity (lbs)</th>
-                                    <th>Location</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {traceabilityItems.map((item) => (
-                                    <tr key={item.id}>
-                                        <td>{item.batchNumber}</td>
-                                        <td>{item.variety}</td>
-                                        <td>
-                                            <span className={`${styles.status} ${styles[item.status.toLowerCase()]}`}>
-                                                {item.status}
-                                            </span>
-                                        </td>
-                                        <td>{item.plantDate}</td>
-                                        <td>{item.harvestDate || 'N/A'}</td>
-                                        <td>{item.quantity}</td>
-                                        <td>{item.location}</td>
+                        {loading ? (
+                            <p style={{ padding: '1rem', textAlign: 'center' }}>Loading traceability data...</p>
+                        ) : traceabilityItems.length === 0 ? (
+                            <p style={{ padding: '1rem', textAlign: 'center' }}>No batches found</p>
+                        ) : (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Batch #</th>
+                                        <th>Variety</th>
+                                        <th>Status</th>
+                                        <th>Plant Date</th>
+                                        <th>Harvest Date</th>
+                                        <th>Quantity</th>
+                                        <th>Location</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {traceabilityItems.map((item) => (
+                                        <tr key={item.id}>
+                                            <td>{item.batchNumber}</td>
+                                            <td>{item.variety}</td>
+                                            <td>
+                                                <span className={`${styles.status} ${styles[item.status.toLowerCase()]}`}>
+                                                    {item.status}
+                                                </span>
+                                            </td>
+                                            <td>{item.plantDate}</td>
+                                            <td>{item.harvestDate || 'N/A'}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>{item.location}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 </Card>
             </div>

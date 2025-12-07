@@ -2,7 +2,26 @@
 // Based on Prisma schema with additional UI and API types
 
 // User and Authentication Types
+// Unified with Prisma FarmRole enum
+export type FarmRole =
+    | 'OWNER'
+    | 'ADMIN'
+    | 'MANAGER'
+    | 'FARM_MANAGER'
+    | 'OPERATIONS_MANAGER'
+    | 'PRODUCTION_LEAD'
+    | 'QUALITY_LEAD'
+    | 'TEAM_MEMBER'
+    | 'QUALITY_SPECIALIST'
+    | 'SENIOR_GROWER'
+    | 'HARVEST_SPECIALIST'
+    | 'WORKER';
+
+// Legacy Role type for backward compatibility
 export type Role = 'ADMIN' | 'MANAGER' | 'TEAM_LEAD' | 'SPECIALIST_LEAD' | 'TEAM_MEMBER' | 'SPECIALIST';
+
+// System-level roles (not farm-specific)
+export type SystemRole = 'SYSTEM_ADMIN' | 'PLATFORM_ADMIN' | 'SUPER_ADMIN';
 
 export interface User {
     id: string;

@@ -1,20 +1,165 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/AuthProvider';
-
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useTenant } from '@/components/TenantProvider';
 import Link from 'next/link';
 import { Card } from '@/components/ui';
 import styles from './page.module.css';
 
+interface ProductionStats {
+    activeBatches: number;
+    completedBatches: number;
+    pendingBatches: number;
+    totalZones: number;
+    optimalZones: number;
+    zoneAlerts: number;
+    seedVarieties: number;
+    stockLevel: number;
+    pendingOrders: number;
+    readyToHarvest: number;
+    scheduledHarvests: number;
+    processedBatches: number;
+    processingBatches: number;
+    packagedBatches: number;
+    shippedBatches: number;
+}
+
+interface RecentActivity {
+    id: string;
+    icon: string;
+    description: string;
+    time: string;
+    status: string;
+}
+
 export default function ProductionPage() {
-    // Filters temporarily disabled
-    // const [activeFilters, setActiveFilters] = useState({
-    //     status: 'all',
-    //     stage: 'all'
-    // });
+    const { currentFarm } = useTenant();
+    const [stats, setStats] = useState<ProductionStats>({
+        activeBatches: 0,
+        completedBatches: 0,
+        pendingBatches: 0,
+        totalZones: 0,
+        optimalZones: 0,
+        zoneAlerts: 0,
+        seedVarieties: 0,
+        stockLevel: 0,
+        pendingOrders: 0,
+        readyToHarvest: 0,
+        scheduledHarvests: 0,
+        processedBatches: 0,
+        processingBatches: 0,
+        packagedBatches: 0,
+        shippedBatches: 0
+    });
+    const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchProductionStats = useCallback(async () => {
+        if (!currentFarm?.id) return;
+
+        try {
+            setLoading(true);
+
+            // Fetch batches data
+            const batchesRes = await fetch('/api/batches?limit=100', {
+                headers: { 'X-Farm-ID': currentFarm.id }
+            });
+            const batchesData = await batchesRes.json();
+            const batches = batchesData.data || [];
+
+            // Fetch environments data
+            const envRes = await fetch('/api/environments', {
+                headers: { 'X-Farm-ID': currentFarm.id }
+            });
+            const envData = await envRes.json();
+            const environments = envData.data || [];
+
+            // Fetch seed varieties
+            const seedsRes = await fetch('/api/seed-varieties', {
+                headers: { 'X-Farm-ID': currentFarm.id }
+            });
+            const seedsData = await seedsRes.json();
+            const seeds = seedsData.data || [];
+
+            // Calculate stats from real data
+            const activeBatches = batches.filter((b: any) =>
+                ['PLANTED', 'GERMINATING', 'GROWING'].includes(b.status)
+            ).length;
+            const completedBatches = batches.filter((b: any) =>
+                b.status === 'HARVESTED' || b.status === 'SOLD'
+            ).length;
+            const pendingBatches = batches.filter((b: any) =>
+                b.status === 'PLANTED'
+            ).length;
+            const readyToHarvest = batches.filter((b: any) =>
+                b.status === 'READY_TO_HARVEST'
+            ).length;
+            const packagedBatches = batches.filter((b: any) =>
+                b.status === 'PACKAGED'
+            ).length;
+
+            // Environment stats
+            const totalZones = environments.length;
+            const optimalZones = environments.filter((e: any) =>
+                e.status === 'OPTIMAL' || e.status === 'ACTIVE'
+            ).length;
+            const zoneAlerts = environments.filter((e: any) =>
+                e.status === 'ALERT' || e.status === 'WARNING'
+            ).length;
+
+            // Seed stats
+            const seedVarieties = seeds.length;
+            const totalStock = seeds.reduce((sum: number, s: any) => sum + (s.stockQuantity || 0), 0);
+            const totalMinStock = seeds.reduce((sum: number, s: any) => sum + (s.minStockLevel || 0), 0);
+            const stockLevel = totalMinStock > 0 ? Math.round((totalStock / totalMinStock) * 100) : 100;
+
+            setStats({
+                activeBatches,
+                completedBatches,
+                pendingBatches,
+                totalZones,
+                optimalZones,
+                zoneAlerts,
+                seedVarieties,
+                stockLevel: Math.min(stockLevel, 100),
+                pendingOrders: 0,
+                readyToHarvest,
+                scheduledHarvests: batches.filter((b: any) => b.status === 'GROWING').length,
+                processedBatches: completedBatches,
+                processingBatches: batches.filter((b: any) => b.status === 'READY_TO_HARVEST').length,
+                packagedBatches,
+                shippedBatches: batches.filter((b: any) => b.status === 'SOLD').length
+            });
+
+            // Generate recent activity from batches
+            const activities: RecentActivity[] = batches
+                .slice(0, 5)
+                .map((batch: any) => ({
+                    id: batch.id,
+                    icon: batch.status === 'READY_TO_HARVEST' ? '🌱' :
+                        batch.status === 'HARVESTED' ? '✂️' :
+                            batch.status === 'PACKAGED' ? '📦' : '🏠',
+                    description: `Batch ${batch.batchNumber} (${batch.seed_varieties?.name || 'Unknown'}) - ${batch.status}`,
+                    time: new Date(batch.updatedAt || batch.createdAt).toLocaleDateString(),
+                    status: batch.status
+                }));
+            setRecentActivity(activities);
+
+        } catch (error) {
+            console.error('Error fetching production stats:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, [currentFarm?.id]);
+
+    useEffect(() => {
+        fetchProductionStats();
+    }, [fetchProductionStats]);
+
+    // Calculate efficiency
+    const efficiency = stats.activeBatches > 0
+        ? Math.round((stats.optimalZones / Math.max(stats.totalZones, 1)) * 100)
+        : 0;
 
     const productionModules = [
         {
@@ -23,7 +168,7 @@ export default function ProductionPage() {
             icon: '🌿',
             description: 'Track and manage production batches from seed to harvest',
             href: '/production/batches',
-            stats: { active: 8, completed: 23, pending: 3 },
+            stats: { active: stats.activeBatches, completed: stats.completedBatches, pending: stats.pendingBatches },
             urgent: false
         },
         {
@@ -32,8 +177,8 @@ export default function ProductionPage() {
             icon: '🏠',
             description: 'Monitor and control growing conditions across facilities',
             href: '/production/environments',
-            stats: { zones: 6, optimal: 5, alerts: 1 },
-            urgent: true
+            stats: { zones: stats.totalZones, optimal: stats.optimalZones, alerts: stats.zoneAlerts },
+            urgent: stats.zoneAlerts > 0
         },
         {
             id: 'seeds',
@@ -41,8 +186,8 @@ export default function ProductionPage() {
             icon: '🌰',
             description: 'Manage seed inventory, varieties, and genetic records',
             href: '/production/seeds',
-            stats: { varieties: 12, stock: '95%', orders: 2 },
-            urgent: false
+            stats: { varieties: stats.seedVarieties, stock: `${stats.stockLevel}%`, orders: stats.pendingOrders },
+            urgent: stats.stockLevel < 20
         },
         {
             id: 'harvesting',
@@ -50,8 +195,8 @@ export default function ProductionPage() {
             icon: '✂️',
             description: 'Schedule and track harvesting operations',
             href: '/production/harvesting',
-            stats: { ready: 4, scheduled: 6, processed: 15 },
-            urgent: false
+            stats: { ready: stats.readyToHarvest, scheduled: stats.scheduledHarvests, processed: stats.processedBatches },
+            urgent: stats.readyToHarvest > 5
         },
         {
             id: 'post-harvest',
@@ -59,7 +204,7 @@ export default function ProductionPage() {
             icon: '📦',
             description: 'Manage washing, packaging, and storage operations',
             href: '/production/post-harvest',
-            stats: { processing: 3, packaged: 12, shipped: 8 },
+            stats: { processing: stats.processingBatches, packaged: stats.packagedBatches, shipped: stats.shippedBatches },
             urgent: false
         }
     ];
@@ -78,15 +223,15 @@ export default function ProductionPage() {
 
                 <div className={styles.quickStats}>
                     <div className={styles.stat}>
-                        <span className={styles.statNumber}>8</span>
+                        <span className={styles.statNumber}>{loading ? '...' : stats.activeBatches}</span>
                         <span className={styles.statLabel}>Active Batches</span>
                     </div>
                     <div className={styles.stat}>
-                        <span className={styles.statNumber}>6</span>
+                        <span className={styles.statNumber}>{loading ? '...' : stats.totalZones}</span>
                         <span className={styles.statLabel}>Growing Zones</span>
                     </div>
                     <div className={styles.stat}>
-                        <span className={styles.statNumber}>94%</span>
+                        <span className={styles.statNumber}>{loading ? '...' : `${efficiency}%`}</span>
                         <span className={styles.statLabel}>Efficiency</span>
                     </div>
                 </div>
@@ -136,38 +281,32 @@ export default function ProductionPage() {
                     </div>
 
                     <div className={styles.activityList}>
-                        <div className={styles.activityItem}>
-                            <div className={styles.activityIcon}>🌱</div>
-                            <div className={styles.activityContent}>
-                                <p className={styles.activityDescription}>
-                                    Batch B2024-045 (Arugula) moved to harvest stage
-                                </p>
-                                <span className={styles.activityTime}>2 hours ago</span>
+                        {loading ? (
+                            <div className={styles.activityItem}>
+                                <div className={styles.activityContent}>
+                                    <p className={styles.activityDescription}>Loading recent activity...</p>
+                                </div>
                             </div>
-                            <div className={styles.activityStatus}>Ready</div>
-                        </div>
-
-                        <div className={styles.activityItem}>
-                            <div className={styles.activityIcon}>🏠</div>
-                            <div className={styles.activityContent}>
-                                <p className={styles.activityDescription}>
-                                    Zone 3 temperature alert resolved - conditions normalized
-                                </p>
-                                <span className={styles.activityTime}>4 hours ago</span>
+                        ) : recentActivity.length > 0 ? (
+                            recentActivity.map((activity) => (
+                                <div key={activity.id} className={styles.activityItem}>
+                                    <div className={styles.activityIcon}>{activity.icon}</div>
+                                    <div className={styles.activityContent}>
+                                        <p className={styles.activityDescription}>
+                                            {activity.description}
+                                        </p>
+                                        <span className={styles.activityTime}>{activity.time}</span>
+                                    </div>
+                                    <div className={styles.activityStatus}>{activity.status}</div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className={styles.activityItem}>
+                                <div className={styles.activityContent}>
+                                    <p className={styles.activityDescription}>No recent activity</p>
+                                </div>
                             </div>
-                            <div className={styles.activityStatus}>Resolved</div>
-                        </div>
-
-                        <div className={styles.activityItem}>
-                            <div className={styles.activityIcon}>✂️</div>
-                            <div className={styles.activityContent}>
-                                <p className={styles.activityDescription}>
-                                    Harvesting completed for Batch B2024-042 (Pea Shoots)
-                                </p>
-                                <span className={styles.activityTime}>6 hours ago</span>
-                            </div>
-                            <div className={styles.activityStatus}>Complete</div>
-                        </div>
+                        )}
                     </div>
                 </Card>
             </div>

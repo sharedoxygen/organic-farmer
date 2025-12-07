@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/AuthProvider';
-
+import React, { useEffect, useState } from 'react';
+import { useTenant } from '@/components/TenantProvider';
 import Link from 'next/link';
 import styles from './page.module.css';
 

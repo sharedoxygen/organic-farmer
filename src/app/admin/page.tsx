@@ -199,7 +199,7 @@ export default function AdminDashboard() {
                 : 'Invite team members, assign roles, and manage user permissions.',
             icon: '👥',
             action: 'Manage',
-            href: '/admin/users',
+            href: '/settings/users',
             category: 'Administration',
             show: canManageUsers() || isGlobalAdmin,
             stats: `${aggregateStats?.totalUsers || 0} users`
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
             description: 'Quickly switch between different farms you have access to.',
             icon: '🔄',
             action: 'Switch',
-            href: '/admin/switch-farm',
+            href: '/dashboard',
             category: 'Navigation',
             show: !isGlobalAdmin && availableFarms.length > 1,
             stats: `${availableFarms.length} available`
@@ -225,7 +225,7 @@ export default function AdminDashboard() {
                 : 'Manage subscription plans, billing, and payment information.',
             icon: '💳',
             action: 'Manage',
-            href: '/admin/billing',
+            href: '/settings/system',
             category: 'Financial',
             show: canManageBilling() || isGlobalAdmin,
             stats: isGlobalAdmin
@@ -241,7 +241,7 @@ export default function AdminDashboard() {
                 : 'View farm performance metrics, usage statistics, and insights.',
             icon: '📊',
             action: 'View',
-            href: '/admin/analytics',
+            href: '/analytics',
             category: 'Insights',
             show: true,
             stats: `${aggregateStats?.totalBatches || 0} batches tracked`
@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                 : 'Monitor data usage, manage storage, and configure data retention.',
             icon: '💾',
             action: 'Monitor',
-            href: '/admin/data',
+            href: '/settings/backup',
             category: 'Technical',
             show: isAdmin || isGlobalAdmin,
             stats: `${Math.round(aggregateStats?.storageUsed || 0)} MB used`

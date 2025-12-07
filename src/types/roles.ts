@@ -1,3 +1,26 @@
+/**
+ * Farm-level roles - matches Prisma FarmRole enum
+ * These are roles assigned to users within a specific farm context
+ */
+export enum FarmRole {
+    OWNER = 'OWNER',
+    ADMIN = 'ADMIN',
+    MANAGER = 'MANAGER',
+    FARM_MANAGER = 'FARM_MANAGER',
+    OPERATIONS_MANAGER = 'OPERATIONS_MANAGER',
+    PRODUCTION_LEAD = 'PRODUCTION_LEAD',
+    QUALITY_LEAD = 'QUALITY_LEAD',
+    TEAM_MEMBER = 'TEAM_MEMBER',
+    QUALITY_SPECIALIST = 'QUALITY_SPECIALIST',
+    SENIOR_GROWER = 'SENIOR_GROWER',
+    HARVEST_SPECIALIST = 'HARVEST_SPECIALIST',
+    WORKER = 'WORKER'
+}
+
+/**
+ * Legacy Role enum - kept for backward compatibility
+ * @deprecated Use FarmRole instead
+ */
 export enum Role {
     ADMIN = 'ADMIN',
     MANAGER = 'MANAGER',
@@ -7,6 +30,15 @@ export enum Role {
     TEAM_MEMBER = 'TEAM_MEMBER',
     INTERN = 'INTERN',
     VIEWER = 'VIEWER'
+}
+
+/**
+ * System-level roles - for platform-wide administration
+ */
+export enum SystemRole {
+    SYSTEM_ADMIN = 'SYSTEM_ADMIN',
+    PLATFORM_ADMIN = 'PLATFORM_ADMIN',
+    SUPER_ADMIN = 'SUPER_ADMIN'
 }
 
 export enum Permission {
@@ -325,4 +357,62 @@ export function getRoleDisplayName(role: Role): string {
         [Role.VIEWER]: 'Viewer'
     };
     return roleNames[role] || role;
+}
+
+/**
+ * Get display name for FarmRole (matches Prisma enum)
+ */
+export function getFarmRoleDisplayName(role: FarmRole | string): string {
+    const roleNames: Record<string, string> = {
+        [FarmRole.OWNER]: 'Owner',
+        [FarmRole.ADMIN]: 'Administrator',
+        [FarmRole.MANAGER]: 'Manager',
+        [FarmRole.FARM_MANAGER]: 'Farm Manager',
+        [FarmRole.OPERATIONS_MANAGER]: 'Operations Manager',
+        [FarmRole.PRODUCTION_LEAD]: 'Production Lead',
+        [FarmRole.QUALITY_LEAD]: 'Quality Lead',
+        [FarmRole.TEAM_MEMBER]: 'Team Member',
+        [FarmRole.QUALITY_SPECIALIST]: 'Quality Specialist',
+        [FarmRole.SENIOR_GROWER]: 'Senior Grower',
+        [FarmRole.HARVEST_SPECIALIST]: 'Harvest Specialist',
+        [FarmRole.WORKER]: 'Worker'
+    };
+    return roleNames[role] || role;
+}
+
+/**
+ * Get display name for SystemRole
+ */
+export function getSystemRoleDisplayName(role: SystemRole | string): string {
+    const roleNames: Record<string, string> = {
+        [SystemRole.SYSTEM_ADMIN]: 'System Administrator',
+        [SystemRole.PLATFORM_ADMIN]: 'Platform Administrator',
+        [SystemRole.SUPER_ADMIN]: 'Super Administrator'
+    };
+    return roleNames[role] || role;
+}
+
+/**
+ * Check if a role is a management-level role
+ */
+export function isManagementRole(role: FarmRole | string): boolean {
+    const managementRoles = [
+        FarmRole.OWNER,
+        FarmRole.ADMIN,
+        FarmRole.MANAGER,
+        FarmRole.FARM_MANAGER,
+        FarmRole.OPERATIONS_MANAGER
+    ];
+    return managementRoles.includes(role as FarmRole);
+}
+
+/**
+ * Check if a role is a lead-level role
+ */
+export function isLeadRole(role: FarmRole | string): boolean {
+    const leadRoles = [
+        FarmRole.PRODUCTION_LEAD,
+        FarmRole.QUALITY_LEAD
+    ];
+    return leadRoles.includes(role as FarmRole);
 } 
