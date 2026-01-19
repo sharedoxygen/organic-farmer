@@ -73,13 +73,8 @@ export default function CustomersPage() {
 
     try {
       const headers: Record<string, string> = { 'X-Farm-ID': currentFarm.id };
-      const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-      if (userData) {
-        const user = JSON.parse(userData);
-        if (user?.id) headers['Authorization'] = `Bearer ${user.id}`;
-      }
 
-      const response = await fetch('/api/parties/customers', { headers });
+      const response = await fetch('/api/parties/customers', { headers, credentials: 'include' });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch customers: ${response.statusText}`);
@@ -171,7 +166,7 @@ export default function CustomersPage() {
       const matchesName = customer.party.displayName.toLowerCase().includes(query);
       const matchesEmail = customer.primaryEmail?.toLowerCase().includes(query);
       const matchesPhone = customer.primaryPhone?.toLowerCase().includes(query);
-      
+
       if (!matchesName && !matchesEmail && !matchesPhone) return false;
     }
 

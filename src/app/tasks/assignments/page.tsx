@@ -44,16 +44,11 @@ export default function TeamAssignmentsPage() {
                     'Content-Type': 'application/json',
                     'X-Farm-ID': currentFarm.id,
                 };
-                const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    if (user?.id) headers['Authorization'] = `Bearer ${user.id}`;
-                }
 
                 // Fetch users and batches to create assignments
                 const [usersRes, batchesRes] = await Promise.all([
-                    fetch('/api/users?limit=50', { headers }),
-                    fetch('/api/batches?limit=100', { headers })
+                    fetch('/api/users?limit=50', { headers, credentials: 'include' }),
+                    fetch('/api/batches?limit=100', { headers, credentials: 'include' })
                 ]);
 
                 const [usersData, batchesData] = await Promise.all([
@@ -78,12 +73,12 @@ export default function TeamAssignmentsPage() {
                             userBatches.forEach((batch: any) => {
                                 const taskType = batch.status === 'SEEDED' ? 'watering'
                                     : batch.status === 'GROWING' ? 'monitoring'
-                                    : batch.status === 'READY_TO_HARVEST' ? 'harvesting'
-                                    : 'general';
+                                        : batch.status === 'READY_TO_HARVEST' ? 'harvesting'
+                                            : 'general';
 
                                 const category: TeamAssignment['category'] = taskType === 'harvesting' ? 'harvest'
                                     : taskType === 'watering' || taskType === 'monitoring' ? 'maintenance'
-                                    : 'processing';
+                                        : 'processing';
 
                                 const title = `${taskType.charAt(0).toUpperCase() + taskType.slice(1)} - ${batch.seed_varieties?.name || 'Unknown'}`;
                                 const description = `Batch ${batch.batchNumber} in ${batch.zones?.name || 'Zone A'}`;

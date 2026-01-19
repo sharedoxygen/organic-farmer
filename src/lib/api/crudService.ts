@@ -38,19 +38,6 @@ export class CrudApiService {
             headers['X-Farm-ID'] = farmId;
         }
 
-        // ✅ CRITICAL FIX: Add Authorization header
-        const user = localStorage.getItem('ofms_user');
-        if (user) {
-            try {
-                const userData = JSON.parse(user);
-                if (userData.id) {
-                    headers['Authorization'] = `Bearer ${userData.id}`;
-                }
-            } catch (error) {
-                console.warn('Failed to parse user data for auth header:', error);
-            }
-        }
-
         return headers;
     }
 
@@ -80,6 +67,7 @@ export class CrudApiService {
         const response = await fetch(url, {
             method: 'GET',
             headers: this.getHeaders(),
+            credentials: 'include',
             cache: 'no-store'
         });
 
@@ -103,6 +91,7 @@ export class CrudApiService {
         const response = await fetch(`${this.endpoint}/${id}`, {
             method: 'GET',
             headers: this.getHeaders(),
+            credentials: 'include',
             cache: 'no-store'
         });
 
@@ -125,6 +114,7 @@ export class CrudApiService {
         const response = await fetch(this.endpoint, {
             method: 'POST',
             headers: this.getHeaders(),
+            credentials: 'include',
             body: JSON.stringify(transformedData)
         });
 
@@ -145,6 +135,7 @@ export class CrudApiService {
         const response = await fetch(`${this.endpoint}/${id}`, {
             method: 'PUT',
             headers: this.getHeaders(),
+            credentials: 'include',
             body: JSON.stringify(transformedData)
         });
 
@@ -162,7 +153,8 @@ export class CrudApiService {
 
         const response = await fetch(`${this.endpoint}/${id}`, {
             method: 'DELETE',
-            headers: this.getHeaders()
+            headers: this.getHeaders(),
+            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -180,6 +172,7 @@ export class CrudApiService {
         const response = await fetch(`${this.endpoint}/bulk-update`, {
             method: 'PUT',
             headers: this.getHeaders(),
+            credentials: 'include',
             body: JSON.stringify({ ids, data: payload })
         });
 
@@ -202,6 +195,7 @@ export class CrudApiService {
         const response = await fetch(`${this.endpoint}/bulk-delete`, {
             method: 'DELETE',
             headers: this.getHeaders(),
+            credentials: 'include',
             body: JSON.stringify({ ids })
         });
 

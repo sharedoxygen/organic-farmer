@@ -52,6 +52,7 @@ export default function ProductionBatchesPage() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingBatch, setEditingBatch] = useState<Batch | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
 
     const loadBatches = useCallback(async () => {
         console.log('🚀 LOAD BATCHES CALLED');
@@ -111,10 +112,6 @@ export default function ProductionBatchesPage() {
                 queryParams.append('status', filters.status);
             }
 
-            // Get user data for authorization
-            const userData = localStorage.getItem('ofms_user');
-            console.log('🔐 User data from localStorage:', userData ? 'EXISTS' : 'MISSING');
-
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json',
                 'X-Farm-ID': currentFarm.id,
@@ -122,20 +119,13 @@ export default function ProductionBatchesPage() {
                 'Pragma': 'no-cache'
             };
 
-            if (userData) {
-                const userObj = JSON.parse(userData);
-                headers['Authorization'] = `Bearer ${userObj.id}`;
-                console.log('🔐 Authorization header set for user:', userObj.email);
-            } else {
-                console.warn('⚠️ No user data found in localStorage');
-            }
-
             const apiUrl = `/api/batches?${queryParams}`;
             console.log('🔄 Making API call to:', apiUrl);
             console.log('📋 Headers:', headers);
 
             const response = await fetch(apiUrl, {
                 method: 'GET',
+                credentials: 'include',
                 headers,
                 cache: 'no-store'
             });
@@ -203,9 +193,9 @@ export default function ProductionBatchesPage() {
                 alert(`API Error: ${data.error}`);
                 setBatches([]);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('❌ Network or parsing error:', error);
-            alert(`Network Error: ${error.message}`);
+            alert(`Network Error: ${error?.message || 'Unknown error'}`);
             setBatches([]);
         } finally {
             setLoading(false);
@@ -366,6 +356,7 @@ export default function ProductionBatchesPage() {
 
             fetch(`/api/batches/${batch.id}`, {
                 method: 'DELETE',
+                credentials: 'include',
                 headers: {
                     'X-Farm-ID': currentFarm.id
                 }
@@ -514,95 +505,109 @@ export default function ProductionBatchesPage() {
                 </Card>
             </div>
 
-            {/* Batches Grid */}
-            <div className={styles.batchesGrid}>
-                {filteredBatches.map((batch) => {
-                    const daysToHarvest = getDaysToHarvest(batch.expectedHarvestDate, batch.actualHarvestDate);
+            {/* Batches Section */}
+            <div className={styles.batchesSection}>
+                <div className={styles.sectionHeader}>
+                    <h2>📦 All Batches</h2>
+                    <div className={styles.sectionActions}>
+                        <div className={styles.viewToggle}>
+                            <button
+                                className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.active : ''}`}
+                                onClick={() => setViewMode('list')}
+                            >
+                                📋 List
+                            </button>
+                            <button
+                                className={`${styles.toggleBtn} ${viewMode === 'cards' ? styles.active : ''}`}
+                                onClick={() => setViewMode('cards')}
+                            >
+                                🗂️ Cards
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                    return (
-                        <Card key={batch.id} className={styles.batchCard}>
-                            <div className={styles.batchHeader}>
-                                <div className={styles.batchNumber}>
-                                    <span className={styles.batchIcon}>{getStatusIcon(batch.status)}</span>
-                                    {batch.batchNumber}
-                                </div>
-                                <div
-                                    className={styles.batchStatus}
-                                    style={{ backgroundColor: getStatusColor(batch.status) }}
-                                >
-                                    {batch.status.replace('_', ' ')}
-                                </div>
-                            </div>
-
-                            <div className={styles.batchInfo}>
-                                <h3 className={styles.seedVariety}>{batch.seedVariety}</h3>
-                                <div className={styles.batchDetails}>
-                                    <div className={styles.detail}>
-                                        <span className={styles.label}>Zone:</span>
-                                        <span className={styles.value}>{batch.zone}</span>
-                                    </div>
-                                    <div className={styles.detail}>
-                                        <span className={styles.label}>Quantity:</span>
-                                        <span className={styles.value}>{batch.quantity} {batch.unit}</span>
-                                    </div>
-                                    <div className={styles.detail}>
-                                        <span className={styles.label}>Planted:</span>
-                                        <span className={styles.value}>{formatDate(batch.plantDate)}</span>
-                                    </div>
-                                    <div className={styles.detail}>
-                                        <span className={styles.label}>Expected Harvest:</span>
-                                        <span className={styles.value}>{formatDate(batch.expectedHarvestDate)}</span>
-                                    </div>
-                                    {daysToHarvest !== null && (
-                                        <div className={styles.detail}>
-                                            <span className={styles.label}>Days to Harvest:</span>
-                                            <span className={`${styles.value} ${daysToHarvest <= 0 ? styles.urgent : ''}`}>
-                                                {daysToHarvest <= 0 ? 'Ready!' : `${daysToHarvest} days`}
-                                            </span>
+                {viewMode === 'list' ? (
+                    /* Clean Table View */
+                    <div className={styles.tableContainer}>
+                        <div className={styles.tableHeader}>
+                            <span>Batch</span>
+                            <span>Variety</span>
+                            <span>Zone</span>
+                            <span>Planted</span>
+                            <span>Harvest</span>
+                            <span>Status</span>
+                            <span>Actions</span>
+                        </div>
+                        <div className={styles.tableBody}>
+                            {filteredBatches.map((batch) => (
+                                <div key={batch.id} className={styles.tableRow} onClick={() => handleViewBatch(batch)}>
+                                    <div className={styles.batchInfo}>
+                                        <span className={styles.batchIcon}>{getStatusIcon(batch.status)}</span>
+                                        <div className={styles.batchDetails}>
+                                            <p className={styles.batchNumber}>{batch.batchNumber}</p>
+                                            <span className={styles.batchQty}>{batch.quantity} {batch.unit}</span>
                                         </div>
-                                    )}
-                                    {batch.qualityGrade && (
-                                        <div className={styles.detail}>
-                                            <span className={styles.label}>Quality Grade:</span>
-                                            <span className={styles.value}>Grade {batch.qualityGrade}</span>
-                                        </div>
-                                    )}
-                                    {batch.yieldAmount && (
-                                        <div className={styles.detail}>
-                                            <span className={styles.label}>Yield:</span>
-                                            <span className={styles.value}>{batch.yieldAmount} kg</span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className={styles.batchMeta}>
-                                    <span>👤 {batch.createdBy}</span>
-                                    <span>📅 Updated {formatDate(batch.updatedAt)}</span>
-                                </div>
-
-                                {batch.notes && (
-                                    <div className={styles.batchNotes}>
-                                        <strong>Notes:</strong> {batch.notes}
                                     </div>
-                                )}
+                                    <div className={styles.cellText}>{batch.seedVariety}</div>
+                                    <div className={styles.cellText}>{batch.zone}</div>
+                                    <div className={styles.cellText}>{formatDate(batch.plantDate)}</div>
+                                    <div className={styles.cellText}>{formatDate(batch.expectedHarvestDate)}</div>
+                                    <div className={`${styles.statusBadge} ${styles[batch.status.toLowerCase().replace('_', '')]}`}>
+                                        {batch.status.replace('_', ' ')}
+                                    </div>
+                                    <div className={styles.rowActions}>
+                                        <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); handleEditBatch(batch); }}>
+                                            Edit
+                                        </button>
+                                        {batch.status === 'READY_TO_HARVEST' && (
+                                            <button className={`${styles.actionBtn} ${styles.primary}`} onClick={(e) => { e.stopPropagation(); handleHarvestBatch(batch); }}>
+                                                Harvest
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    /* Cards View - Limited */
+                    <div className={styles.batchesGrid}>
+                        {filteredBatches.slice(0, 12).map((batch) => {
+                            const daysToHarvest = getDaysToHarvest(batch.expectedHarvestDate, batch.actualHarvestDate);
+                            return (
+                                <Card key={batch.id} className={styles.batchCard}>
+                                    <div className={styles.cardHeader}>
+                                        <div className={styles.batchNumber}>
+                                            <span className={styles.batchIcon}>{getStatusIcon(batch.status)}</span>
+                                            {batch.batchNumber}
+                                        </div>
+                                        <div className={`${styles.statusBadge} ${styles[batch.status.toLowerCase().replace('_', '')]}`}>
+                                            {batch.status.replace('_', ' ')}
+                                        </div>
+                                    </div>
+                                    <h3 className={styles.seedVariety}>{batch.seedVariety}</h3>
+                                    <div className={styles.cardMeta}>
+                                        <span>📍 {batch.zone}</span>
+                                        <span>📅 {formatDate(batch.plantDate)}</span>
+                                        {daysToHarvest !== null && daysToHarvest > 0 && (
+                                            <span>⏱️ {daysToHarvest} days</span>
+                                        )}
+                                    </div>
+                                    <div className={styles.batchActions}>
+                                        <Button variant="secondary" size="sm" onClick={() => handleViewBatch(batch)}>View</Button>
+                                        <Button variant="secondary" size="sm" onClick={() => handleEditBatch(batch)}>Edit</Button>
+                                    </div>
+                                </Card>
+                            );
+                        })}
+                        {filteredBatches.length > 12 && (
+                            <div className={styles.moreIndicator}>
+                                +{filteredBatches.length - 12} more. Switch to List view.
                             </div>
-
-                            <div className={styles.batchActions}>
-                                <Button variant="secondary" size="sm" onClick={() => handleViewBatch(batch)}>
-                                    View
-                                </Button>
-                                <Button variant="secondary" size="sm" onClick={() => handleEditBatch(batch)}>
-                                    Edit
-                                </Button>
-                                {batch.status === 'READY_TO_HARVEST' && (
-                                    <Button variant="primary" size="sm" onClick={() => handleHarvestBatch(batch)}>
-                                        Harvest
-                                    </Button>
-                                )}
-                            </div>
-                        </Card>
-                    );
-                })}
+                        )}
+                    </div>
+                )}
             </div>
 
             {filteredBatches.length === 0 && (
@@ -642,6 +647,7 @@ export default function ProductionBatchesPage() {
 
                                 const response = await fetch('/api/batches', {
                                     method: 'POST',
+                                    credentials: 'include',
                                     headers: {
                                         'Content-Type': 'application/json',
                                         'X-Farm-ID': currentFarm.id
@@ -946,6 +952,7 @@ export default function ProductionBatchesPage() {
 
                                 const response = await fetch(`/api/batches/${editingBatch.id}`, {
                                     method: 'PUT',
+                                    credentials: 'include',
                                     headers: {
                                         'Content-Type': 'application/json',
                                         'X-Farm-ID': currentFarm.id

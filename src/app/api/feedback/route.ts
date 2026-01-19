@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { ensureFarmAccess, getAuthUser, HttpError } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 import { rateLimiter } from '@/lib/rate-limiter';
 import { feedbackSchema } from '@/lib/validation/feedbackSchema';
 
@@ -9,10 +11,9 @@ export const dynamic = 'force-dynamic';
 // GET - Fetch feedback based on user role and farm
 export async function GET(request: NextRequest) {
     try {
-        // Debug: Log all incoming headers and query params
-        const farmId = request.headers.get('X-Farm-ID');
-        const authHeader = request.headers.get('Authorization');
-        const isGlobalAdmin = request.headers.get('X-Global-Admin') === 'true';
+        const ctx = await ensureFarmAccess(request);
+        const farmId = ctx.farmId;
+        const isGlobalAdmin = ctx.isSystemAdmin;
         const { searchParams } = new URL(request.url);
         const page = parseInt(searchParams.get('page') || '1');
         const limit = parseInt(searchParams.get('limit') || '20');
@@ -22,17 +23,6 @@ export async function GET(request: NextRequest) {
         const myFeedback = searchParams.get('my') === 'true';
         const userId = searchParams.get('userId');
         const targetFarmId = searchParams.get('farmId');
-
-        console.log('[OFMS FEEDBACK API] Incoming GET /api/feedback');
-        console.log('  X-Farm-ID:', farmId);
-        console.log('  Authorization:', authHeader);
-        console.log('  X-Global-Admin:', isGlobalAdmin);
-        console.log('  Query:', { page, limit, type, status, priority, myFeedback, userId, targetFarmId });
-
-        // Only allow farm-less (all-farm) access if isGlobalAdmin is true
-        if (!farmId && !isGlobalAdmin) {
-            return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
-        }
 
         // Build where clause with farm scoping
         const where: any = {};
@@ -48,23 +38,20 @@ export async function GET(request: NextRequest) {
             where.farm_id = farmId;
         }
 
-        // Extract user ID from Authorization header if present
-        let authUserId: string | null = null;
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            authUserId = authHeader.replace('Bearer ', '');
-        }
-
         // If not admin or specifically requesting own feedback, filter by user
         if (!isGlobalAdmin || myFeedback) {
             // Use authenticated user ID if 'my=true' and no userId param
             if (myFeedback) {
-                if (!authUserId) {
-                    return NextResponse.json({ error: 'Authentication required for my feedback' }, { status: 401 });
-                }
-                where.user_id = authUserId;
+                where.user_id = ctx.user.id;
             } else if (userId) {
-                where.user_id = userId;
+                if (userId !== ctx.user.id) {
+                    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+                }
+                where.user_id = ctx.user.id;
             }
+        } else if (userId) {
+            // System admin can filter by arbitrary user
+            where.user_id = userId;
         }
 
         // Add filters
@@ -77,8 +64,6 @@ export async function GET(request: NextRequest) {
         if (priority && ['LOW', 'NORMAL', 'HIGH', 'URGENT'].includes(priority)) {
             where.priority = priority;
         }
-        console.log('  Prisma where clause:', JSON.stringify(where));
-
         // Fetch feedback with pagination
         const [feedback, total] = await Promise.all([
             (prisma as any).feedback_submissions.findMany({
@@ -125,14 +110,6 @@ export async function GET(request: NextRequest) {
             (prisma as any).feedback_submissions.count({ where })
         ]);
 
-        const responseHeaders: Record<string, string> = {};
-        if (farmId) {
-            responseHeaders['X-Farm-ID'] = farmId;
-        }
-        if (isGlobalAdmin) {
-            responseHeaders['X-Global-Admin'] = 'true';
-        }
-
         return NextResponse.json({
             success: true,
             data: feedback,
@@ -142,13 +119,13 @@ export async function GET(request: NextRequest) {
                 total,
                 pages: Math.ceil(total / limit)
             }
-        }, {
-            headers: responseHeaders
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('[OFMS FEEDBACK API] ❌ Error fetching feedback:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        const status = error instanceof HttpError ? error.status : (error?.status || 500);
+        const message = error instanceof HttpError ? error.message : (error?.message || 'Internal server error');
+        return NextResponse.json({ error: message }, { status });
     }
 }
 
@@ -188,7 +165,6 @@ export async function POST(request: NextRequest) {
             userAgent,
             screenshot,
             metadata,
-            userId // TODO: Get from authentication
         } = body;
 
         // Validate payload using Zod schema
@@ -206,8 +182,21 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // TODO: Verify user has access to this farm
-        // For now, we'll trust the userId parameter
+        // Authenticate and verify access; never trust userId from client
+        let userId: string;
+        if (isSystemAdminFeedback) {
+            const user = await getAuthUser(request);
+            if (!user) {
+                return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+            }
+            if (!isSystemAdmin(user as any)) {
+                return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+            }
+            userId = user.id;
+        } else {
+            const ctx = await ensureFarmAccess(request);
+            userId = ctx.user.id;
+        }
 
         // Auto-assign priority based on type
         let finalPriority = priority;
@@ -272,8 +261,10 @@ export async function POST(request: NextRequest) {
             }
         });
 
-    } catch (error) {
-        console.error('❌ Error submitting feedback:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Error submitting feedback:', error);
+        const status = error instanceof HttpError ? error.status : (error?.status || 500);
+        const message = error instanceof HttpError ? error.message : (error?.message || 'Internal server error');
+        return NextResponse.json({ error: message }, { status });
     }
 }

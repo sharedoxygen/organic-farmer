@@ -29,7 +29,7 @@ export class TransactionManager {
      * MANDATORY for all multi-step operations that must succeed or fail together
      */
     static async execute<T>(
-        operations: (prisma: PrismaClient) => Promise<T>,
+        operations: (prisma: Prisma.TransactionClient) => Promise<T>,
         options: TransactionOptions = {}
     ): Promise<TransactionResult<T>> {
         const startTime = Date.now();
@@ -50,7 +50,7 @@ export class TransactionManager {
                     }
 
                     // Execute the operations  
-                    const data = await operations(prismaTransaction as PrismaClient);
+                    const data = await operations(prismaTransaction);
                     operationsCount++;
 
                     // Log transaction success if audit user provided
@@ -110,13 +110,6 @@ export class TransactionManager {
                 operationsCount
             };
         }
-    }
-
-    /**
-     * CRITICAL: Execute user creation with role assignment atomically
-     */
-    static async createUserWithRoles(): Promise<TransactionResult<unknown>> {
-        throw new Error('createUserWithRoles is not supported with current schema');
     }
 
     /**

@@ -108,7 +108,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // POST /api/orders - Create new order
 export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
-        const { farmId } = await ensureFarmAccess(request);
+        const { farmId, user } = await ensureFarmAccess(request);
 
         console.log('🔒 SECURE: Creating order for farm:', farmId);
 
@@ -125,8 +125,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
         // Check if order number already exists (if provided)
         if (body.orderNumber) {
-            const existingOrder = await prisma.orders.findUnique({
-                where: { orderNumber: body.orderNumber }
+            const existingOrder = await prisma.orders.findFirst({
+                where: { farm_id: farmId, orderNumber: body.orderNumber }
             });
 
             if (existingOrder) {

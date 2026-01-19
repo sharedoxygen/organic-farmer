@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/db';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 
 export async function GET(
     request: NextRequest,
@@ -9,6 +9,22 @@ export async function GET(
 ) {
     try {
         const userId = params.id;
+
+        const user = await getAuthUser(request);
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Authentication required' },
+                { status: 401 }
+            );
+        }
+
+        const admin = isSystemAdmin(user as any);
+        if (!admin && user.id !== userId) {
+            return NextResponse.json(
+                { error: 'Forbidden' },
+                { status: 403 }
+            );
+        }
 
         if (!userId) {
             return NextResponse.json(
@@ -56,7 +72,5 @@ export async function GET(
             { error: 'Internal server error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
-} 
+}

@@ -93,12 +93,12 @@ export class TenantMiddleware {
                 farm: {
                     id: farm.id,
                     farm_name: farm.farm_name,
-                    business_name: farm.business_name,
-                    subdomain: farm.subdomain,
+                    business_name: farm.business_name ?? undefined,
+                    subdomain: farm.subdomain ?? undefined,
                     owner_id: farm.owner_id,
-                    subscription_plan: farm.subscription_plan,
-                    subscription_status: farm.subscription_status,
-                    trial_ends_at: farm.trial_ends_at,
+                    subscription_plan: farm.subscription_plan ?? undefined,
+                    subscription_status: farm.subscription_status ?? undefined,
+                    trial_ends_at: farm.trial_ends_at ?? undefined,
                     settings: farm.settings,
                     created_at: farm.created_at,
                     updated_at: farm.updated_at

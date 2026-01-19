@@ -106,13 +106,13 @@ export default function Layout({ children, user, onLogout }: LayoutProps) {
             )}
 
             {/* Floating Feedback Button - Only show when tenant context is loaded or for system admins */}
-            {!isTenantLoading && (currentFarm || isSystemAdmin({ ...user, roles: userRoles })) && (
-                    <FeedbackButton
-                        floating={true}
-                        variant="primary"
-                        size="md"
-                    />
-                )}
+            {!isTenantLoading && (currentFarm || isSystemAdmin({ ...user, roles: user.roles.join(',') })) && (
+                <FeedbackButton
+                    floating={true}
+                    variant="primary"
+                    size="md"
+                />
+            )}
         </div>
     );
 } 

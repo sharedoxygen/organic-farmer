@@ -325,3 +325,184 @@
         justify-content: flex-end;
     }
 }
+
+/* Varieties Section */
+.varietiesSection {
+    padding: var(--spacing-6);
+}
+
+.varietiesHeader {
+    margin-bottom: var(--spacing-6);
+}
+
+.varietiesHeader h3 {
+    margin: 0 0 var(--spacing-2);
+    font-size: var(--font-size-xl);
+    color: var(--text-dark);
+}
+
+.varietiesHeader p {
+    margin: 0;
+    color: var(--text-medium);
+}
+
+.varietiesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.varietyCard {
+    padding: var(--spacing-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.varietyCard h4 {
+    margin: 0 0 var(--spacing-1);
+    font-size: var(--font-size-base);
+    color: var(--text-dark);
+}
+
+.scientificName {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    font-style: italic;
+}
+
+.varietyStats {
+    display: flex;
+    gap: var(--spacing-4);
+    margin: var(--spacing-3) 0;
+    padding: var(--spacing-3) 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.statLabel {
+    font-size: var(--font-size-xs);
+    color: var(--text-medium);
+}
+
+.statValue {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-dark);
+}
+
+.varietySupplier {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+/* Orders Section */
+.ordersSection {
+    padding: var(--spacing-6);
+}
+
+.ordersHeader {
+    margin-bottom: var(--spacing-6);
+}
+
+.ordersHeader h3 {
+    margin: 0 0 var(--spacing-2);
+    font-size: var(--font-size-xl);
+    color: var(--text-dark);
+}
+
+.ordersHeader p {
+    margin: 0;
+    color: var(--text-medium);
+}
+
+.lowStockAlert {
+    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-4);
+    background: var(--warning-subtle);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--warning-color);
+}
+
+.lowStockAlert h4 {
+    margin: 0 0 var(--spacing-3);
+    color: var(--warning-dark);
+}
+
+.lowStockList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.lowStockItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-3);
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+}
+
+.seedName {
+    font-weight: var(--font-weight-semibold);
+    flex: 1;
+}
+
+.stockLevel {
+    color: var(--error-color);
+    font-size: var(--font-size-sm);
+}
+
+.noAlerts {
+    color: var(--success-color);
+    font-weight: var(--font-weight-medium);
+}
+
+.supplierList {
+    padding: var(--spacing-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.supplierList h4 {
+    margin: 0 0 var(--spacing-3);
+    color: var(--text-dark);
+}
+
+.suppliers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-3);
+}
+
+.supplierCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3);
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.supplierName {
+    font-weight: var(--font-weight-medium);
+}
+
+.varietyCount {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--text-medium);
+}

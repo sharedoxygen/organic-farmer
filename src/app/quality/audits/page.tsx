@@ -39,16 +39,11 @@ export default function AuditLogsPage() {
                     'Content-Type': 'application/json',
                     'X-Farm-ID': currentFarm.id,
                 };
-                const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    if (user?.id) headers['Authorization'] = `Bearer ${user.id}`;
-                }
 
                 // Fetch quality checks and users to generate audit logs
                 const [qualityRes, usersRes] = await Promise.all([
-                    fetch('/api/quality-checks?limit=50', { headers }),
-                    fetch('/api/users?limit=10', { headers })
+                    fetch('/api/quality-checks?limit=50', { headers, credentials: 'include' }),
+                    fetch('/api/users?limit=10', { headers, credentials: 'include' })
                 ]);
 
                 const [qualityData, usersData] = await Promise.all([

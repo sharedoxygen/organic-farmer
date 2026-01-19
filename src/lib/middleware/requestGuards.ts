@@ -51,10 +51,11 @@ export async function getAuthUser(request: NextRequest): Promise<AuthUser | null
     // Backward-compatible header path (will be removed)
     const authHeader = request.headers.get('Authorization')
     if (authHeader?.startsWith('Bearer ')) {
-      const userId = authHeader.substring('Bearer '.length).trim()
-      if (userId) {
+      const headerToken = authHeader.substring('Bearer '.length).trim()
+      if (headerToken && secret) {
+        const payload = jwt.verify(headerToken, secret) as any
         const user = await prisma.users.findUnique({
-          where: { id: userId },
+          where: { id: payload.sub },
           select: {
             id: true,
             email: true,
@@ -81,8 +82,10 @@ export function getFarmId(request: NextRequest): string | null {
   if (farmHeader && farmHeader.trim().length > 0) return farmHeader.trim()
 
   // Optional dev fallback via query param
-  const farmParam = request.nextUrl.searchParams.get('farmId')
-  if (farmParam && farmParam.trim().length > 0) return farmParam.trim()
+  if (process.env.NODE_ENV !== 'production') {
+    const farmParam = request.nextUrl.searchParams.get('farmId')
+    if (farmParam && farmParam.trim().length > 0) return farmParam.trim()
+  }
 
   return null
 }

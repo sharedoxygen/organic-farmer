@@ -38,7 +38,7 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
   console.log('EditUserModal - Current User:', currentUser?.email, 'Role:', currentUser?.role);
   console.log('EditUserModal - Is Owner:', isOwner, 'Is Admin:', isAdmin);
   console.log('EditUserModal - Editing User:', user.email, 'Role:', user.role);
-  
+
   const [formData, setFormData] = useState({
     firstName: user.firstName || '',
     lastName: user.lastName || '',
@@ -61,7 +61,7 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!currentFarm?.id) {
       setError('No farm context available');
       return;
@@ -73,10 +73,10 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
     try {
       const response = await fetch(`/api/users/${user.id}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-Farm-ID': currentFarm.id,
-          'Authorization': `Bearer ${currentUser?.id}`
         },
         body: JSON.stringify(formData)
       });
@@ -109,9 +109,9 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
           {error && (
             <div className={styles.errorAlert}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
               {error}
             </div>
@@ -121,7 +121,7 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
             {/* Personal Information */}
             <div className={styles.formSection}>
               <h3>Personal Information</h3>
-              
+
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="firstName">
@@ -203,14 +203,14 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
                       Owner (Cannot be reassigned)
                     </option>
                   )}
-                  
+
                   {/* Admin role - Only owners can assign, or if editing existing admin */}
                   {(isOwner || user.role === 'ADMIN' || user.role === 'ADMINISTRATOR') && (
                     <option value="ADMIN" disabled={!isOwner && (user.role === 'ADMIN' || user.role === 'ADMINISTRATOR')}>
                       Administrator {!isOwner && (user.role === 'ADMIN' || user.role === 'ADMINISTRATOR') ? '(Contact Owner to change)' : ''}
                     </option>
                   )}
-                  
+
                   {/* Standard roles - Available to all managers */}
                   <option value="FARM_MANAGER">Farm Manager</option>
                   <option value="OPERATIONS_MANAGER">Operations Manager</option>
@@ -310,9 +310,9 @@ export default function EditUserModal({ user, onClose, onSuccess }: EditUserModa
               ) : (
                 <>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" strokeWidth="2"/>
-                    <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" strokeWidth="2"/>
-                    <polyline points="7 3 7 8 15 8" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" strokeWidth="2" />
+                    <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" strokeWidth="2" />
+                    <polyline points="7 3 7 8 15 8" stroke="currentColor" strokeWidth="2" />
                   </svg>
                   Save Changes
                 </>

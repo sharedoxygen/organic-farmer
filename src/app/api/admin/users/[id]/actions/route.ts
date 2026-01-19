@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { isSystemAdmin } from '@/lib/utils/systemAdmin';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -17,29 +18,7 @@ export async function POST(
         const userId = params.id;
         const { action } = await request.json();
 
-        // Get requesting user from session/auth
-        const authHeader = request.headers.get('Authorization');
-
-        if (!authHeader) {
-            return NextResponse.json(
-                { error: 'Authentication required' },
-                { status: 401 }
-            );
-        }
-
-        const requestingUserId = authHeader.replace('Bearer ', '');
-
-        // Get requesting user and check if system admin
-        const requestingUser = await (prisma as any).users.findUnique({
-            where: { id: requestingUserId },
-            select: {
-                id: true,
-                email: true,
-                isActive: true,
-                is_system_admin: true,
-                system_role: true,
-            }
-        });
+        const requestingUser = await getAuthUser(request);
 
         if (!requestingUser || !requestingUser.isActive) {
             return NextResponse.json(
@@ -86,7 +65,7 @@ export async function POST(
         }
 
         // Prevent users from acting on themselves
-        if (requestingUserId === userId) {
+        if (requestingUser.id === userId) {
             return NextResponse.json(
                 { error: 'Cannot perform actions on your own account' },
                 { status: 403 }

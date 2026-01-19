@@ -62,7 +62,7 @@ export default function ConnectedUsersPage() {
             setLoading(true);
             setError(null);
 
-            const response = await fetch('/api/admin/connected-users');
+            const response = await fetch('/api/admin/connected-users', { credentials: 'include' });
             const data = await response.json();
 
             if (data.success) {
@@ -83,6 +83,7 @@ export default function ConnectedUsersPage() {
         try {
             const response = await fetch(`/api/admin/users/${userId}/actions`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },

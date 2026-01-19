@@ -67,14 +67,14 @@ export default function CustomerModal({ mode, customer, onClose, onSave }: Custo
       setPartyType(customer.party.partyType);
       setDisplayName(customer.party.displayName);
       setLegalName(customer.party.legalName || '');
-      
+
       const emailContact = customer.contacts.find(c => c.type === 'EMAIL');
       const phoneContact = customer.contacts.find(c => c.type === 'PHONE' || c.type === 'MOBILE');
       const addressContact = customer.contacts.find(c => c.type === 'ADDRESS');
 
       if (emailContact) setEmail(emailContact.value);
       if (phoneContact) setPhone(phoneContact.value);
-      
+
       if (addressContact) {
         try {
           const address = JSON.parse(addressContact.value);
@@ -108,7 +108,7 @@ export default function CustomerModal({ mode, customer, onClose, onSave }: Custo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!displayName || !email) {
       setError('Display name and email are required');
       return;
@@ -122,12 +122,6 @@ export default function CustomerModal({ mode, customer, onClose, onSave }: Custo
         'X-Farm-ID': currentFarm?.id || '',
         'Content-Type': 'application/json'
       };
-      
-      const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-      if (userData) {
-        const user = JSON.parse(userData);
-        if (user?.id) headers['Authorization'] = `Bearer ${user.id}`;
-      }
 
       const payload = {
         displayName,
@@ -163,15 +157,16 @@ export default function CustomerModal({ mode, customer, onClose, onSave }: Custo
         }
       };
 
-      const url = mode === 'add' 
+      const url = mode === 'add'
         ? '/api/parties/customers'
         : `/api/parties/customers/${customer?.party.id}`;
-      
+
       const method = mode === 'add' ? 'POST' : 'PUT';
 
       const response = await fetch(url, {
         method,
         headers,
+        credentials: 'include',
         body: JSON.stringify(payload)
       });
 

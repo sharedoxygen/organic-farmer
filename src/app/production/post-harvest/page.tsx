@@ -48,14 +48,9 @@ export default function PostHarvestHandlingPage() {
                 'Content-Type': 'application/json',
                 'X-Farm-ID': currentFarm.id,
             };
-            const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-            if (userData) {
-                const user = JSON.parse(userData);
-                if (user?.id) headers['Authorization'] = `Bearer ${user.id}`;
-            }
 
             // Fetch harvested batches
-            const response = await fetch('/api/batches?status=HARVESTED&limit=100', { headers });
+            const response = await fetch('/api/batches?status=HARVESTED&limit=100', { headers, credentials: 'include' });
             const data = await response.json();
 
             if (response.ok && data.success) {

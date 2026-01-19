@@ -358,9 +358,25 @@ const navigationItems: NavItem[] = [
 
     {
         id: 'ai-insights',
-        label: 'AI Insights',
+        label: 'AI Intelligence',
         href: '/ai-insights',
-        icon: '🤖',
+        icon: '🧠',
+        badge: 'NEW',
+        children: [
+            {
+                id: 'ai-dashboard',
+                label: 'AI Command Center',
+                href: '/ai-dashboard',
+                icon: '🎯',
+                badge: 'NEW',
+            },
+            {
+                id: 'ai-classic',
+                label: 'Classic Insights',
+                href: '/ai-insights',
+                icon: '📊',
+            },
+        ],
     },
 
     // ===== SYSTEM MANAGEMENT =====

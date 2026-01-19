@@ -31,14 +31,6 @@ export default function AIModelsAdminPage() {
         const farmId = currentFarm?.id ||
             (typeof window !== 'undefined' ? (localStorage.getItem('ofms_current_farm') || localStorage.getItem('ofms_farm_id') || '') : '');
         const headers: Record<string, string> = { 'X-Farm-ID': farmId };
-        // Auth is handled via cookies (ofms_session), but add header fallback
-        const user = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-        if (user) {
-            try {
-                const u = JSON.parse(user);
-                if (u?.id) headers['Authorization'] = `Bearer ${u.id}`;
-            } catch { }
-        }
         return headers;
     };
 
@@ -79,7 +71,12 @@ export default function AIModelsAdminPage() {
         setPulling(name);
         setMessage('');
         try {
-            const res = await fetch('/api/ai/models', { method: 'POST', headers: { ...getHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim() }) });
+            const res = await fetch('/api/ai/models', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { ...getHeaders(), 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name.trim() })
+            });
             const json = await res.json();
             setMessage(json.success ? `Pulled ${name}` : `Failed to pull ${name}`);
             await load();
@@ -98,6 +95,7 @@ export default function AIModelsAdminPage() {
 
             const res = await fetch('/api/ai/models/config', {
                 method: 'PUT',
+                credentials: 'include',
                 headers: { ...headers, 'Content-Type': 'application/json' },
                 body: JSON.stringify(config)
             });

@@ -6,7 +6,7 @@ import {
     DEPARTMENT_STRUCTURE,
     getTypicalDepartments
 } from '@/lib/utils/roleHelpers';
-import { User } from './UserManagement';
+import type { User } from './UserManagement';
 import styles from './UserCreateModal.module.css';
 
 interface UserCreateModalProps {

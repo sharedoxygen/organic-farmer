@@ -29,7 +29,7 @@ class ApiService {
         try {
             const match = document.cookie.match(/(?:^|; )ofms_farm=([^;]+)/)
             if (match) return decodeURIComponent(match[1])
-        } catch {}
+        } catch { }
         return localStorage.getItem('ofms_current_farm');
     }
 
@@ -44,19 +44,6 @@ class ApiService {
             headers['X-Farm-ID'] = farmId;
         } else if (requireFarmContext) {
             throw new Error('Farm context required but not available. Please select a farm.');
-        }
-
-        // Add auth token if available
-        const user = localStorage.getItem('ofms_user');
-        if (user) {
-            try {
-                const userData = JSON.parse(user);
-                if (userData.id) {
-                    headers['Authorization'] = `Bearer ${userData.id}`;
-                }
-            } catch (error) {
-                console.warn('Failed to parse user data for auth header:', error);
-            }
         }
 
         return headers;

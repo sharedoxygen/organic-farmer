@@ -38,13 +38,6 @@ export class TenantApiService {
             headers['X-Farm-ID'] = this.farmId;
         }
 
-        // Add auth token if available
-        const user = localStorage.getItem('ofms_user');
-        if (user) {
-            const userData = JSON.parse(user);
-            headers['Authorization'] = `Bearer ${userData.id}`;
-        }
-
         return headers;
     }
 

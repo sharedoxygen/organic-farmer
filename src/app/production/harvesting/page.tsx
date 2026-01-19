@@ -78,22 +78,15 @@ export default function HarvestingPage() {
             if (!currentFarm?.id) {
                 throw new Error('No farm context available. Please select a farm.');
             }
-
-            // Get user data for authorization
-            const userData = localStorage.getItem('ofms_user');
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json',
                 'X-Farm-ID': currentFarm.id,
                 'Cache-Control': 'no-cache'
             };
 
-            if (userData) {
-                const user = JSON.parse(userData);
-                headers['Authorization'] = `Bearer ${user.id}`;
-            }
-
             const response = await fetch('/api/batches', {
-                headers
+                headers,
+                credentials: 'include'
             });
 
             if (!response.ok) {

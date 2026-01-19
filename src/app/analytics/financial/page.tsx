@@ -41,20 +41,15 @@ export default function FinancialReportsPage() {
         const loadFinancialData = async () => {
             try {
                 // Fetch real orders data from API with proper farm context
-                const userData = localStorage.getItem('ofms_user');
                 const headers: Record<string, string> = {
                     'X-Farm-ID': currentFarm.id
                 };
 
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    headers['Authorization'] = `Bearer ${user.id}`;
-                }
-
                 console.log('💰 Loading financial data for farm:', currentFarm.farm_name);
 
                 const response = await fetch('/api/orders?limit=1000', {
-                    headers
+                    headers,
+                    credentials: 'include'
                 });
                 const data = await response.json();
 

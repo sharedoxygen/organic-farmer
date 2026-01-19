@@ -97,14 +97,16 @@ export default function AdminFeedbackPage() {
                 'Content-Type': 'application/json'
             };
 
-            if (isGlobalAdmin) {
-                headers['X-Global-Admin'] = 'true';
-                // For global admin, we don't need to send a specific farm ID
-            } else if (currentFarm) {
-                headers['X-Farm-ID'] = currentFarm.id;
+            const farmHeader = currentFarm?.id || filters.farmId || availableFarms[0]?.id;
+            if (!farmHeader) {
+                setError('No farm context available');
+                setFeedback([]);
+                return;
             }
+            headers['X-Farm-ID'] = farmHeader;
 
             const response = await fetch(`/api/feedback?${queryParams}`, {
+                credentials: 'include',
                 headers
             });
 
@@ -158,20 +160,20 @@ export default function AdminFeedbackPage() {
 
     const handleStatusUpdate = async (feedbackId: string, newStatus: string) => {
         const oldStatus = feedback.find(f => f.id === feedbackId)?.status;
+        const item = feedback.find(f => f.id === feedbackId);
 
         try {
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json'
             };
 
-            if (isGlobalAdmin) {
-                headers['X-Global-Admin'] = 'true';
-            } else if (currentFarm) {
-                headers['X-Farm-ID'] = currentFarm.id;
-            }
+            const farmHeader = item?.farm_id || currentFarm?.id || availableFarms[0]?.id;
+            if (!farmHeader) throw new Error('No farm context available');
+            headers['X-Farm-ID'] = farmHeader;
 
             const response = await fetch(`/api/feedback/${feedbackId}`, {
                 method: 'PATCH',
+                credentials: 'include',
                 headers,
                 body: JSON.stringify({ status: newStatus })
             });
@@ -198,19 +200,20 @@ export default function AdminFeedbackPage() {
             return;
         }
 
+        const item = feedback.find(f => f.id === feedbackId);
+
         try {
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json'
             };
 
-            if (isGlobalAdmin) {
-                headers['X-Global-Admin'] = 'true';
-            } else if (currentFarm) {
-                headers['X-Farm-ID'] = currentFarm.id;
-            }
+            const farmHeader = item?.farm_id || currentFarm?.id || availableFarms[0]?.id;
+            if (!farmHeader) throw new Error('No farm context available');
+            headers['X-Farm-ID'] = farmHeader;
 
             const response = await fetch(`/api/feedback/${feedbackId}`, {
                 method: 'DELETE',
+                credentials: 'include',
                 headers
             });
 

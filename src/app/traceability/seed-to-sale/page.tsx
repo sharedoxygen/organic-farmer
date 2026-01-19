@@ -51,16 +51,11 @@ export default function SeedToSalePage() {
 
                 // Tenant-scoped headers
                 const headers: Record<string, string> = { 'X-Farm-ID': currentFarm.id };
-                const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    if (user?.id) headers['Authorization'] = `Bearer ${user.id}`;
-                }
 
                 // Fetch batches and orders to create traceability records
                 const [batchesRes, ordersRes] = await Promise.all([
-                    fetch('/api/batches?limit=100', { headers }),
-                    fetch('/api/orders?limit=100', { headers })
+                    fetch('/api/batches?limit=100', { headers, credentials: 'include' }),
+                    fetch('/api/orders?limit=100', { headers, credentials: 'include' })
                 ]);
 
                 const [batchesData, ordersData] = await Promise.all([

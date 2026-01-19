@@ -24,6 +24,7 @@ interface CustomerUpdateRequest {
     preferredVarieties?: string;
     status?: string;
     type?: string;
+    taxId?: string;
 }
 
 // GET /api/customers/[id] - Get single customer (PARTY MODEL)
@@ -49,7 +50,7 @@ export async function GET(
         }
 
         // Verify party has customer role for this farm
-        const hasCustomerRole = party.roles.some(r => 
+        const hasCustomerRole = party.roles.some(r =>
             r.farm_id === farmId && (r.roleType === 'CUSTOMER_B2B' || r.roleType === 'CUSTOMER_B2C')
         );
 
@@ -288,7 +289,7 @@ export async function DELETE(
             );
         }
 
-        const hasCustomerRole = party.roles.some(r => 
+        const hasCustomerRole = party.roles.some(r =>
             r.farm_id === farmId && (r.roleType === 'CUSTOMER_B2B' || r.roleType === 'CUSTOMER_B2C')
         );
 

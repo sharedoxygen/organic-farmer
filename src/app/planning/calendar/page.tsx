@@ -42,7 +42,7 @@ export default function ProductionCalendarPage() {
     const [error, setError] = useState<string | null>(null);
     const [selectedEvent, setSelectedEvent] = useState<ProductionEvent | null>(null);
     const [selectedMetric, setSelectedMetric] = useState<MetricDetail | null>(null);
-    const [viewMode, setViewMode] = useState<'timeline' | 'cards'>('cards');
+    const [viewMode, setViewMode] = useState<'timeline' | 'cards'>('timeline');
 
     // Edit functionality state
     const [isEditing, setIsEditing] = useState(false);
@@ -498,91 +498,100 @@ export default function ProductionCalendarPage() {
 
             {/* Events Display */}
             {viewMode === 'cards' ? (
-                <div className={styles.eventsGrid}>
-                    {events.map((event) => (
-                        <div
-                            key={event.id}
-                            className={styles.eventCard}
-                            onClick={() => setSelectedEvent(event)}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    setSelectedEvent(event);
-                                }
-                            }}
-                            aria-label={`View details for ${event.title}`}
-                        >
-                            <div className={styles.cardHeader}>
-                                <div className={styles.eventType}>
-                                    <span className={styles.eventIcon}>
-                                        {getEventTypeIcon(event.type)}
+                <div className={styles.cardsGrid}>
+                    {events.length === 0 ? (
+                        <div className={styles.emptyState}>
+                            <div className={styles.emptyIcon}>📅</div>
+                            <h3>No Events Yet</h3>
+                            <p>Add your first production event to get started</p>
+                        </div>
+                    ) : (
+                        events.slice(0, 12).map((event) => (
+                            <div
+                                key={event.id}
+                                className={`${styles.eventCard} ${styles[event.type]}`}
+                                onClick={() => setSelectedEvent(event)}
+                            >
+                                <div className={styles.cardHeader}>
+                                    <span className={styles.cardType}>
+                                        {getEventTypeIcon(event.type)} {event.type}
                                     </span>
-                                    <span className={styles.eventTypeLabel}>{event.type}</span>
-                                </div>
-                                <div className={styles.cardBadges}>
-                                    <span
-                                        className={styles.statusBadge}
-                                        style={{ backgroundColor: getStatusColor(event.status) }}
-                                    >
+                                    <span className={`${styles.eventStatus} ${styles[event.status]}`}>
                                         {event.status}
                                     </span>
                                 </div>
-                            </div>
-
-                            <div className={styles.cardContent}>
-                                <h3 className={styles.eventTitle}>{event.title}</h3>
-                                <div className={styles.eventDetails}>
-                                    <div className={styles.detailItem}>
-                                        <span className={styles.detailIcon}>📅</span>
-                                        <span className={styles.detailText}>
-                                            {event.start.toLocaleDateString()}
-                                        </span>
+                                <h3 className={styles.cardTitle}>{event.title}</h3>
+                                <div className={styles.cardMeta}>
+                                    <div className={styles.cardMetaItem}>
+                                        <span>📅</span>
+                                        <span>{event.start.toLocaleDateString()}</span>
                                     </div>
-                                    <div className={styles.detailItem}>
-                                        <span className={styles.detailIcon}>🏭</span>
-                                        <span className={styles.detailText}>{event.resource}</span>
+                                    <div className={styles.cardMetaItem}>
+                                        <span>🏭</span>
+                                        <span>{event.resource}</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             ) : (
-                <div className={styles.timelineView}>
+                <div className={styles.timelineContainer}>
                     <div className={styles.timelineHeader}>
-                        <h2>📊 Production Timeline</h2>
+                        <span>Event</span>
+                        <span>Date</span>
+                        <span>Zone</span>
+                        <span>Status</span>
+                        <span>Actions</span>
                     </div>
-                    <div className={styles.timeline}>
-                        {events
-                            .sort((a, b) => a.start.getTime() - b.start.getTime())
-                            .map((event) => (
-                                <div key={event.id} className={styles.timelineItem}>
-                                    <div className={styles.timelineMarker}>
-                                        <span className={styles.markerIcon}>
-                                            {getEventTypeIcon(event.type)}
-                                        </span>
-                                    </div>
-                                    <div className={styles.timelineContent}>
-                                        <div className={styles.timelineHeader}>
-                                            <h3 className={styles.timelineTitle}>{event.title}</h3>
-                                            <span className={styles.timelineDate}>
-                                                {event.start.toLocaleDateString()}
-                                            </span>
+                    <div className={styles.timelineList}>
+                        {events.length === 0 ? (
+                            <div className={styles.emptyState}>
+                                <div className={styles.emptyIcon}>📅</div>
+                                <h3>No Events Yet</h3>
+                                <p>Add your first production event to get started</p>
+                            </div>
+                        ) : (
+                            events
+                                .sort((a, b) => a.start.getTime() - b.start.getTime())
+                                .map((event) => (
+                                    <div
+                                        key={event.id}
+                                        className={styles.timelineItem}
+                                        onClick={() => setSelectedEvent(event)}
+                                    >
+                                        <div className={styles.eventInfo}>
+                                            <div className={`${styles.eventIcon} ${styles[event.type]}`}>
+                                                {getEventTypeIcon(event.type)}
+                                            </div>
+                                            <div className={styles.eventDetails}>
+                                                <p className={styles.eventTitle}>{event.title}</p>
+                                                <span className={styles.eventType}>{event.type}</span>
+                                            </div>
                                         </div>
-                                        <div className={styles.timelineDetails}>
-                                            <span className={styles.timelineResource}>🏭 {event.resource}</span>
-                                            <span
-                                                className={styles.timelineStatus}
-                                                style={{ backgroundColor: getStatusColor(event.status) }}
+                                        <div className={styles.eventDate}>
+                                            {event.start.toLocaleDateString()}
+                                        </div>
+                                        <div className={styles.eventZone}>
+                                            {event.resource}
+                                        </div>
+                                        <div className={`${styles.eventStatus} ${styles[event.status]}`}>
+                                            {event.status}
+                                        </div>
+                                        <div className={styles.eventActions}>
+                                            <button
+                                                className={styles.actionBtn}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedEvent(event);
+                                                }}
                                             >
-                                                {event.status}
-                                            </span>
+                                                View
+                                            </button>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                        )}
                     </div>
                 </div>
             )}

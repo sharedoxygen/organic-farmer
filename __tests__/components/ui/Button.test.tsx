@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import Button from '../../../src/components/ui/Button/Button';
 
 describe('🔥 Button Component - Critical UI Element Tests', () => {
@@ -26,11 +27,11 @@ describe('🔥 Button Component - Critical UI Element Tests', () => {
     });
 
     it('should render different button sizes', () => {
-        const { rerender } = render(<Button size="small">Small</Button>);
-        expect(screen.getByRole('button')).toHaveClass('small');
+        const { rerender } = render(<Button size="sm">Small</Button>);
+        expect(screen.getByRole('button')).toHaveClass('sm');
 
-        rerender(<Button size="large">Large</Button>);
-        expect(screen.getByRole('button')).toHaveClass('large');
+        rerender(<Button size="lg">Large</Button>);
+        expect(screen.getByRole('button')).toHaveClass('lg');
     });
 
     it('should handle click events', () => {

@@ -42,20 +42,14 @@ export default function YieldAnalysisPage() {
             try {
                 setError(null);
                 // OFMS COMPLIANT: Include farm context in API call
-                // Get user data for authorization
-                const userData = localStorage.getItem('ofms_user');
                 const headers: Record<string, string> = {
                     'X-Farm-ID': currentFarm.id,
                     'Content-Type': 'application/json'
                 };
 
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    headers['Authorization'] = `Bearer ${user.id}`;
-                }
-
                 const response = await fetch('/api/batches?status=HARVESTED&limit=100', {
-                    headers
+                    headers,
+                    credentials: 'include'
                 });
                 const data = await response.json();
 

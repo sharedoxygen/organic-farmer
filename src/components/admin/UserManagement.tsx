@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { User } from '@/types';
+import { User as BaseUser } from '@/types';
 import { Role } from '@/types/roles';
 import { useTenant } from '@/components/TenantProvider';
 import {
@@ -16,9 +16,14 @@ import { UserEditModal } from './UserEditModal';
 import styles from './UserManagement.module.css';
 
 // Extended user interface for management-specific fields
-interface ManagementUser extends User {
+export interface User {
+    id: string;
+    email: string;
+    name: string;
     firstName?: string;
     lastName?: string;
+    roles: Role[];
+    isActive: boolean;
     department?: string;
     position?: string;
     phone?: string;
@@ -30,8 +35,13 @@ interface ManagementUser extends User {
         name: string;
         role: string;
     };
-    directReports?: ManagementUser[];
+    directReports?: User[];
+    createdAt?: Date;
+    updatedAt?: Date;
 }
+
+// Alias for backward compatibility
+type ManagementUser = User;
 
 interface UserManagementProps {
     currentUserRole?: Role;
@@ -234,9 +244,9 @@ export default function UserManagement({
     const canEditUser = (user: ManagementUser): boolean => {
         if (currentUserId === user.id) return true; // Can edit own profile
 
-        // Extract role from UserRole array or use direct role string
+        // Extract role from roles array
         const userRole = Array.isArray(user.roles) && user.roles.length > 0
-            ? user.roles[0].role as Role
+            ? (typeof user.roles[0] === 'string' ? user.roles[0] : (user.roles[0] as any).role) as Role
             : Role.TEAM_MEMBER;
 
         return canManageUser(currentUserRole, userRole);
@@ -245,9 +255,9 @@ export default function UserManagement({
     const canDeleteUser = (user: ManagementUser): boolean => {
         if (currentUserId === user.id) return false; // Can't delete self
 
-        // Extract role from UserRole array or use direct role string
+        // Extract role from roles array
         const userRole = Array.isArray(user.roles) && user.roles.length > 0
-            ? user.roles[0].role as Role
+            ? (typeof user.roles[0] === 'string' ? user.roles[0] : (user.roles[0] as any).role) as Role
             : Role.TEAM_MEMBER;
 
         return canManageUser(currentUserRole, userRole);
@@ -263,10 +273,10 @@ export default function UserManagement({
             active: activeUsers.length,
             inactive: usersArray.length - activeUsers.length,
             admins: activeUsers.filter(u =>
-                Array.isArray(u.roles) && u.roles.some(r => r.role === 'ADMIN')
+                Array.isArray(u.roles) && u.roles.some((r: any) => (typeof r === 'string' ? r : r.role) === 'ADMIN')
             ).length,
             managers: activeUsers.filter(u =>
-                Array.isArray(u.roles) && u.roles.some(r => r.role === 'MANAGER')
+                Array.isArray(u.roles) && u.roles.some((r: any) => (typeof r === 'string' ? r : r.role) === 'MANAGER')
             ).length,
             departments: new Set(activeUsers.map(u => u.department).filter(Boolean)).size
         };
@@ -418,13 +428,13 @@ export default function UserManagement({
             <div className={styles.content}>
                 {viewMode === 'list' ? (
                     <UserListView
-                        users={users}
-                        onEditUser={setEditingUser}
+                        users={users as any}
+                        onEditUser={setEditingUser as any}
                         onDeleteUser={handleDeleteUser}
                     />
                 ) : (
                     <UserHierarchyView
-                        users={users}
+                        users={users as any}
                         currentUserRole={currentUserRole}
                         onEditUser={setEditingUser}
                     />

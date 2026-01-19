@@ -39,7 +39,7 @@ describe('/api/batches', () => {
                     return null;
                 }),
             },
-        } as NextRequest;
+        } as unknown as NextRequest;
 
         const response = await GET(mockRequest);
         const data = await response.json();
@@ -64,7 +64,7 @@ describe('/api/batches', () => {
                     return null;
                 }),
             },
-        } as NextRequest;
+        } as unknown as NextRequest;
 
         const response = await GET(mockRequest);
         const data = await response.json();

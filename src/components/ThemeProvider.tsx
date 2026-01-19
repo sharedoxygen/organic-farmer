@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark' | 'system';
 
 interface ThemeContextType {
     theme: Theme;
@@ -19,18 +19,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Initialize theme on mount - sync with what was set in layout
     useEffect(() => {
-        const stored = localStorage.getItem('ofms-theme') as Theme;
-        const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const stored = (localStorage.getItem('ofms-theme') as Theme | null) ?? 'system';
+        const systemPreference: 'light' | 'dark' = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
-        // Use stored preference, otherwise fall back to system preference
-        const initialTheme = stored || systemPreference;
+        const initialTheme: Theme = stored;
+        const initialResolved: 'light' | 'dark' = initialTheme === 'system' ? systemPreference : initialTheme;
 
         setTheme(initialTheme);
-        setResolvedTheme(initialTheme);
+        setResolvedTheme(initialResolved);
         setMounted(true);
 
         // Apply theme to document
-        document.documentElement.className = `theme-${initialTheme}`;
+        document.documentElement.className = `theme-${initialResolved}`;
     }, []);
 
     // Listen for system theme changes
@@ -38,12 +38,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
         const handleChange = (e: MediaQueryListEvent) => {
-            // Only update if user hasn't explicitly set a preference
-            if (!localStorage.getItem('ofms-theme')) {
-                const newTheme = e.matches ? 'dark' : 'light';
-                setTheme(newTheme);
-                setResolvedTheme(newTheme);
-                document.documentElement.className = `theme-${newTheme}`;
+            const stored = localStorage.getItem('ofms-theme');
+            if (stored === 'system') {
+                const newResolved = e.matches ? 'dark' : 'light';
+                setResolvedTheme(newResolved);
+                document.documentElement.className = `theme-${newResolved}`;
             }
         };
 
@@ -53,9 +52,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const updateTheme = (newTheme: Theme) => {
         setTheme(newTheme);
-        setResolvedTheme(newTheme);
         localStorage.setItem('ofms-theme', newTheme);
-        document.documentElement.className = `theme-${newTheme}`;
+
+        const systemPreference: 'light' | 'dark' = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const newResolved: 'light' | 'dark' = newTheme === 'system' ? systemPreference : newTheme;
+
+        setResolvedTheme(newResolved);
+        document.documentElement.className = `theme-${newResolved}`;
     };
 
     // Don't render anything until mounted to avoid hydration mismatch

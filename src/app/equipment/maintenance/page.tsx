@@ -9,6 +9,7 @@ import styles from './page.module.css';
 interface MaintenanceTask {
     id: string;
     equipmentName: string;
+    equipmentType?: string;
     taskType: 'preventive' | 'corrective' | 'calibration' | 'inspection';
     priority: 'low' | 'medium' | 'high' | 'urgent';
     status: 'scheduled' | 'in_progress' | 'completed' | 'overdue';
@@ -19,7 +20,7 @@ interface MaintenanceTask {
     description: string;
     location: string;
     lastMaintenance?: string;
-    nextMaintenance: string;
+    nextMaintenance?: string;
 }
 
 export default function MaintenancePage() {
@@ -65,7 +66,7 @@ export default function MaintenancePage() {
                             taskType: 'inspection',
                             description: 'Check water lines, nozzles, and pressure',
                             priority: zone.activeBatchCount > 0 ? 'high' : 'low',
-                            status: 'pending',
+                            status: 'scheduled',
                             scheduledDate: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString(),
                             assignedTo: 'Farm Manager',
                             estimatedDuration: 1,
@@ -259,7 +260,7 @@ export default function MaintenancePage() {
                             </div>
                             <div className={styles.detail}>
                                 <span className={styles.detailLabel}>Next Due</span>
-                                <span className={styles.detailValue}>{formatDate(task.nextMaintenance)}</span>
+                                <span className={styles.detailValue}>{task.nextMaintenance ? formatDate(task.nextMaintenance) : 'N/A'}</span>
                             </div>
                         </div>
 

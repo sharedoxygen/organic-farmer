@@ -20,11 +20,13 @@ interface FeedbackSubmission {
 interface FeedbackResponse {
     id: string;
     message: string;
+    is_internal?: boolean;
     created_at: string;
-    created_by_user: {
+    admin: {
+        id: string;
         firstName: string;
         lastName: string;
-        email: string;
+        email?: string;
     };
 }
 
@@ -60,8 +62,8 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
 
             // Fetch only feedback submitted by the current user
             const response = await fetch("/api/feedback?my=true", {
+                credentials: 'include',
                 headers: {
-                    Authorization: `Bearer ${user.id}`,
                     'X-Farm-ID': currentFarm.id
                 }
             });
@@ -74,7 +76,7 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
 
             if (data.success) {
                 console.log('✅ Feedback refreshed:', data.data.length, 'items');
-                console.log('📄 Latest feedback items:', data.data.map(f => f.title));
+                console.log('📄 Latest feedback items:', (data.data as Array<{ title: string }>).map((f) => f.title));
                 setFeedback(data.data);
             } else {
                 throw new Error(data.error || "Failed to load feedback");

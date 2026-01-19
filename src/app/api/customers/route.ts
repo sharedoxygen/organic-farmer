@@ -32,6 +32,7 @@ interface CustomerCreateRequest {
     address?: string;
     customerType?: string;
     taxId?: string;
+    packagingReqs?: string;
     preferences?: string;
     dietaryRestrictions?: string;
     marketingConsent?: boolean;
@@ -121,7 +122,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             const primaryEmail = (party.contacts as any[])?.find((c: any) => c.type === 'EMAIL' && c.isPrimary);
             const primaryPhone = (party.contacts as any[])?.find((c: any) => c.type === 'PHONE' && c.isPrimary);
             const address = (party.contacts as any[])?.find((c: any) => c.type === 'ADDRESS' && c.isPrimary);
-            
+
             const orders = (party.orders as any[]) || [];
             const customer: Record<string, unknown> = {
                 id: party.id,
@@ -143,7 +144,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
                 createdAt: party.createdAt,
                 updatedAt: party.updatedAt
             };
-            
+
             return customer;
         });
 

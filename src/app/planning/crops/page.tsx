@@ -68,6 +68,7 @@ export default function CropPlanningPage() {
     const [showModal, setShowModal] = useState(false);
     const [editingPlan, setEditingPlan] = useState<CropPlan | null>(null);
     const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
+    const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
 
     const loadCropPlans = useCallback(async () => {
         if (!currentFarm) {
@@ -164,9 +165,44 @@ export default function CropPlanningPage() {
         router.push('/production/batches');
     };
 
-    const handleUpdateStatus = (planId: string) => {
-        console.log('Updating status for plan:', planId);
-        alert(`Update Status: ${planId}\n\nThis will open a status update modal with options:\n- Planned → Active\n- Active → Growing\n- Growing → Harvested\n- Add progress notes\n\n(Status update functionality will be implemented)`);
+    const handleUpdateStatus = async (planId: string) => {
+        if (!currentFarm) return;
+
+        const plan = plans.find((p: CropPlan) => p.id === planId);
+        if (!plan) return;
+
+        const statusFlow: Record<string, string> = {
+            'planned': 'active',
+            'active': 'growing',
+            'growing': 'harvested',
+            'harvested': 'completed'
+        };
+
+        const nextStatus = statusFlow[plan.status] || plan.status;
+        const confirmed = confirm(`Update status from "${plan.status}" to "${nextStatus}"?`);
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch('/api/crop-plans', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Farm-ID': currentFarm.id,
+                },
+                body: JSON.stringify({ id: planId, status: nextStatus }),
+            });
+
+            if (response.ok) {
+                await loadCropPlans();
+            } else {
+                const error = await response.json();
+                alert(`Failed to update status: ${error.error || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            alert('Failed to update status. Please try again.');
+        }
     };
 
     const handleDeletePlan = async (planId: string) => {
@@ -205,8 +241,7 @@ export default function CropPlanningPage() {
     };
 
     const handleViewCalendar = () => {
-        console.log('Opening calendar view');
-        alert('View Calendar\n\nThis will open the production calendar showing:\n- All crop plans timeline\n- Planting schedules\n- Harvest dates\n- Zone utilization\n- Seasonal planning\n\n(Calendar view will be implemented)');
+        router.push('/planning/calendar');
     };
 
     // Modal handlers
@@ -382,12 +417,28 @@ export default function CropPlanningPage() {
                 </Card>
             </div>
 
-            {/* Crop Plans Grid */}
+            {/* Crop Plans Section */}
             <div className={styles.mainContent}>
                 <div className={styles.section}>
                     <div className={styles.sectionHeader}>
                         <h2>🌾 Crop Production Plans</h2>
-                        <Button variant="secondary" onClick={handleViewCalendar}>View Calendar</Button>
+                        <div className={styles.sectionActions}>
+                            <div className={styles.viewToggle}>
+                                <button
+                                    className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.active : ''}`}
+                                    onClick={() => setViewMode('list')}
+                                >
+                                    📋 List
+                                </button>
+                                <button
+                                    className={`${styles.toggleBtn} ${viewMode === 'cards' ? styles.active : ''}`}
+                                    onClick={() => setViewMode('cards')}
+                                >
+                                    🗂️ Cards
+                                </button>
+                            </div>
+                            <Button variant="secondary" onClick={handleViewCalendar}>View Calendar</Button>
+                        </div>
                     </div>
 
                     {loading ? (
@@ -400,9 +451,63 @@ export default function CropPlanningPage() {
                             <p>No crop plans found for the selected zone.</p>
                             <Button variant="primary" onClick={handleNewCropPlan}>Create First Plan</Button>
                         </div>
+                    ) : viewMode === 'list' ? (
+                        /* Clean Table/List View */
+                        <div className={styles.tableContainer}>
+                            <div className={styles.tableHeader}>
+                                <span>Plan Name</span>
+                                <span>Crop</span>
+                                <span>Planted</span>
+                                <span>Harvest</span>
+                                <span>Yield</span>
+                                <span>Status</span>
+                                <span>Actions</span>
+                            </div>
+                            <div className={styles.tableBody}>
+                                {filteredPlans.map((plan) => (
+                                    <div key={plan.id} className={styles.tableRow} onClick={() => handleEditPlan(plan.id)}>
+                                        <div className={styles.planInfo}>
+                                            <span className={styles.planIcon}>🌾</span>
+                                            <div className={styles.planDetails}>
+                                                <p className={styles.planName}>{plan.planName || `${plan.crop.name} Plan`}</p>
+                                                <span className={styles.planZone}>{plan.zone?.name || 'No zone'}</span>
+                                            </div>
+                                        </div>
+                                        <div className={styles.cellText}>{plan.crop.name}</div>
+                                        <div className={styles.cellText}>
+                                            {plan.plantingDate ? new Date(plan.plantingDate).toLocaleDateString() : '—'}
+                                        </div>
+                                        <div className={styles.cellText}>
+                                            {plan.harvestDate ? new Date(plan.harvestDate).toLocaleDateString() : '—'}
+                                        </div>
+                                        <div className={styles.cellYield}>
+                                            {plan.expectedYield || plan.yield || 0} lbs
+                                        </div>
+                                        <div className={`${styles.statusBadge} ${styles[plan.status?.toLowerCase() || 'planned']}`}>
+                                            {plan.status || 'Planned'}
+                                        </div>
+                                        <div className={styles.rowActions}>
+                                            <button
+                                                className={styles.actionBtn}
+                                                onClick={(e) => { e.stopPropagation(); handleEditPlan(plan.id); }}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className={`${styles.actionBtn} ${styles.danger}`}
+                                                onClick={(e) => { e.stopPropagation(); handleDeletePlan(plan.id); }}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     ) : (
+                        /* Cards View - Limited */
                         <div className={styles.cardGrid}>
-                            {filteredPlans.map((plan) => (
+                            {filteredPlans.slice(0, 9).map((plan) => (
                                 <ExpandableCard
                                     key={plan.id}
                                     title={`${plan.planName || plan.crop.name}`}
@@ -413,22 +518,10 @@ export default function CropPlanningPage() {
                                     metrics={getPlanCardMetrics(plan)}
                                     actions={[
                                         {
-                                            label: 'Edit Plan',
+                                            label: 'Edit',
                                             onClick: () => handleEditPlan(plan.id),
                                             variant: 'primary' as const,
                                             icon: '✏️'
-                                        },
-                                        {
-                                            label: 'View Batch',
-                                            onClick: () => handleViewBatch(plan.id),
-                                            variant: 'secondary' as const,
-                                            icon: '👁️'
-                                        },
-                                        {
-                                            label: 'Update Status',
-                                            onClick: () => handleUpdateStatus(plan.id),
-                                            variant: 'secondary' as const,
-                                            icon: '🔄'
                                         },
                                         {
                                             label: 'Delete',
@@ -441,11 +534,15 @@ export default function CropPlanningPage() {
                                     expandMode="both"
                                     variant="elevated"
                                     size="md"
-                                    priority={plan.priority === 'high' || plan.crop.name === 'Basil' ? 'high' : 'medium'}
                                     className={styles.planCard}
                                     onClick={() => handleCardClick(plan.id)}
                                 />
                             ))}
+                            {filteredPlans.length > 9 && (
+                                <div className={styles.moreIndicator}>
+                                    +{filteredPlans.length - 9} more plans. Switch to List view to see all.
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

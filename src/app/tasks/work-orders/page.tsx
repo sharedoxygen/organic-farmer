@@ -55,8 +55,6 @@ export default function WorkOrdersPage() {
                         if (batch.status === 'PLANNED' || batch.status === 'SEEDED') {
                             workOrdersList.push({
                                 id: `wo-${batch.id}`,
-                                orderNumber: `WO-${new Date().getFullYear()}-${String(index + 1).padStart(4, '0')}`,
-                                type: batch.status === 'PLANNED' ? 'planting' : 'monitoring',
                                 title: `${batch.status === 'PLANNED' ? 'Plant' : 'Monitor'} ${batch.seed_varieties?.name || 'Unknown'} - ${batch.batchNumber}`,
                                 description: batch.status === 'PLANNED' ?
                                     `Plant ${batch.seedQuantity || 0}${batch.seedUnit || 'g'} of seeds in designated area` :
@@ -64,10 +62,12 @@ export default function WorkOrdersPage() {
                                 priority: batch.status === 'PLANNED' ? 'high' : 'medium',
                                 status: 'pending',
                                 assignedTo: batch.users ? `${batch.users.firstName} ${batch.users.lastName}` : 'Unassigned',
-                                location: batch.zones?.name || 'Zone A',
+                                zone: batch.zones?.name || 'Zone A',
                                 dueDate: batch.plantDate || new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
                                 estimatedHours: batch.status === 'PLANNED' ? 2 : 1,
-                                createdAt: batch.createdAt || new Date().toISOString(),
+                                createdDate: batch.createdAt || new Date().toISOString(),
+                                category: batch.status === 'PLANNED' ? 'planting' : 'other',
+                                batchNumber: batch.batchNumber,
                                 createdBy: 'System'
                             });
                         }
@@ -75,17 +75,17 @@ export default function WorkOrdersPage() {
                         if (batch.status === 'READY_TO_HARVEST') {
                             workOrdersList.push({
                                 id: `wo-harvest-${batch.id}`,
-                                orderNumber: `WO-${new Date().getFullYear()}-H${String(index + 1).padStart(3, '0')}`,
-                                type: 'harvest',
                                 title: `Harvest ${batch.seed_varieties?.name || 'Unknown'} - ${batch.batchNumber}`,
                                 description: `Harvest batch with expected yield of ${batch.expectedYield || 0}${batch.yieldUnit || 'lbs'}`,
                                 priority: 'urgent',
                                 status: 'pending',
                                 assignedTo: batch.users ? `${batch.users.firstName} ${batch.users.lastName}` : 'Harvest Team',
-                                location: batch.zones?.name || 'Zone A',
+                                zone: batch.zones?.name || 'Zone A',
                                 dueDate: batch.expectedHarvestDate || new Date().toISOString(),
                                 estimatedHours: 3,
-                                createdAt: batch.createdAt || new Date().toISOString(),
+                                createdDate: batch.createdAt || new Date().toISOString(),
+                                category: 'harvest',
+                                batchNumber: batch.batchNumber,
                                 createdBy: 'System'
                             });
                         }
@@ -95,17 +95,16 @@ export default function WorkOrdersPage() {
                     zones.forEach((zone: any, index: number) => {
                         workOrdersList.push({
                             id: `wo-maint-${zone.id}`,
-                            orderNumber: `WO-${new Date().getFullYear()}-M${String(index + 1).padStart(3, '0')}`,
-                            type: 'maintenance',
                             title: `Weekly Maintenance - ${zone.name}`,
                             description: 'Perform routine maintenance checks on all equipment',
                             priority: 'low',
-                            status: 'scheduled',
+                            status: 'pending',
                             assignedTo: 'Maintenance Team',
-                            location: zone.name,
+                            zone: zone.name,
                             dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
                             estimatedHours: 2,
-                            createdAt: new Date().toISOString(),
+                            createdDate: new Date().toISOString(),
+                            category: 'maintenance',
                             createdBy: 'System'
                         });
                     });

@@ -8,7 +8,7 @@ import {
     validateRoleTransition,
     getEffectiveRole
 } from '@/lib/utils/roleHelpers';
-import { User } from './UserManagement';
+import type { User } from './UserManagement';
 import styles from './UserCreateModal.module.css'; // Reuse the same styles
 
 interface UserEditModalProps {
@@ -88,7 +88,7 @@ export function UserEditModal({
                     currentUserRole
                 );
                 if (!roleValidation.valid) {
-                    newErrors.roles = roleValidation.reason || `Invalid role: ${FARM_ROLE_DISPLAY_NAMES[role]}`;
+                    newErrors.roles = roleValidation.reason || `Invalid role: ${FARM_ROLE_DISPLAY_NAMES[role as keyof typeof FARM_ROLE_DISPLAY_NAMES] || role}`;
                     break;
                 }
             }
@@ -145,7 +145,7 @@ export function UserEditModal({
         setFormData(prev => {
             const currentRoles = prev.roles;
             const newRoles = currentRoles.includes(role)
-                ? currentRoles.filter(r => r !== role)
+                ? currentRoles.filter((r: Role) => r !== role)
                 : [...currentRoles, role];
 
             return {
@@ -325,10 +325,10 @@ export function UserEditModal({
                                     <option value="">No Manager (Top Level)</option>
                                     {existingUsers
                                         .filter(u => u.id !== user.id && u.isActive) // Can't report to self
-                                        .filter(u => u.roles.some(role => [Role.ADMIN, Role.MANAGER, Role.TEAM_LEAD].includes(role))) // Only managers can be selected
+                                        .filter(u => u.roles.some((role: Role) => [Role.ADMIN, Role.MANAGER, Role.TEAM_LEAD].includes(role))) // Only managers can be selected
                                         .map(manager => (
                                             <option key={manager.id} value={manager.id}>
-                                                {manager.name} ({manager.roles.map(r => FARM_ROLE_DISPLAY_NAMES[r]).join(', ')})
+                                                {manager.name} ({manager.roles.map((r: Role) => FARM_ROLE_DISPLAY_NAMES[r as keyof typeof FARM_ROLE_DISPLAY_NAMES] || r).join(', ')})
                                             </option>
                                         ))}
                                 </select>

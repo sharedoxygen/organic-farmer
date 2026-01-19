@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import { Button } from '@/components/ui';
 import { useAuth } from '@/components/AuthProvider';
 import { useTenant } from '@/components/TenantProvider';
-import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 import { emitFeedbackResponseCreated } from '@/lib/events/dataEvents';
 import toast from 'react-hot-toast';
 import styles from './FeedbackResponseModal.module.css';
@@ -42,8 +41,6 @@ export default function FeedbackResponseModal({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [mounted, setMounted] = useState(false);
 
-    const isGlobalAdmin = isSystemAdmin(user);
-
     React.useEffect(() => {
         setMounted(true);
         if (isOpen) {
@@ -77,7 +74,8 @@ export default function FeedbackResponseModal({
             return;
         }
 
-        if (!user || (!currentFarm && !isGlobalAdmin)) {
+        const farmHeader = currentFarm?.id || (feedback as any)?.farm_id;
+        if (!user || !farmHeader) {
             toast.error('Unable to submit response. Please check your authentication.');
             return;
         }
@@ -86,22 +84,17 @@ export default function FeedbackResponseModal({
 
         try {
             const headers: Record<string, string> = {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Farm-ID': farmHeader,
             };
-
-            if (isGlobalAdmin) {
-                headers['X-Global-Admin'] = 'true';
-            } else if (currentFarm) {
-                headers['X-Farm-ID'] = currentFarm.id;
-            }
 
             const response = await fetch(`/api/feedback/${feedback.id}/responses`, {
                 method: 'POST',
+                credentials: 'include',
                 headers,
                 body: JSON.stringify({
                     message: message.trim(),
                     is_internal: isInternal,
-                    adminId: user.id
                 })
             });
 

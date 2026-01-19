@@ -50,23 +50,16 @@ export default function ProductionEnvironmentsPage() {
         try {
             setLoading(true);
             setError(null);
-
-            // Get user data for authorization
-            const userData = localStorage.getItem('ofms_user');
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json',
                 'X-Farm-ID': currentFarm.id
             };
 
-            if (userData) {
-                const user = JSON.parse(userData);
-                headers['Authorization'] = `Bearer ${user.id}`;
-            }
-
             console.log('🏢 Loading environments for farm:', currentFarm.farm_name);
 
             const response = await fetch('/api/environments', {
                 method: 'GET',
+                credentials: 'include',
                 headers
             });
 

@@ -2,6 +2,7 @@
 // Uses shared prisma and aligns with prisma schema model `audit_logs`
 
 import { prisma } from '@/lib/db';
+import { Prisma } from '@prisma/client';
 
 export interface AuditLogData {
     action: string;
@@ -32,7 +33,7 @@ export class AuditService {
                 entityId: userId,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: userData || {}
+                details: (userData || {}) as Prisma.InputJsonValue
             }
         });
     }
@@ -55,7 +56,7 @@ export class AuditService {
                 entityId: userId,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: { previousData, newData }
+                details: ({ previousData, newData }) as Prisma.InputJsonValue
             }
         });
     }
@@ -77,7 +78,7 @@ export class AuditService {
                 entityId: userId,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: { previousData: userData }
+                details: ({ previousData: userData }) as Prisma.InputJsonValue
             }
         });
     }
@@ -98,7 +99,7 @@ export class AuditService {
                 entityId: operationName,
                 userId,
                 farm_id: farmId,
-                details: { startTime: new Date().toISOString() }
+                details: ({ startTime: new Date().toISOString() }) as Prisma.InputJsonValue
             }
         });
     }
@@ -120,7 +121,7 @@ export class AuditService {
                 entityId: operationName,
                 userId,
                 farm_id: farmId,
-                details: { endTime: new Date().toISOString(), result: result || {} }
+                details: ({ endTime: new Date().toISOString(), result: result || {} }) as Prisma.InputJsonValue
             }
         });
     }
@@ -143,7 +144,7 @@ export class AuditService {
                     entityId: operationName,
                     userId,
                     farm_id: farmId,
-                    details: { error, endTime: new Date().toISOString() }
+                    details: ({ error, endTime: new Date().toISOString() }) as Prisma.InputJsonValue
                 }
             });
         } catch (auditError) {
@@ -169,7 +170,7 @@ export class AuditService {
                 entityId: batchId,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: data || {}
+                details: (data || {}) as Prisma.InputJsonValue
             }
         });
     }
@@ -192,7 +193,7 @@ export class AuditService {
                 entityId: orderId,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: data || {}
+                details: (data || {}) as Prisma.InputJsonValue
             }
         });
     }
@@ -216,7 +217,7 @@ export class AuditService {
                 entityId: itemId,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: data || {}
+                details: (data || {}) as Prisma.InputJsonValue
             }
         });
     }
@@ -237,12 +238,12 @@ export class AuditService {
                 entityId: auditData.entityId || auditData.action,
                 userId: actionUserId,
                 farm_id: farmId,
-                details: {
+                details: ({
                     previousData: auditData.previousData || null,
                     newData: auditData.newData || null,
                     ipAddress: auditData.ipAddress,
                     userAgent: auditData.userAgent
-                }
+                }) as Prisma.InputJsonValue
             }
         });
     }

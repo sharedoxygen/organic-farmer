@@ -21,15 +21,10 @@ export default function SustainabilityMetricsPage() {
         const fetchData = async () => {
             try {
                 const farmId = typeof window !== 'undefined' ? localStorage.getItem('ofms_farm_id') : null;
-                const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
 
                 const headers: Record<string, string> = { 'X-Farm-ID': farmId || '' };
-                if (userData) {
-                    const u = JSON.parse(userData);
-                    if (u?.id) headers['Authorization'] = `Bearer ${u.id}`;
-                }
 
-                const res = await fetch('/api/analytics/sustainability', { headers });
+                const res = await fetch('/api/analytics/sustainability', { headers, credentials: 'include' });
                 const json = await res.json();
                 if (res.ok && json.success) setData(json.data as Metrics);
             } finally {

@@ -54,6 +54,7 @@ export default function DailyTasksPage() {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
 
   // Form state for creating new task
   const [formData, setFormData] = useState({
@@ -357,100 +358,110 @@ export default function DailyTasksPage() {
             Completed ({tasks.filter(t => t.status === 'COMPLETED').length})
           </button>
         </div>
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.active : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            📋 List
+          </button>
+          <button
+            className={`${styles.toggleBtn} ${viewMode === 'cards' ? styles.active : ''}`}
+            onClick={() => setViewMode('cards')}
+          >
+            🗂️ Cards
+          </button>
+        </div>
       </div>
 
-      <div className={styles.tasksGrid}>
-        {filteredTasks.map((task) => (
-          <div key={task.id} className={styles.taskCard}>
-            <div className={styles.cardHeader}>
-              <div className={styles.taskInfo}>
-                <span className={styles.taskIcon}>{getTaskTypeIcon(task.category)}</span>
-                <div>
-                  <h3 className={styles.taskTitle}>{task.title}</h3>
-                  <p className={styles.taskType}>{task.category.replace('_', ' ')}</p>
-                </div>
-              </div>
-              <div className={styles.badges}>
-                <span
-                  className={styles.priorityBadge}
-                  style={{ backgroundColor: getPriorityColor(task.priority) }}
-                >
-                  {task.priority}
-                </span>
-                <span
-                  className={styles.statusBadge}
-                  style={{ backgroundColor: getStatusColor(task.status) }}
-                >
-                  {task.status.replace('_', ' ')}
-                </span>
-              </div>
-            </div>
-
-            <div className={styles.cardBody}>
-              <p className={styles.description}>{task.description}</p>
-
-              <div className={styles.taskDetails}>
-                <div className={styles.detail}>
-                  <span className={styles.label}>Assigned to:</span>
-                  <span className={styles.value}>
-                    {task.users_tasks_assignedToTousers
-                      ? `${task.users_tasks_assignedToTousers.firstName} ${task.users_tasks_assignedToTousers.lastName}`
-                      : 'Unassigned'
-                    }
-                  </span>
-                </div>
-                <div className={styles.detail}>
-                  <span className={styles.label}>Due Date:</span>
-                  <span className={styles.value}>{formatTime(task.dueDate)}</span>
-                </div>
-                <div className={styles.detail}>
-                  <span className={styles.label}>Estimated Time:</span>
-                  <span className={styles.value}>{task.estimatedDuration} min</span>
-                </div>
-                {task.batches && (
-                  <div className={styles.detail}>
-                    <span className={styles.label}>Batch:</span>
-                    <span className={styles.value}>
-                      {task.batches.batchNumber} - {task.batches.seed_varieties?.name || 'Unknown'}
-                    </span>
-                  </div>
-                )}
-                {task.actualDuration && (
-                  <div className={styles.detail}>
-                    <span className={styles.label}>Actual Time:</span>
-                    <span className={styles.value}>{task.actualDuration} min</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.cardActions}>
-              <button
-                className={styles.actionButton}
-                onClick={() => viewTaskDetails(task.id)}
-              >
-                View Details
-              </button>
-              {task.status === 'PENDING' && (
-                <button
-                  className={styles.startButton}
-                  onClick={() => startTask(task.id)}
-                >
-                  Start Task
-                </button>
-              )}
-              {task.status === 'IN_PROGRESS' && (
-                <button
-                  className={styles.completeButton}
-                  onClick={() => markComplete(task.id)}
-                >
-                  Mark Complete
-                </button>
-              )}
-            </div>
+      {viewMode === 'list' ? (
+        /* Clean Table View */
+        <div className={styles.tableContainer}>
+          <div className={styles.tableHeader}>
+            <span>Task</span>
+            <span>Assigned</span>
+            <span>Due</span>
+            <span>Duration</span>
+            <span>Priority</span>
+            <span>Status</span>
+            <span>Actions</span>
           </div>
-        ))}
-      </div>
+          <div className={styles.tableBody}>
+            {filteredTasks.map((task) => (
+              <div key={task.id} className={styles.tableRow} onClick={() => viewTaskDetails(task.id)}>
+                <div className={styles.taskInfo}>
+                  <span className={styles.taskIcon}>{getTaskTypeIcon(task.category)}</span>
+                  <div className={styles.taskDetails}>
+                    <p className={styles.taskTitle}>{task.title}</p>
+                    <span className={styles.taskType}>{task.category.replace('_', ' ')}</span>
+                  </div>
+                </div>
+                <div className={styles.cellText}>
+                  {task.users_tasks_assignedToTousers
+                    ? `${task.users_tasks_assignedToTousers.firstName} ${task.users_tasks_assignedToTousers.lastName}`
+                    : 'Unassigned'}
+                </div>
+                <div className={styles.cellText}>{formatTime(task.dueDate)}</div>
+                <div className={styles.cellText}>{task.estimatedDuration} min</div>
+                <div className={`${styles.priorityBadge} ${styles[task.priority.toLowerCase()]}`}>
+                  {task.priority}
+                </div>
+                <div className={`${styles.statusBadge} ${styles[task.status.toLowerCase().replace('_', '')]}`}>
+                  {task.status.replace('_', ' ')}
+                </div>
+                <div className={styles.rowActions}>
+                  {task.status === 'PENDING' && (
+                    <button className={`${styles.actionBtn} ${styles.primary}`} onClick={(e) => { e.stopPropagation(); startTask(task.id); }}>
+                      Start
+                    </button>
+                  )}
+                  {task.status === 'IN_PROGRESS' && (
+                    <button className={`${styles.actionBtn} ${styles.success}`} onClick={(e) => { e.stopPropagation(); markComplete(task.id); }}>
+                      Complete
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* Cards View */
+        <div className={styles.tasksGrid}>
+          {filteredTasks.slice(0, 12).map((task) => (
+            <div key={task.id} className={styles.taskCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.taskInfo}>
+                  <span className={styles.taskIcon}>{getTaskTypeIcon(task.category)}</span>
+                  <div>
+                    <h3 className={styles.taskTitle}>{task.title}</h3>
+                    <p className={styles.taskType}>{task.category.replace('_', ' ')}</p>
+                  </div>
+                </div>
+                <div className={`${styles.statusBadge} ${styles[task.status.toLowerCase().replace('_', '')]}`}>
+                  {task.status.replace('_', ' ')}
+                </div>
+              </div>
+              <div className={styles.cardMeta}>
+                <span>📅 {formatTime(task.dueDate)}</span>
+                <span>⏱️ {task.estimatedDuration} min</span>
+              </div>
+              <div className={styles.cardActions}>
+                <button className={styles.actionButton} onClick={() => viewTaskDetails(task.id)}>View</button>
+                {task.status === 'PENDING' && (
+                  <button className={styles.startButton} onClick={() => startTask(task.id)}>Start</button>
+                )}
+                {task.status === 'IN_PROGRESS' && (
+                  <button className={styles.completeButton} onClick={() => markComplete(task.id)}>Complete</button>
+                )}
+              </div>
+            </div>
+          ))}
+          {filteredTasks.length > 12 && (
+            <div className={styles.moreIndicator}>+{filteredTasks.length - 12} more. Switch to List view.</div>
+          )}
+        </div>
+      )}
 
       {filteredTasks.length === 0 && (
         <div className={styles.emptyState}>

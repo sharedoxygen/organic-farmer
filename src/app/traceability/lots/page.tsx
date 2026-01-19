@@ -47,13 +47,8 @@ export default function LotTrackingPage() {
             try {
                 if (!currentFarm?.id) return;
                 const headers: Record<string, string> = { 'X-Farm-ID': currentFarm.id };
-                const userData = typeof window !== 'undefined' ? localStorage.getItem('ofms_user') : null;
-                if (userData) {
-                    const u = JSON.parse(userData);
-                    if (u?.id) headers['Authorization'] = `Bearer ${u.id}`;
-                }
                 // Fetch batches to create lot tracking records
-                const response = await fetch('/api/batches?limit=200', { headers });
+                const response = await fetch('/api/batches?limit=200', { headers, credentials: 'include' });
                 const data = await response.json();
 
                 if (response.ok && data.success) {

@@ -1,21 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
 
-const prisma = new PrismaClient();
+async function requireFarmAdmin(userId: string, farmId: string): Promise<boolean> {
+    const membership = await (prisma as any).farm_users.findUnique({
+        where: {
+            farm_id_user_id: {
+                farm_id: farmId,
+                user_id: userId,
+            },
+        },
+        select: { is_active: true, role: true },
+    });
+    return !!membership?.is_active && ['OWNER', 'ADMIN'].includes(membership.role);
+}
 
 // GET - Get single feedback with responses
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     try {
         const feedbackId = params.id;
         const farmId = request.headers.get('X-Farm-ID');
-        const isGlobalAdmin = request.headers.get('X-Global-Admin') === 'true';
+        if (!farmId) return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
 
-        if (!farmId && !isGlobalAdmin) {
-            return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
-        }
+        const user = await getAuthUser(request);
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const isGlobalAdmin = isSystemAdmin(user as any);
 
         const whereClause: any = { id: feedbackId };
         if (!isGlobalAdmin) {
@@ -58,26 +72,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             return NextResponse.json({ error: 'Feedback not found' }, { status: 404 });
         }
 
-        const responseHeaders: Record<string, string> = {};
-        if (farmId) {
-            responseHeaders['X-Farm-ID'] = farmId;
-        }
-        if (isGlobalAdmin) {
-            responseHeaders['X-Global-Admin'] = 'true';
-        }
-
         return NextResponse.json({
             success: true,
             data: feedback
-        }, {
-            headers: responseHeaders
         });
 
     } catch (error) {
         console.error('❌ Error fetching feedback:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -86,15 +88,18 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     try {
         const feedbackId = params.id;
         const farmId = request.headers.get('X-Farm-ID');
-        const isGlobalAdmin = request.headers.get('X-Global-Admin') === 'true';
+        if (!farmId) return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
+
+        const user = await getAuthUser(request);
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const isGlobalAdmin = isSystemAdmin(user as any);
         const updates = await request.json();
 
-        if (!farmId && !isGlobalAdmin) {
-            return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
+        if (!isGlobalAdmin) {
+            const ok = await requireFarmAdmin(user.id, farmId);
+            if (!ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
-
-        // TODO: Check if user is admin or owner of feedback
-        // For now, allow updates
 
         const whereClause: any = { id: feedbackId };
         if (!isGlobalAdmin) {
@@ -140,26 +145,14 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
             }
         });
 
-        const responseHeaders: Record<string, string> = {};
-        if (farmId) {
-            responseHeaders['X-Farm-ID'] = farmId;
-        }
-        if (isGlobalAdmin) {
-            responseHeaders['X-Global-Admin'] = 'true';
-        }
-
         return NextResponse.json({
             success: true,
             data: updatedFeedback
-        }, {
-            headers: responseHeaders
         });
 
     } catch (error) {
         console.error('❌ Error updating feedback:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -168,14 +161,16 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     try {
         const feedbackId = params.id;
         const farmId = request.headers.get('X-Farm-ID');
-        const isGlobalAdmin = request.headers.get('X-Global-Admin') === 'true';
+        if (!farmId) return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
 
-        if (!farmId && !isGlobalAdmin) {
-            return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
+        const user = await getAuthUser(request);
+        if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const isGlobalAdmin = isSystemAdmin(user as any);
+        if (!isGlobalAdmin) {
+            const ok = await requireFarmAdmin(user.id, farmId);
+            if (!ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
-
-        // TODO: Check if user is admin
-        // For now, allow deletion
 
         const whereClause: any = { id: feedbackId };
         if (!isGlobalAdmin) {
@@ -195,25 +190,13 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
             where: whereClause
         });
 
-        const responseHeaders: Record<string, string> = {};
-        if (farmId) {
-            responseHeaders['X-Farm-ID'] = farmId;
-        }
-        if (isGlobalAdmin) {
-            responseHeaders['X-Global-Admin'] = 'true';
-        }
-
         return NextResponse.json({
             success: true,
             message: 'Feedback deleted successfully'
-        }, {
-            headers: responseHeaders
         });
 
     } catch (error) {
         console.error('❌ Error deleting feedback:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
-} 
+}

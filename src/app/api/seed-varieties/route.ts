@@ -10,6 +10,8 @@ interface SeedCreateRequest {
     name: string;
     scientificName?: string;
     supplier: string;
+    lotNumber?: string;
+    seedSource?: string;
     stockQuantity?: number;
     minStockLevel?: number;
     unit?: string;
@@ -210,7 +212,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             { status: 500 }
         );
     }
-} 
+}
 
 // PUT /api/seed-varieties - Update seed variety by id in body
 export async function PUT(request: NextRequest): Promise<NextResponse> {

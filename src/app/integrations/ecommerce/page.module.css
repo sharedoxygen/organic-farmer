@@ -1,0 +1,159 @@
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.statCard {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.platformsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.platformCard {
+    padding: 1.5rem;
+}
+
+.platformHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.platformIcon {
+    font-size: 2.5rem;
+}
+
+.platformInfo h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+}
+
+.status {
+    font-size: 0.75rem;
+}
+
+.status.active {
+    color: var(--success-color);
+}
+
+.status.inactive {
+    color: var(--text-tertiary);
+}
+
+.status.error {
+    color: var(--error-color);
+}
+
+.platformDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.detailRow strong {
+    color: var(--text-primary);
+}
+
+.platformActions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.platformConnect {
+    text-align: center;
+}
+
+.platformConnect p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+}
+
+.helpCard {
+    padding: 1.5rem;
+    background: var(--info-subtle);
+    border: 1px solid var(--info-color);
+}
+
+.helpCard h3 {
+    margin: 0 0 1rem;
+    color: var(--text-primary);
+}
+
+.helpCard ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.helpCard li {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}

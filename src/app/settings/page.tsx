@@ -111,8 +111,7 @@ export default function SettingsPage() {
             icon: '🔧',
             action: 'Monitor',
             href: '/admin/utilities/system-health',
-            category: 'System Utilities',
-            comingSoon: true
+            category: 'System Utilities'
         },
         {
             id: 'audit-logs',
@@ -121,8 +120,7 @@ export default function SettingsPage() {
             icon: '📋',
             action: 'Review',
             href: '/admin/utilities/audit-logs',
-            category: 'System Utilities',
-            comingSoon: true
+            category: 'System Utilities'
         },
         {
             id: 'database-management',
@@ -131,8 +129,7 @@ export default function SettingsPage() {
             icon: '🗄️',
             action: 'Monitor',
             href: '/admin/utilities/database-management',
-            category: 'System Utilities',
-            comingSoon: true
+            category: 'System Utilities'
         },
 
         // Feedback & Communication
@@ -170,13 +167,7 @@ export default function SettingsPage() {
         }
     ];
 
-    const handleSettingClick = (setting: { isHelp?: boolean; href: string; comingSoon?: boolean }) => {
-        if (setting.comingSoon) {
-            // Show coming soon message for coming soon items
-            alert('This feature is coming soon! Stay tuned for updates.');
-            return;
-        }
-
+    const handleSettingClick = (setting: { isHelp?: boolean; href: string }) => {
         if (setting.isHelp) {
             openHelp();
         } else {
@@ -212,7 +203,7 @@ export default function SettingsPage() {
                 {filteredSettings.map((setting) => (
                     <Card
                         key={setting.id}
-                        className={`${styles.utilityCard} ${setting.comingSoon ? styles.comingSoonCard : ''}`}
+                        className={styles.utilityCard}
                         onClick={() => handleSettingClick(setting)}
                         style={{ cursor: 'pointer' }}
                     >
@@ -223,7 +214,6 @@ export default function SettingsPage() {
                             <div className={styles.utilityInfo}>
                                 <h3 className={styles.utilityTitle}>
                                     {setting.title}
-                                    {setting.comingSoon && <span className={styles.comingSoonBadge}>Coming Soon</span>}
                                 </h3>
                                 <p className={styles.utilityDescription}>
                                     {setting.description}
@@ -234,13 +224,13 @@ export default function SettingsPage() {
                             </div>
                             <div className={styles.utilityAction}>
                                 <button
-                                    className={`${styles.actionButton} ${setting.comingSoon ? styles.comingSoonButton : ''}`}
+                                    className={styles.actionButton}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleSettingClick(setting);
                                     }}
                                 >
-                                    {setting.comingSoon ? 'Coming Soon' : `${setting.action} →`}
+                                    {`${setting.action} →`}
                                 </button>
                             </div>
                         </div>

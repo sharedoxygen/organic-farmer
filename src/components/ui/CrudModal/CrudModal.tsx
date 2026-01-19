@@ -9,6 +9,7 @@ export interface CrudField {
     label: string;
     type: 'text' | 'email' | 'number' | 'date' | 'datetime-local' | 'select' | 'textarea' | 'checkbox';
     required?: boolean;
+    readOnly?: boolean;
     options?: { value: string; label: string }[];
     placeholder?: string;
     min?: number;
@@ -213,7 +214,7 @@ export function CrudModal({
                             value={value}
                             onChange={(e) => handleInputChange(field.name, e.target.value)}
                             className={styles.fieldInput}
-                            disabled={loading}
+                            disabled={loading || field.readOnly}
                         >
                             <option value="">{field.placeholder || `Select ${field.label}`}</option>
                             {field.options?.map(option => (
@@ -240,7 +241,7 @@ export function CrudModal({
                             className={styles.fieldTextarea}
                             placeholder={field.placeholder}
                             rows={field.rows || 3}
-                            disabled={loading}
+                            disabled={loading || field.readOnly}
                         />
                         {hasError && <span className={styles.fieldError}>{errors[field.name]}</span>}
                     </div>
@@ -255,7 +256,7 @@ export function CrudModal({
                                 checked={!!value}
                                 onChange={(e) => handleInputChange(field.name, e.target.checked)}
                                 className={styles.checkboxInput}
-                                disabled={loading}
+                                disabled={loading || field.readOnly}
                             />
                             <span className={styles.checkboxText}>
                                 {field.label}
@@ -283,7 +284,7 @@ export function CrudModal({
                             min={field.min}
                             max={field.max}
                             step={field.step}
-                            disabled={loading}
+                            disabled={loading || field.readOnly}
                         />
                         {hasError && <span className={styles.fieldError}>{errors[field.name]}</span>}
                     </div>

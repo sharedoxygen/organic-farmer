@@ -213,6 +213,9 @@ export default function CropPlanModal({
 
             let savedPlan;
             if (mode === 'edit') {
+                if (!payload.id) {
+                    throw new Error('Crop plan id is required');
+                }
                 savedPlan = await crudService.cropPlans.update(payload.id, payload);
             } else {
                 savedPlan = await crudService.cropPlans.create(payload);

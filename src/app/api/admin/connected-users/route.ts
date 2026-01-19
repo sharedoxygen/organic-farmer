@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { isSystemAdmin } from '@/lib/utils/systemAdmin';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -11,33 +12,16 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
     try {
-        // Get user from session/auth (this would be implemented based on your auth system)
-        const authHeader = request.headers.get('Authorization');
+        const user = await getAuthUser(request);
 
-        if (!authHeader) {
+        if (!user) {
             return NextResponse.json(
                 { error: 'Authentication required' },
                 { status: 401 }
             );
         }
 
-        // Extract user from auth header (simplified for demo)
-        const userId = authHeader.replace('Bearer ', '');
-
-        // Get user and check if system admin
-        const user = await prisma.users.findUnique({
-            where: { id: userId },
-            select: {
-                id: true,
-                email: true,
-                isActive: true,
-                roles: true,
-                is_system_admin: true,
-                system_role: true,
-            }
-        });
-
-        if (!user || !user.isActive) {
+        if (!user.isActive) {
             return NextResponse.json(
                 { error: 'User not found or inactive' },
                 { status: 404 }
@@ -175,30 +159,16 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
     try {
-        const authHeader = request.headers.get('Authorization');
+        const user = await getAuthUser(request);
 
-        if (!authHeader) {
+        if (!user) {
             return NextResponse.json(
                 { error: 'Authentication required' },
                 { status: 401 }
             );
         }
 
-        const userId = authHeader.replace('Bearer ', '');
-
-        // Get user and check if system admin
-        const user = await prisma.users.findUnique({
-            where: { id: userId },
-            select: {
-                id: true,
-                email: true,
-                isActive: true,
-                is_system_admin: true,
-                system_role: true,
-            }
-        });
-
-        if (!user || !user.isActive) {
+        if (!user.isActive) {
             return NextResponse.json(
                 { error: 'User not found or inactive' },
                 { status: 404 }

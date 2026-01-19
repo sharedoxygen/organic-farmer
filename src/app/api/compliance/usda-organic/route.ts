@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
         user.id,
         farmId
       );
-    } catch {}
+    } catch { }
 
     return NextResponse.json({ success: true, data: records });
   } catch (error) {
@@ -102,10 +102,42 @@ export async function POST(req: NextRequest) {
         user.id,
         farmId
       );
-    } catch {}
+    } catch { }
 
     return NextResponse.json({ success: true, data: record });
   } catch (error) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+}
+
+// DELETE: Delete a USDA Organic compliance record by id
+export async function DELETE(req: NextRequest) {
+  try {
+    const { farmId, user } = await ensureFarmAccess(req);
+    const body = await req.json().catch(() => ({}));
+    const id = body?.id || new URL(req.url).searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'id is required' }, { status: 400 });
+
+    const existing = await prisma.organic_compliance.findFirst({ where: { id, farm_id: farmId } });
+    if (!existing) return NextResponse.json({ error: 'Record not found' }, { status: 404 });
+
+    await prisma.organic_compliance.delete({ where: { id } });
+
+    try {
+      await AuditService.logGenericOperation(
+        {
+          action: 'DELETE_USDA_ORGANIC_COMPLIANCE',
+          entityType: 'organic_compliance',
+          entityId: id,
+          previousData: { id },
+        },
+        user.id,
+        farmId
+      );
+    } catch { }
+
+    return NextResponse.json({ success: true, message: 'Deleted' });
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 }

@@ -1,21 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
 
-const prisma = new PrismaClient();
+async function requireFarmAdmin(userId: string, farmId: string): Promise<boolean> {
+    const membership = await (prisma as any).farm_users.findUnique({
+        where: {
+            farm_id_user_id: {
+                farm_id: farmId,
+                user_id: userId,
+            },
+        },
+        select: { is_active: true, role: true },
+    });
+
+    return !!membership?.is_active && ['OWNER', 'ADMIN'].includes(membership.role);
+}
 
 // GET - Get responses for a feedback
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     try {
         const feedbackId = params.id;
         const farmId = request.headers.get('X-Farm-ID');
-        const isGlobalAdmin = request.headers.get('X-Global-Admin') === 'true';
 
-        if (!farmId && !isGlobalAdmin) {
+        if (!farmId) {
             return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
         }
+
+        const user = await getAuthUser(request);
+        if (!user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const isGlobalAdmin = isSystemAdmin(user as any);
 
         // First verify the feedback exists and user has access
         const whereClause: any = { id: feedbackId };
@@ -50,26 +70,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             }
         });
 
-        const responseHeaders: Record<string, string> = {};
-        if (farmId) {
-            responseHeaders['X-Farm-ID'] = farmId;
-        }
-        if (isGlobalAdmin) {
-            responseHeaders['X-Global-Admin'] = 'true';
-        }
-
         return NextResponse.json({
             success: true,
             data: responses
-        }, {
-            headers: responseHeaders
         });
 
     } catch (error) {
         console.error('❌ Error fetching responses:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -78,17 +86,26 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     try {
         const feedbackId = params.id;
         const farmId = request.headers.get('X-Farm-ID');
-        const isGlobalAdmin = request.headers.get('X-Global-Admin') === 'true';
 
-        if (!farmId && !isGlobalAdmin) {
+        if (!farmId) {
             return NextResponse.json({ error: 'Farm ID required' }, { status: 400 });
+        }
+
+        const user = await getAuthUser(request);
+        if (!user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const isGlobalAdmin = isSystemAdmin(user as any);
+        if (!isGlobalAdmin) {
+            const ok = await requireFarmAdmin(user.id, farmId);
+            if (!ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
         const body = await request.json();
         const {
             message,
             is_internal = false,
-            adminId // TODO: Get from authentication
         } = body;
 
         // Validate required fields
@@ -117,7 +134,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         const response = await (prisma as any).feedback_responses.create({
             data: {
                 feedback_id: feedbackId,
-                admin_id: adminId,
+                admin_id: user.id,
                 message: message.trim(),
                 is_internal
             },
@@ -144,31 +161,19 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         console.log('✅ Response added:', {
             responseId: response.id,
             feedbackId,
-            adminId,
+            adminId: user.id,
             isInternal: is_internal,
             messageLength: message.length
         });
-
-        const responseHeaders: Record<string, string> = {};
-        if (farmId) {
-            responseHeaders['X-Farm-ID'] = farmId;
-        }
-        if (isGlobalAdmin) {
-            responseHeaders['X-Global-Admin'] = 'true';
-        }
 
         return NextResponse.json({
             success: true,
             message: 'Response added successfully',
             data: response
-        }, {
-            headers: responseHeaders
         });
 
     } catch (error) {
         console.error('❌ Error adding response:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
-} 
+}

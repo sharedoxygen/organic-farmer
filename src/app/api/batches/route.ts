@@ -94,7 +94,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const body = await request.json();
 
     // Enforce farm scoping and auth
-    const { farmId } = await ensureFarmAccess(request);
+    const { farmId, user } = await ensureFarmAccess(request);
 
     console.log('📦 Creating batch for farm:', farmId);
 

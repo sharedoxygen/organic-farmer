@@ -1,0 +1,209 @@
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.statCard {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+    color: var(--text-primary);
+}
+
+.labsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.labCard {
+    padding: 1.5rem;
+}
+
+.labHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.labHeader h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.labStatus {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.labStatus.connected {
+    color: var(--success-color);
+}
+
+.labStats {
+    display: flex;
+    gap: 2rem;
+}
+
+.labStats div {
+    display: flex;
+    flex-direction: column;
+}
+
+.labStats strong {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.labStats span {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.testsCard {
+    padding: 0;
+    overflow: hidden;
+}
+
+.testsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.testsTable th,
+.testsTable td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.testsTable th {
+    background: var(--bg-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.testsTable td {
+    font-size: 0.875rem;
+}
+
+.sampleId {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.results {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-secondary);
+}
+
+.testTypesCard {
+    padding: 1.5rem;
+}
+
+.testTypesCard h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+}
+
+.testTypesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.testType {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.testIcon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.testType strong {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.testType p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}

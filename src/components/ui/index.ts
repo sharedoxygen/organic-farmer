@@ -36,6 +36,28 @@ export { default as FeedbackModal } from './FeedbackModal/FeedbackModal';
 export { default as FeedbackButton } from './FeedbackButton/FeedbackButton';
 export { default as FeedbackResponseModal } from './FeedbackResponseModal/FeedbackResponseModal';
 
+// AI Components
+export {
+    FarmAssistantChat,
+    WeatherWidget,
+    AlertCenter,
+    BatchScoreCard,
+    YieldForecastChart,
+    QualityGradeCard,
+    ResourceOptimizationPanel,
+    AIInsightCard
+} from './AIComponents';
+
+// Skeleton Components
+export {
+    Skeleton,
+    TableRowSkeleton,
+    CardSkeleton,
+    ListItemSkeleton,
+    PageSkeleton,
+    FormSkeleton
+} from './Skeleton';
+
 // Re-export types
 export type { ButtonProps } from './Button/Button';
 export type { CardProps } from './Card/Card'; 

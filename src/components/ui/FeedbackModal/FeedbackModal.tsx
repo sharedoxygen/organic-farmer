@@ -86,14 +86,13 @@ export default function FeedbackModal({
             // Submit feedback
             const response = await fetch('/api/feedback', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Farm-ID': farmId,
                 },
                 body: JSON.stringify({
                     ...validatedData,
-                    farmId,
-                    userId: user.id,
                 }),
             });
 

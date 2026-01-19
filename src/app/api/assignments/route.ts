@@ -131,15 +131,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
         const body = await request.json();
 
-        // Get farm ID from headers
-        const farmId = request.headers.get('X-Farm-ID');
-
-        if (!farmId) {
-            return NextResponse.json(
-                { success: false, error: 'Farm ID required' },
-                { status: 400 }
-            );
-        }
+        // Enforce auth + farm access
+        const { farmId, user } = await ensureFarmAccess(request);
 
         console.log('👥 Creating team assignment for farm:', farmId);
 

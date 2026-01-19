@@ -130,23 +130,17 @@ export default function AIInsightsPage() {
 
         setLoading(true);
         try {
-            // Get user data for authorization
-            const userData = localStorage.getItem('ofms_user');
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json',
                 'X-Farm-ID': currentFarm.id
             };
-
-            if (userData) {
-                const user = JSON.parse(userData);
-                headers['Authorization'] = `Bearer ${user.id}`;
-            }
 
             console.log('🤖 Loading AI insights for farm:', currentFarm.farm_name);
 
             // Load disease analysis
             const diseaseResponse = await fetch('/api/ai/crop-analysis', {
                 method: 'POST',
+                credentials: 'include',
                 headers,
                 body: JSON.stringify({
                     // imageUrl: 'https://example.com/sample-plant.jpg', // TODO: Use actual image from file upload
@@ -165,6 +159,7 @@ export default function AIInsightsPage() {
 
             // Load market insights
             const insightsResponse = await fetch(`/api/ai/demand-forecast/insights?crop=${selectedCrop}`, {
+                credentials: 'include',
                 headers
             });
             if (insightsResponse.ok) {

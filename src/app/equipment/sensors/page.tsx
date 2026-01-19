@@ -51,73 +51,113 @@ export default function IoTSensorsPage() {
                     data.data.forEach((zone: any) => {
                         // Temperature sensor for each zone
                         if (zone.currentTemperature !== null) {
+                            const value = Number(zone.currentTemperature ?? 22);
+                            const min = Number(zone.temperatureMin ?? 18);
+                            const max = Number(zone.temperatureMax ?? 26);
+                            const timestamp = new Date().toISOString();
                             sensorList.push({
                                 id: `sensor-temp-${zone.id}`,
+                                sensorId: `TEMP-${zone.id}`,
                                 name: `${zone.name} Temperature Sensor`,
                                 type: 'temperature',
                                 location: zone.name,
+                                zone: zone.name,
                                 status: 'online',
-                                currentValue: zone.currentTemperature || 22,
+                                lastReading: value,
                                 unit: '°C',
-                                minThreshold: zone.temperatureMin || 18,
-                                maxThreshold: zone.temperatureMax || 26,
-                                lastReading: new Date().toISOString(),
-                                battery: 85 + Math.floor(Math.random() * 15),
-                                signalStrength: 75 + Math.floor(Math.random() * 25)
+                                timestamp,
+                                batteryLevel: 85 + Math.floor(Math.random() * 15),
+                                calibrationDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                                alertThresholds: { min, max },
+                                readings: Array.from({ length: 6 }).map((_, i) => {
+                                    const t = new Date(Date.now() - (6 - i) * 10 * 60 * 1000).toISOString();
+                                    const v = Math.round((value + (Math.random() - 0.5) * 2) * 10) / 10;
+                                    return { timestamp: t, value: v, alert: v < min || v > max };
+                                })
                             });
                         }
 
                         // Humidity sensor for each zone
                         if (zone.currentHumidity !== null) {
+                            const value = Number(zone.currentHumidity ?? 65);
+                            const min = Number(zone.humidityMin ?? 60);
+                            const max = Number(zone.humidityMax ?? 80);
+                            const timestamp = new Date().toISOString();
                             sensorList.push({
                                 id: `sensor-hum-${zone.id}`,
+                                sensorId: `HUM-${zone.id}`,
                                 name: `${zone.name} Humidity Sensor`,
                                 type: 'humidity',
                                 location: zone.name,
-                                status: 'active',
-                                currentValue: zone.currentHumidity || 65,
+                                zone: zone.name,
+                                status: 'online',
+                                lastReading: value,
                                 unit: '%',
-                                minThreshold: zone.humidityMin || 60,
-                                maxThreshold: zone.humidityMax || 80,
-                                lastReading: new Date().toISOString(),
-                                battery: 80 + Math.floor(Math.random() * 20),
-                                signalStrength: 70 + Math.floor(Math.random() * 30)
+                                timestamp,
+                                batteryLevel: 80 + Math.floor(Math.random() * 20),
+                                calibrationDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+                                alertThresholds: { min, max },
+                                readings: Array.from({ length: 6 }).map((_, i) => {
+                                    const t = new Date(Date.now() - (6 - i) * 10 * 60 * 1000).toISOString();
+                                    const v = Math.round((value + (Math.random() - 0.5) * 5) * 10) / 10;
+                                    return { timestamp: t, value: v, alert: v < min || v > max };
+                                })
                             });
                         }
 
                         // CO2 sensor for greenhouses
                         if (zone.type === 'GREENHOUSE' && zone.currentCO2 !== null) {
+                            const value = Number(zone.currentCO2 ?? 400);
+                            const min = 350;
+                            const max = 600;
+                            const timestamp = new Date().toISOString();
                             sensorList.push({
                                 id: `sensor-co2-${zone.id}`,
+                                sensorId: `CO2-${zone.id}`,
                                 name: `${zone.name} CO2 Sensor`,
                                 type: 'co2',
                                 location: zone.name,
-                                status: 'active',
-                                currentValue: zone.currentCO2 || 400,
+                                zone: zone.name,
+                                status: 'online',
+                                lastReading: value,
                                 unit: 'ppm',
-                                minThreshold: 350,
-                                maxThreshold: 600,
-                                lastReading: new Date().toISOString(),
-                                battery: 90 + Math.floor(Math.random() * 10),
-                                signalStrength: 85 + Math.floor(Math.random() * 15)
+                                timestamp,
+                                batteryLevel: 90 + Math.floor(Math.random() * 10),
+                                calibrationDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+                                alertThresholds: { min, max },
+                                readings: Array.from({ length: 6 }).map((_, i) => {
+                                    const t = new Date(Date.now() - (6 - i) * 10 * 60 * 1000).toISOString();
+                                    const v = Math.round(value + (Math.random() - 0.5) * 30);
+                                    return { timestamp: t, value: v, alert: v < min || v > max };
+                                })
                             });
                         }
 
                         // Light sensor for indoor growing areas
                         if ((zone.type === 'GROWING_ROOM' || zone.isIndoor) && zone.currentLight !== null) {
+                            const value = Number(zone.currentLight ?? 5000);
+                            const min = 3000;
+                            const max = 8000;
+                            const timestamp = new Date().toISOString();
                             sensorList.push({
                                 id: `sensor-light-${zone.id}`,
+                                sensorId: `LUX-${zone.id}`,
                                 name: `${zone.name} Light Sensor`,
                                 type: 'light',
                                 location: zone.name,
-                                status: 'active',
-                                currentValue: zone.currentLight || 5000,
+                                zone: zone.name,
+                                status: 'online',
+                                lastReading: value,
                                 unit: 'lux',
-                                minThreshold: 3000,
-                                maxThreshold: 8000,
-                                lastReading: new Date().toISOString(),
-                                battery: 95,
-                                signalStrength: 90 + Math.floor(Math.random() * 10)
+                                timestamp,
+                                batteryLevel: 95,
+                                calibrationDate: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+                                alertThresholds: { min, max },
+                                readings: Array.from({ length: 6 }).map((_, i) => {
+                                    const t = new Date(Date.now() - (6 - i) * 10 * 60 * 1000).toISOString();
+                                    const v = Math.round(value + (Math.random() - 0.5) * 200);
+                                    return { timestamp: t, value: v, alert: v < min || v > max };
+                                })
                             });
                         }
                     });

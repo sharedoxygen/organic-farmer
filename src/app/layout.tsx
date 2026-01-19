@@ -5,6 +5,7 @@ import { FeedbackProvider } from '@/context/FeedbackContext'
 import { ConditionalLayout } from '@/components/ConditionalLayout'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { HelpProvider } from '@/components/HelpProvider'
+import { QueryProvider } from '@/components/QueryProvider'
 import { HelpModal } from '@/components/ui/HelpModal/HelpModal'
 import { TutorialOverlay } from '@/components/ui/TutorialOverlay/TutorialOverlay'
 
@@ -71,22 +72,24 @@ export default function RootLayout({
                 />
             </head>
             <body>
-                <ThemeProvider>
-                    <AuthProvider>
-                        <TenantProvider>
-                            <FeedbackProvider>
-                                <HelpProvider>
-                                    <ConditionalLayout>
-                                        {children}
-                                    </ConditionalLayout>
-                                    <HelpModal />
-                                    <TutorialOverlay />
-                                    <Toaster />
-                                </HelpProvider>
-                            </FeedbackProvider>
-                        </TenantProvider>
-                    </AuthProvider>
-                </ThemeProvider>
+                <QueryProvider>
+                    <ThemeProvider>
+                        <AuthProvider>
+                            <TenantProvider>
+                                <FeedbackProvider>
+                                    <HelpProvider>
+                                        <ConditionalLayout>
+                                            {children}
+                                        </ConditionalLayout>
+                                        <HelpModal />
+                                        <TutorialOverlay />
+                                        <Toaster />
+                                    </HelpProvider>
+                                </FeedbackProvider>
+                            </TenantProvider>
+                        </AuthProvider>
+                    </ThemeProvider>
+                </QueryProvider>
             </body>
         </html>
     )

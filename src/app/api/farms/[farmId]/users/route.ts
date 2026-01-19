@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 
-const prisma = new PrismaClient();
+async function requireFarmAdmin(userId: string, farmId: string): Promise<boolean> {
+    const membership = await (prisma as any).farm_users.findUnique({
+        where: {
+            farm_id_user_id: {
+                farm_id: farmId,
+                user_id: userId,
+            },
+        },
+        select: { is_active: true, role: true },
+    });
+
+    return !!membership?.is_active && ['OWNER', 'ADMIN'].includes(membership.role);
+}
 
 // GET /api/farms/[farmId]/users - Get farm users
 export async function GET(
@@ -10,6 +24,25 @@ export async function GET(
 ) {
     try {
         const farmId = params.farmId;
+
+        const user = await getAuthUser(request);
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Authentication required' },
+                { status: 401 }
+            );
+        }
+
+        const globalAdmin = isSystemAdmin(user as any);
+        if (!globalAdmin) {
+            const ok = await requireFarmAdmin(user.id, farmId);
+            if (!ok) {
+                return NextResponse.json(
+                    { error: 'Forbidden' },
+                    { status: 403 }
+                );
+            }
+        }
 
         if (!farmId) {
             return NextResponse.json(
@@ -58,8 +91,6 @@ export async function GET(
             { error: 'Failed to fetch farm users', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -71,6 +102,25 @@ export async function POST(
     try {
         const farmId = params.farmId;
         const body = await request.json();
+
+        const user = await getAuthUser(request);
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Authentication required' },
+                { status: 401 }
+            );
+        }
+
+        const globalAdmin = isSystemAdmin(user as any);
+        if (!globalAdmin) {
+            const ok = await requireFarmAdmin(user.id, farmId);
+            if (!ok) {
+                return NextResponse.json(
+                    { error: 'Forbidden' },
+                    { status: 403 }
+                );
+            }
+        }
 
         if (!farmId) {
             return NextResponse.json(
@@ -129,7 +179,5 @@ export async function POST(
             { error: 'Failed to add user to farm', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
-} 
+}

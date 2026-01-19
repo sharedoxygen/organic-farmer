@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { GET } from '@/app/api/auth/validate/route';
+import { POST } from '@/app/api/auth/validate/route';
 
 // Mock the Prisma client
 jest.mock('@prisma/client', () => ({
@@ -28,7 +28,7 @@ describe('/api/auth/validate', () => {
             },
         } as unknown as NextRequest;
 
-        const response = await GET(mockRequest);
+        const response = await POST(mockRequest);
         const data = await response.json();
 
         expect(response.status).toBe(401);
@@ -43,7 +43,7 @@ describe('/api/auth/validate', () => {
             },
         } as unknown as NextRequest;
 
-        const response = await GET(mockRequest);
+        const response = await POST(mockRequest);
         const data = await response.json();
 
         expect(response.status).toBe(401);

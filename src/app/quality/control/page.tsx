@@ -181,20 +181,13 @@ export default function QualityControlPage() {
       if (!currentFarm?.id) {
         throw new Error('No farm context available. Please select a farm.');
       }
-
-      // Get user data for authorization
-      const userData = localStorage.getItem('ofms_user');
       const headers: Record<string, string> = {
         'X-Farm-ID': currentFarm.id
       };
 
-      if (userData) {
-        const user = JSON.parse(userData);
-        headers['Authorization'] = `Bearer ${user.id}`;
-      }
-
       const response = await fetch('/api/batches?status=active', {
-        headers
+        headers,
+        credentials: 'include'
       });
       const data = await response.json();
       if (data.success) {

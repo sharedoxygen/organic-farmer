@@ -10,9 +10,7 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3005',
     trace: 'on-first-retry',
-    extraHTTPHeaders: async ({}, use) => {
-      await use({});
-    },
+    extraHTTPHeaders: {},
   },
   projects: [
     {

@@ -473,6 +473,7 @@ export default function SalesOrdersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
 
   const loadOrders = useCallback(async () => {
     setLoading(true);
@@ -983,144 +984,109 @@ export default function SalesOrdersPage() {
 
       {/* Orders Section */}
       <div id="orders-section" className={styles.ordersSection}>
-        <div className={styles.ordersSectionHeader}>
-          <h2 className={styles.ordersSectionTitle}>
-            {getOrdersSectionTitle()}
-          </h2>
-          <div className={styles.ordersSectionMeta}>
+        <div className={styles.sectionHeader}>
+          <h2>{getOrdersSectionTitle()}</h2>
+          <div className={styles.sectionActions}>
             <span className={styles.ordersCount}>
               {filteredOrders.length} {filteredOrders.length === 1 ? 'order' : 'orders'}
             </span>
             {activeFilter && (
-              <button
-                onClick={clearActiveFilter}
-                className={styles.clearFilterButton}
-              >
+              <button onClick={clearActiveFilter} className={styles.clearFilterButton}>
                 Clear Filter ✕
               </button>
             )}
+            <div className={styles.viewToggle}>
+              <button
+                className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.active : ''}`}
+                onClick={() => setViewMode('list')}
+              >
+                📋 List
+              </button>
+              <button
+                className={`${styles.toggleBtn} ${viewMode === 'cards' ? styles.active : ''}`}
+                onClick={() => setViewMode('cards')}
+              >
+                🗂️ Cards
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className={styles.ordersGrid}>
-          {filteredOrders.map((order) => {
-            const daysUntilDelivery = getDaysUntilDelivery(order.deliveryDate);
-
-            return (
-              <Card key={order.id} className={styles.orderCard}>
-                <div className={styles.orderHeader}>
+        {viewMode === 'list' ? (
+          /* Clean Table View */
+          <div className={styles.tableContainer}>
+            <div className={styles.tableHeader}>
+              <span>Order</span>
+              <span>Customer</span>
+              <span>Date</span>
+              <span>Delivery</span>
+              <span>Total</span>
+              <span>Status</span>
+              <span>Actions</span>
+            </div>
+            <div className={styles.tableBody}>
+              {filteredOrders.map((order) => (
+                <div key={order.id} className={styles.tableRow} onClick={() => handleViewOrder(order)}>
                   <div className={styles.orderInfo}>
+                    <span className={styles.orderIcon}>{getStatusIcon(order.status)}</span>
+                    <div className={styles.orderDetails}>
+                      <p className={styles.orderNumber}>{order.orderNumber}</p>
+                      <span className={styles.itemCount}>{order.items.length} items</span>
+                    </div>
+                  </div>
+                  <div className={styles.customerCell}>
+                    <span>{getCustomerTypeIcon(order.customerType)}</span>
+                    <span>{order.customerName}</span>
+                  </div>
+                  <div className={styles.cellText}>{formatDate(order.orderDate)}</div>
+                  <div className={styles.cellText}>{formatDate(order.deliveryDate)}</div>
+                  <div className={styles.cellHighlight}>{formatCurrency(order.totalAmount)}</div>
+                  <div className={`${styles.statusBadge} ${styles[order.status.toLowerCase()]}`}>
+                    {order.status}
+                  </div>
+                  <div className={styles.rowActions}>
+                    <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); handleEditOrder(order); }}>
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* Cards View - Limited */
+          <div className={styles.ordersGrid}>
+            {filteredOrders.slice(0, 12).map((order) => {
+              const daysUntilDelivery = getDaysUntilDelivery(order.deliveryDate);
+              return (
+                <Card key={order.id} className={styles.orderCard}>
+                  <div className={styles.cardHeader}>
                     <div className={styles.orderNumber}>{order.orderNumber}</div>
-                    <div className={styles.customerInfo}>
-                      <span className={styles.customerIcon}>
-                        {getCustomerTypeIcon(order.customerType)}
-                      </span>
-                      <span className={styles.customerName}>{order.customerName}</span>
+                    <div className={`${styles.statusBadge} ${styles[order.status.toLowerCase()]}`}>
+                      {order.status}
                     </div>
                   </div>
-                  <div className={styles.orderBadges}>
-                    <span
-                      className={styles.statusBadge}
-                      style={{ backgroundColor: getStatusColor(order.status) }}
-                    >
-                      {getStatusIcon(order.status)} {order.status}
-                    </span>
-                    <span
-                      className={styles.priorityBadge}
-                      style={{ backgroundColor: getPriorityColor(order.priority) }}
-                    >
-                      {order.priority}
-                    </span>
+                  <div className={styles.customerInfo}>
+                    {getCustomerTypeIcon(order.customerType)} {order.customerName}
                   </div>
-                </div>
-
-                <div className={styles.orderContent}>
-                  <div className={styles.orderMeta}>
-                    <div className={styles.metaItem}>
-                      <span className={styles.metaLabel}>Order Date:</span>
-                      <span className={styles.metaValue}>{formatDate(order.orderDate)}</span>
-                    </div>
-                    <div className={styles.metaItem}>
-                      <span className={styles.metaLabel}>Delivery:</span>
-                      <span className={`${styles.metaValue} ${daysUntilDelivery <= 1 ? styles.urgent : ''}`}>
-                        {formatDate(order.deliveryDate)}
-                        {daysUntilDelivery === 0 && ' (Today)'}
-                        {daysUntilDelivery === 1 && ' (Tomorrow)'}
-                        {daysUntilDelivery > 1 && ` (${daysUntilDelivery} days)`}
-                        {daysUntilDelivery < 0 && ` (${Math.abs(daysUntilDelivery)} days overdue)`}
-                      </span>
-                    </div>
-                    <div className={styles.metaItem}>
-                      <span className={styles.metaLabel}>Total:</span>
-                      <span className={styles.totalAmount}>{formatCurrency(order.totalAmount)}</span>
-                    </div>
+                  <div className={styles.cardMeta}>
+                    <span>📅 {formatDate(order.deliveryDate)}</span>
+                    <span className={styles.totalAmount}>{formatCurrency(order.totalAmount)}</span>
                   </div>
-
-                  <div className={styles.orderItems}>
-                    <h4>Order Items ({order.items.length}):</h4>
-                    <div className={styles.itemsList}>
-                      {order.items.slice(0, 3).map((item, index) => (
-                        <div key={index} className={styles.orderItem}>
-                          <span className={styles.itemName}>{item.productName}</span>
-                          <span className={styles.itemQuantity}>
-                            {item.quantity} {item.unit}
-                          </span>
-                          <span className={styles.itemPrice}>
-                            {formatCurrency(item.totalPrice || (item.unitPrice * item.quantity))}
-                          </span>
-                          {item.qualityGrade && (
-                            <span className={styles.itemGrade}>Grade {item.qualityGrade}</span>
-                          )}
-                        </div>
-                      ))}
-                      {order.items.length > 3 && (
-                        <div className={styles.moreItems}>
-                          +{order.items.length - 3} more items
-                        </div>
-                      )}
-                    </div>
+                  <div className={styles.orderActions}>
+                    <Button variant="secondary" size="sm" onClick={() => handleViewOrder(order)}>View</Button>
+                    <Button variant="secondary" size="sm" onClick={() => handleEditOrder(order)}>Edit</Button>
                   </div>
-
-                  {order.shippingAddress && (
-                    <div className={styles.shippingInfo}>
-                      <strong>Delivery Address:</strong> {order.shippingAddress}
-                    </div>
-                  )}
-
-                  {order.notes && (
-                    <div className={styles.orderNotes}>
-                      <strong>Notes:</strong> {order.notes}
-                    </div>
-                  )}
-                </div>
-
-                <div className={styles.orderActions}>
-                  <Button variant="secondary" size="sm" onClick={() => handleViewOrder(order)}>
-                    View
-                  </Button>
-                  <Button variant="secondary" size="sm" onClick={() => handleEditOrder(order)}>
-                    Edit
-                  </Button>
-                  {order.status === 'CONFIRMED' && (
-                    <Button variant="primary" size="sm" onClick={() => handleUpdateStatus(order, 'PREPARING')}>
-                      Start Preparing
-                    </Button>
-                  )}
-                  {order.status === 'PREPARING' && (
-                    <Button variant="primary" size="sm" onClick={() => handleUpdateStatus(order, 'READY')}>
-                      Mark Ready
-                    </Button>
-                  )}
-                  {order.status === 'READY' && (
-                    <Button variant="primary" size="sm" onClick={() => handleUpdateStatus(order, 'SHIPPED')}>
-                      Ship Order
-                    </Button>
-                  )}
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                </Card>
+              );
+            })}
+            {filteredOrders.length > 12 && (
+              <div className={styles.moreIndicator}>
+                +{filteredOrders.length - 12} more. Switch to List view.
+              </div>
+            )}
+          </div>
+        )}
 
         {filteredOrders.length === 0 && (
           <Card className={styles.emptyState}>

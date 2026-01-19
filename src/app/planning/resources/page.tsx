@@ -67,26 +67,18 @@ export default function ResourcePlanningPage() {
             if (!currentFarm?.id) {
                 throw new Error('No farm context available. Please select a farm.');
             }
-
-            // Get user data for authorization
-            const userData = localStorage.getItem('ofms_user');
             const headers: Record<string, string> = {
                 'X-Farm-ID': currentFarm.id,
                 'Cache-Control': 'no-store'
             };
 
-            if (userData) {
-                const user = JSON.parse(userData);
-                headers['Authorization'] = `Bearer ${user.id}`;
-            }
-
             console.log('🏗️ Loading resource data for farm:', currentFarm.farm_name);
 
             const [zonesRes, batchesRes, equipmentRes, inventoryRes] = await Promise.all([
-                fetch('/api/zones', { headers }),
-                fetch('/api/batches?limit=100', { headers }),
-                fetch('/api/equipment', { headers }),
-                fetch('/api/inventory', { headers })
+                fetch('/api/zones', { headers, credentials: 'include' }),
+                fetch('/api/batches?limit=100', { headers, credentials: 'include' }),
+                fetch('/api/equipment', { headers, credentials: 'include' }),
+                fetch('/api/inventory', { headers, credentials: 'include' })
             ]);
 
             const [zonesData, batchesData, equipmentData, inventoryData] = await Promise.all([

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
+import { useTenant } from '@/components/TenantProvider';
 import { Card, Button } from '@/components/ui';
 import styles from './page.module.css';
 
@@ -52,39 +53,98 @@ interface FSMAComplianceData {
 }
 
 export default function FDAFSMAPage() {
+    const { currentFarm } = useTenant();
     const [complianceData, setComplianceData] = useState<FSMAComplianceData | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
 
-    useEffect(() => {
-        fetchComplianceData();
-    }, []);
-
-    const fetchComplianceData = async () => {
+    const fetchComplianceData = useCallback(async () => {
+        if (!currentFarm?.id) return;
         try {
-            // TODO: Replace with actual farmId from context or user session
-            const farmId = 'REPLACE_WITH_FARM_ID';
-            const res = await fetch(`/api/compliance/fda-fsma?farmId=${farmId}`);
+            const res = await fetch('/api/compliance/fda-fsma', {
+                headers: {
+                    'X-Farm-ID': currentFarm.id,
+                },
+                credentials: 'include',
+            });
             if (!res.ok) {
                 throw new Error(`API error: ${res.status}`);
             }
-            const data = await res.json();
-            setComplianceData(data);
+            const result = await res.json();
+            // Transform API response to match UI interface
+            if (result.success && result.data?.length > 0) {
+                const record = result.data[0];
+                setComplianceData({
+                    id: record.id,
+                    facilityNumber: record.title || 'N/A',
+                    lastFDAInspection: record.last_check_date || new Date().toISOString(),
+                    status: record.status === 'compliant' ? 'COMPLIANT' : 'ATTENTION_REQUIRED',
+                    waterTesting: { lastTest: '', nextDue: '', status: 'PASS', parameters: [] },
+                    workerTraining: { trained: 0, total: 0, lastUpdate: '', expirations: [] },
+                    hazardAnalysis: { completed: false, lastUpdate: '', identifiedHazards: 0, controlMeasures: 0 },
+                    recordKeeping: { score: 0, upToDate: false, lastAudit: '' },
+                    correctiveActions: [],
+                });
+            } else {
+                setComplianceData(null);
+            }
         } catch (error) {
             console.error('Error fetching FSMA compliance data:', error);
             setComplianceData(null);
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentFarm?.id]);
+
+    useEffect(() => {
+        fetchComplianceData();
+    }, [fetchComplianceData]);
 
 
     const generateFSMAReport = () => {
-        alert('Generating FDA FSMA Compliance Report...');
+        if (!complianceData) return;
+        const report = {
+            title: 'FDA FSMA Compliance Report',
+            generatedAt: new Date().toISOString(),
+            facilityNumber: complianceData.facilityNumber,
+            status: complianceData.status,
+            lastInspection: complianceData.lastFDAInspection,
+            waterTesting: complianceData.waterTesting,
+            workerTraining: complianceData.workerTraining,
+            hazardAnalysis: complianceData.hazardAnalysis,
+            recordKeeping: complianceData.recordKeeping,
+            correctiveActions: complianceData.correctiveActions,
+        };
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `fsma-compliance-report-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     const generateHazardAnalysis = () => {
-        alert('Generating Hazard Analysis and Risk-Based Preventive Controls (HARPC) Report...');
+        if (!complianceData) return;
+        const report = {
+            title: 'Hazard Analysis and Risk-Based Preventive Controls (HARPC) Report',
+            generatedAt: new Date().toISOString(),
+            facilityNumber: complianceData.facilityNumber,
+            hazardAnalysis: complianceData.hazardAnalysis,
+            correctiveActions: complianceData.correctiveActions,
+            recommendations: [
+                'Review biological hazards quarterly',
+                'Update chemical hazard controls annually',
+                'Conduct physical hazard assessments monthly',
+            ],
+        };
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `harpc-report-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     if (loading) {

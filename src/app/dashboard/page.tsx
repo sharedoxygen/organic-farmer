@@ -72,19 +72,13 @@ export default function DashboardPage() {
                 throw new Error('No farm context available. Please select a farm.');
             }
 
-            // Get user data for authorization
-            const userData = localStorage.getItem('ofms_user');
             const authHeaders: Record<string, string> = {
                 'X-Farm-ID': currentFarm.id,
             };
 
-            if (userData) {
-                const user = JSON.parse(userData);
-                authHeaders['Authorization'] = `Bearer ${user.id}`;
-            }
-
             const response = await fetch('/api/analytics/dashboard', {
                 headers: authHeaders,
+                credentials: 'include',
             });
 
             clearTimeout(timeoutId);

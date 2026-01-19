@@ -53,10 +53,10 @@ export default function SeedsPage() {
             console.log('🌱 Fetching seed varieties for farm:', currentFarm.farm_name);
 
             const response = await fetch(`/api/seed-varieties?${params}`, {
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Farm-ID': currentFarm.id,
-                    'Authorization': `Bearer ${user.id}`
                 }
             });
 
@@ -131,10 +131,10 @@ export default function SeedsPage() {
 
             const response = await fetch(url, {
                 method,
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Farm-ID': currentFarm.id,
-                    'Authorization': `Bearer ${user.id}`
                 },
                 body: JSON.stringify(seedData),
             });
@@ -375,10 +375,10 @@ export default function SeedsPage() {
                                                     if (!confirm(`Delete ${seed.name}?`)) return
                                                     const res = await fetch('/api/seed-varieties', {
                                                         method: 'DELETE',
+                                                        credentials: 'include',
                                                         headers: {
                                                             'Content-Type': 'application/json',
                                                             'X-Farm-ID': currentFarm.id,
-                                                            'Authorization': `Bearer ${user.id}`
                                                         },
                                                         body: JSON.stringify({ id: seed.id })
                                                     })
@@ -403,20 +403,86 @@ export default function SeedsPage() {
 
             {activeTab === 'varieties' && (
                 <Card className={styles.varietiesSection}>
-                    <div className={styles.comingSoon}>
-                        <div className={styles.comingSoonIcon}>🧬</div>
-                        <h4>Variety Management</h4>
-                        <p>Advanced genetic tracking and variety development tools coming soon.</p>
+                    <div className={styles.varietiesHeader}>
+                        <h3>🧬 Variety Catalog</h3>
+                        <p>Browse and manage your seed variety catalog with genetic and growing information.</p>
                     </div>
+                    <div className={styles.varietiesGrid}>
+                        {seedVarieties.map((seed) => (
+                            <div key={seed.id} className={styles.varietyCard}>
+                                <div className={styles.varietyHeader}>
+                                    <h4>{seed.name}</h4>
+                                    <span className={styles.scientificName}>{seed.scientificName}</span>
+                                </div>
+                                <div className={styles.varietyStats}>
+                                    <div className={styles.stat}>
+                                        <span className={styles.statLabel}>Germination</span>
+                                        <span className={styles.statValue}>{(seed.germinationRate * 100).toFixed(0)}%</span>
+                                    </div>
+                                    <div className={styles.stat}>
+                                        <span className={styles.statLabel}>Days to Harvest</span>
+                                        <span className={styles.statValue}>{seed.daysToHarvest}</span>
+                                    </div>
+                                    <div className={styles.stat}>
+                                        <span className={styles.statLabel}>Cost/Unit</span>
+                                        <span className={styles.statValue}>${seed.costPerUnit.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                                <div className={styles.varietySupplier}>Supplier: {seed.supplier}</div>
+                            </div>
+                        ))}
+                    </div>
+                    {seedVarieties.length === 0 && (
+                        <div className={styles.emptyState}>No seed varieties found. Add varieties in the Inventory tab.</div>
+                    )}
                 </Card>
             )}
 
             {activeTab === 'orders' && (
                 <Card className={styles.ordersSection}>
-                    <div className={styles.comingSoon}>
-                        <div className={styles.comingSoonIcon}>📦</div>
-                        <h4>Seed Orders</h4>
-                        <p>Seed procurement and supplier order management coming soon.</p>
+                    <div className={styles.ordersHeader}>
+                        <h3>📦 Seed Procurement</h3>
+                        <p>Track seed orders and manage supplier relationships.</p>
+                    </div>
+                    <div className={styles.lowStockAlert}>
+                        <h4>⚠️ Low Stock Alerts</h4>
+                        <div className={styles.lowStockList}>
+                            {seedVarieties.filter(s => s.stockQuantity <= s.minStockLevel).map((seed) => (
+                                <div key={seed.id} className={styles.lowStockItem}>
+                                    <span className={styles.seedName}>{seed.name}</span>
+                                    <span className={styles.stockLevel}>
+                                        {seed.stockQuantity} / {seed.minStockLevel} min
+                                    </span>
+                                    <span className={styles.supplier}>{seed.supplier}</span>
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        onClick={() => {
+                                            setSelectedSeed(seed);
+                                            setShowEditModal(true);
+                                        }}
+                                    >
+                                        Reorder
+                                    </Button>
+                                </div>
+                            ))}
+                            {seedVarieties.filter(s => s.stockQuantity <= s.minStockLevel).length === 0 && (
+                                <div className={styles.noAlerts}>✅ All seed varieties are adequately stocked.</div>
+                            )}
+                        </div>
+                    </div>
+                    <div className={styles.supplierList}>
+                        <h4>🏢 Suppliers</h4>
+                        <div className={styles.suppliers}>
+                            {Array.from(new Set(seedVarieties.map(s => s.supplier))).map((supplier) => (
+                                <div key={supplier} className={styles.supplierCard}>
+                                    <span className={styles.supplierName}>{supplier}</span>
+                                    <span className={styles.varietyCount}>
+                                        {seedVarieties.filter(s => s.supplier === supplier).length} varieties
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </Card>
             )}

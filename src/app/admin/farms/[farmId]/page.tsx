@@ -71,7 +71,7 @@ export default function FarmDetailsPage({ params }: { params: { farmId: string }
             setError(null);
 
             // Load farm details
-            const farmResponse = await fetch(`/api/farms/${params.farmId}`);
+            const farmResponse = await fetch(`/api/farms/${params.farmId}`, { credentials: 'include' });
             if (!farmResponse.ok) {
                 throw new Error('Failed to load farm details');
             }
@@ -79,14 +79,14 @@ export default function FarmDetailsPage({ params }: { params: { farmId: string }
             setFarm(farmData.farm);
 
             // Load farm users
-            const usersResponse = await fetch(`/api/farms/${params.farmId}/users`);
+            const usersResponse = await fetch(`/api/farms/${params.farmId}/users`, { credentials: 'include' });
             if (usersResponse.ok) {
                 const usersData = await usersResponse.json();
                 setFarmUsers(usersData.users || []);
             }
 
             // Load farm statistics
-            const statsResponse = await fetch(`/api/farms/${params.farmId}/stats`);
+            const statsResponse = await fetch(`/api/farms/${params.farmId}/stats`, { credentials: 'include' });
             if (statsResponse.ok) {
                 const statsData = await statsResponse.json();
                 setFarmStats(statsData.stats);

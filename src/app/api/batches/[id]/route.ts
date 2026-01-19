@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
+import { ensureFarmAccess, HttpError } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
-
-const prisma = new PrismaClient();
 
 // PUT /api/batches/[id] - Update batch
 export async function PUT(
@@ -15,24 +14,7 @@ export async function PUT(
         const body = await request.json();
         const batchId = params.id;
 
-        // Get farm ID from headers - TODO: migrate to ensureFarmAccess
-        const farmId = request.headers.get('X-Farm-ID');
-        const authHeader = request.headers.get('Authorization');
-        const userId = authHeader ? authHeader.replace('Bearer ', '') : null;
-
-        if (!farmId) {
-            return NextResponse.json(
-                { success: false, error: 'Farm ID required' },
-                { status: 400 }
-            );
-        }
-
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, error: 'Authentication required' },
-                { status: 401 }
-            );
-        }
+        const { farmId, user } = await ensureFarmAccess(request);
 
         console.log('📦 Updating batch:', batchId, 'for farm:', farmId);
 
@@ -57,7 +39,7 @@ export async function PUT(
         // Build update data
         const updateData: any = {
             updatedAt: new Date(),
-            updatedBy: userId
+            updatedBy: user.id
         };
 
         // Only update fields that are provided
@@ -115,8 +97,14 @@ export async function PUT(
             data: updatedBatch
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error updating batch:', error);
+        if (error instanceof HttpError) {
+            return NextResponse.json(
+                { success: false, error: error.message },
+                { status: error.status }
+            );
+        }
         return NextResponse.json(
             {
                 success: false,
@@ -124,8 +112,6 @@ export async function PUT(
             },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -137,15 +123,7 @@ export async function DELETE(
     try {
         const batchId = params.id;
 
-        // Get farm ID from headers
-        const farmId = request.headers.get('X-Farm-ID');
-
-        if (!farmId) {
-            return NextResponse.json(
-                { success: false, error: 'Farm ID required' },
-                { status: 400 }
-            );
-        }
+        const { farmId } = await ensureFarmAccess(request);
 
         console.log('🗑️ Deleting batch:', batchId, 'for farm:', farmId);
 
@@ -179,8 +157,14 @@ export async function DELETE(
             message: 'Batch deleted successfully'
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error deleting batch:', error);
+        if (error instanceof HttpError) {
+            return NextResponse.json(
+                { success: false, error: error.message },
+                { status: error.status }
+            );
+        }
         return NextResponse.json(
             {
                 success: false,
@@ -188,7 +172,5 @@ export async function DELETE(
             },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
-} 
+}
