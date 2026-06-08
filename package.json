@@ -47,6 +47,7 @@
     "verify:agent": "tsx scripts/verify-agent.ts",
     "verify:all": "tsx scripts/verify-all.ts",
     "security:scan": "node scripts/scan-secrets.mjs",
+    "security:purge-history": "bash scripts/purge-secrets-from-history.sh",
     "docs:screenshots": "playwright test automation/user-guide-screenshots.spec.ts --project=chromium --workers=1",
     "mobile:configure": "FORCE_MOBILE_CONFIGURE=1 tsx scripts/configure-mobile.ts",
     "mobile:verify": "tsx scripts/verify-mobile.ts",

@@ -47,14 +47,14 @@ program
   .command('create-admin')
   .description('Create system administrator user')
   .option('-e, --email <email>', 'Admin email', 'admin@ofms.com')
-  .option('-p, --password <password>', 'Admin password', 'REDACTED_TEST_PASSWORD')
+  .option('-p, --password <password>', 'Admin password', 'process.env.TEST_ADMIN_PASSWORD || 'test_password'')
   .action(createSystemAdmin)
 
 program
   .command('reset-password')
   .description('Reset system administrator password')
   .option('-e, --email <email>', 'Admin email', 'admin@ofms.com')
-  .option('-p, --password <password>', 'New password', 'REDACTED_TEST_PASSWORD')
+  .option('-p, --password <password>', 'New password', 'process.env.TEST_ADMIN_PASSWORD || 'test_password'')
   .action(resetAdminPassword)
 
 program
@@ -134,7 +134,7 @@ async function completeSystemSetup() {
 
     // Step 2: Create system admin
     log('🔧 Setting up system admin user...')
-    await createSystemAdmin({ email: 'admin@ofms.com', password: 'REDACTED_TEST_PASSWORD' })
+    await createSystemAdmin({ email: 'admin@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'' })
 
     // Step 3: Verify setup
     await verifySystemIntegrity()
@@ -148,7 +148,7 @@ async function completeSystemSetup() {
 
     console.log('\n🔑 System Admin Login:')
     console.log('   Email: admin@ofms.com')
-    console.log('   Password: REDACTED_TEST_PASSWORD')
+    console.log('   Password: process.env.TEST_ADMIN_PASSWORD || 'test_password'')
     console.log('   URL: http://localhost:3005/auth/signin')
 
     console.log('\n🌟 System Admin Capabilities:')
@@ -169,7 +169,7 @@ async function completeSystemSetup() {
  */
 async function createSystemAdmin(cmdOptions = {}) {
   const email = cmdOptions.email || 'admin@ofms.com'
-  const password = cmdOptions.password || 'REDACTED_TEST_PASSWORD'
+  const password = cmdOptions.password || 'process.env.TEST_ADMIN_PASSWORD || 'test_password''
 
   log('🔧 Creating system administrator...')
 
@@ -241,7 +241,7 @@ async function createSystemAdmin(cmdOptions = {}) {
  */
 async function resetAdminPassword(cmdOptions = {}) {
   const email = cmdOptions.email || 'admin@ofms.com'
-  const newPassword = cmdOptions.password || 'REDACTED_TEST_PASSWORD'
+  const newPassword = cmdOptions.password || 'process.env.TEST_ADMIN_PASSWORD || 'test_password''
 
   log(`🔐 Resetting password for admin: ${email}`)
 

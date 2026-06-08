@@ -35,7 +35,7 @@ if (!options.targetDb && !process.env.DATABASE_URL) {
 }
 
 // Database connections
-const sourceDb = options.sourceDb || 'postgresql://postgres:REDACTED_DB_PASSWORD@localhost:5432/afarm_d';
+const sourceDb = options.sourceDb || 'process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database'';
 const targetDb = options.targetDb || process.env.DATABASE_URL;
 
 const sourcePrisma = new PrismaClient({

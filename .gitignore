@@ -130,10 +130,10 @@ Thumbs.db
 tmp/
 temp/
 
-# Database backups
+# Database backups and credential snapshots (never commit)
 *.backup
 backup_*.sql
-backups/pre-sanitization-*/
+backups/
 
 # Internal security audits and pre-release docs (never publish)
 private/

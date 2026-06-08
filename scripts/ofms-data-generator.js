@@ -57,11 +57,11 @@ const DATA_SIZES = {
 
 // Production Users (from create-production-users.js)
 const PRODUCTION_USERS = [
-  { id: 'admin-001', email: 'admin@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'ADMIN' },
-  { id: 'mgr-001', email: 'sarah.chen@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'MANAGER' },
-  { id: 'mgr-002', email: 'operations@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'MANAGER' },
-  { id: 'tl-001', email: 'production.lead@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'TEAM_LEAD' },
-  { id: 'sl-001', email: 'quality.lead@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'TEAM_LEAD' },
+  { id: 'admin-001', email: 'admin@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'', role: 'ADMIN' },
+  { id: 'mgr-001', email: 'sarah.chen@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'', role: 'MANAGER' },
+  { id: 'mgr-002', email: 'operations@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'', role: 'MANAGER' },
+  { id: 'tl-001', email: 'production.lead@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'', role: 'TEAM_LEAD' },
+  { id: 'sl-001', email: 'quality.lead@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'', role: 'TEAM_LEAD' },
   { id: 'tm-001', email: 'team.member@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'TEAM_MEMBER' },
   { id: 'sp-001', email: 'quality@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'QUALITY_CONTROL' },
   { id: 'tm-002', email: 'grower@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'GROWER' },

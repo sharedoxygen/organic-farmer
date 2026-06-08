@@ -14,7 +14,7 @@ class RealCRUDTest {
     this.page = await this.browser.newPage()
   }
 
-  async login(email = 'admin@ofms.com', password = 'REDACTED_TEST_PASSWORD') {
+  async login(email = 'admin@ofms.com', password = 'process.env.TEST_ADMIN_PASSWORD || 'test_password'') {
     console.log('🔐 Logging in...')
     await this.page.goto(`${this.baseURL}/auth/signin`)
     await this.page.fill('input[type="email"]', email)

@@ -1,161 +1,166 @@
-# Organic Farm Management System (OFMS)
+<p align="center">
+  <strong>Organic Farm Management System</strong><br/>
+  <em>Seed-to-sale ops · audit-ready traceability · agentic intelligence</em>
+</p>
 
-[License](LICENSE) · Next.js 14 · TypeScript · PostgreSQL · Capacitor mobile
+<p align="center">
+  <a href="LICENSE">MIT</a> ·
+  Next.js 14 · TypeScript · PostgreSQL · Capacitor 8 ·
+  <a href="docs/SYSTEM_OVERVIEW.md">Docs</a>
+</p>
 
----
+<p align="center">
+  <img src="docs/screenshots/ai-dashboard.png" alt="OFMS AI Command Center — live batch scoring and ops metrics" width="680"/>
+</p>
 
-### Strategic fit
+```mermaid
+flowchart TB
+  subgraph Surface["Grow · Ship · Prove it"]
+    direction LR
+    MC[Mission Control] --- PR[Production]
+    PR --- TR[Traceability]
+    TR --- QC[Quality & Compliance]
+    QC --- SL[Sales & Analytics]
+  end
 
-**OFMS** is a **unified** operating picture for regulated farm businesses: production, **traceability**, **compliance** (USDA organic–aligned and FDA FSMA–oriented workflows), **sales**, and **analytics** share one **PostgreSQL**-backed model so leadership is not reconciling spreadsheets when an auditor, buyer, or insurer asks for the line of sight from input to shipment. **Per-farm isolation** (multi-tenant) keeps each operation’s data in its own boundary.
+  subgraph Agent["Farm Agent — auditable by design"]
+    direction TB
+    P[Plan goals] --> T[11 live tools]
+    T --> S[Synthesize answer]
+    S --> L["AI_* audit log"]
+  end
 
-**OFMS 2.0** adds **Auditable Operations Intelligence** — a native in-app **Farm Agent** that scores batches, forecasts yield, raises alerts, optimizes resources, and **creates tasks** on live production data, with every tool call logged for due diligence. The same platform serves **USDA organic microgreens** and **cannabis cultivation** demo farms from one tenant model.
+  subgraph Field["Field & mobile"]
+    PV[Plant Vision Scan]
+  end
 
-### This repository
+  DB[(PostgreSQL · multi-tenant)]
 
-Implementers get a **unified** Next.js 14 application using the **App Router**, **TypeScript**, **Route Handlers** under `src/app/api/`, and **Prisma** to **PostgreSQL**. The product ships as one **monolith** (one codebase, one deployable). This tree does **not** include GraphQL, Redis, or LangGraph — agent orchestration is a **custom TypeScript orchestrator** in `src/lib/ai/agent/`.
+  Surface --> DB
+  Agent --> DB
+  PV --> Agent
+  MCP[MCP /api/mcp] --> Agent
+  CHAT[Assistant chat] --> Agent
 
-## Branding
+  style Agent fill:#ecfdf5,stroke:#22c55e
+  style DB fill:#f0f9ff,stroke:#0ea5e9
+```
+
+**OFMS** is one operating picture for regulated farm businesses — production, **traceability**, **compliance** (USDA organic & FDA FSMA workflows), **sales**, and **analytics** on a single **PostgreSQL** model. **OFMS 2.0** adds **Auditable Operations Intelligence**: a native **Farm Agent** that scores batches, forecasts yield, raises alerts, optimizes resources, and **creates tasks** on live data — every tool call logged for diligence. Same platform, **organic microgreens** and **cannabis** demo farms.
 
 | | |
 | --- | --- |
 | **Product** | Organic Farm Management System (OFMS) |
 | **Company** | **Shared Oxygen, LLC** |
-| **Positioning** | Operational clarity, audit-ready traceability, and practical analytics for modern growers and multi-site teams. |
+| **Scale** | **85** App Router pages · **77** API route handlers · **11** agent tools |
+| **Pattern** | Modular monolith — custom TypeScript agent orchestrator (not LangGraph) |
 
 ---
 
-## At a glance
+## Why it’s different
+
+| Capability | What you get |
+| --- | --- |
+| **Unified ops** | Batches → harvest → custody → orders in one DB — no spreadsheet reconciliation at audit time |
+| **Farm Agent** | Multi-step workflow: goal → tool chain → answer; visible in chat (`Workflow:` line) |
+| **Task creation** | Agent `create_task` writes real rows to `tasks` — write-tool classification in `toolClassification.ts` |
+| **Observability** | `AI_AGENT_RUN`, `AI_MCP_TOOL_CALL`, plant scans in `audit_logs` — real counts in `/observability` |
+| **Mobile** | Capacitor iOS/Android + **Plant Vision Scan** in the field (camera → AI health report → optional lot link) |
+| **MCP** | Streamable HTTP JSON-RPC at `POST /api/mcp` for external agent integrations |
+
+**Buyer narrative:** [AGENTIC_AI_DIFFERENTIATOR](docs/features/AGENTIC_AI_DIFFERENTIATOR.md) · [One-pager](docs/features/AGENT_ONE_PAGER.md) · [Demo flow](docs/features/AGENT_DEMO_FLOW.md)
+
+---
+
+## Quick start
+
+```bash
+git clone https://github.com/sharedoxygen/organic-farmer-app.git
+cd organic-farmer-app
+npm install && cp .env.example .env
+npx prisma migrate dev
+npm run seed:showcase    # Curry Island + Shared Oxygen demo farms
+npm run verify:all       # tsc + tests + agent on both farms
+npm run dev              # http://localhost:3005
+```
+
+**Showcase logins:** `kinkead@curryislandmicrogreens.com` · `jay.cee@sharedoxygen.com` (passwords in your `.env` / seed — never committed)
+
+**5-minute demo:** `⌘K` switch farms → **Mission Control** → **AI Command Center** → Farm Agent *“What should I focus on today?”* → **Traceability → Custody** → **Observability**
+
+---
+
+## Platform map
 
 ```mermaid
 flowchart LR
-  subgraph Client["Browser / Mobile WebView"]
-    UI[Next.js UI<br/>Mission Control · AI · Traceability]
-    Mobile[Capacitor shell<br/>iOS / Android]
+  subgraph Client["Browser / Mobile"]
+    UI[Next.js UI]
+    Cap[Capacitor WebView]
   end
 
-  subgraph Server["Next.js server"]
-    API[REST API routes<br/>67+ handlers]
-    Agent[Farm Agent orchestrator<br/>11 domain tools]
-    MCP[MCP JSON-RPC<br/>POST /api/mcp]
-    Auth[JWT session + ensureFarmAccess]
+  subgraph Server["Next.js 14"]
+    API[REST /api/*]
+    AG[Agent orchestrator]
+    MCP[MCP JSON-RPC]
+    AUTH[JWT + X-Farm-ID]
   end
 
-  subgraph Data["Data & AI"]
-    DB[(PostgreSQL<br/>Prisma ORM)]
-    Ollama[Ollama local LLM / vision]
-    OpenAI[OpenAI API<br/>optional fallback]
+  subgraph AI["Optional inference"]
+    OL[Ollama local]
+    OAI[OpenAI vision fallback]
   end
+
+  DB[(PostgreSQL)]
 
   UI --> API
-  Mobile --> UI
-  API --> Auth
-  Auth --> DB
-  API --> Agent
-  Agent --> DB
-  MCP --> Agent
-  Agent -.-> Ollama
-  Agent -.-> OpenAI
+  Cap --> UI
+  API --> AUTH --> DB
+  API --> AG --> DB
+  MCP --> AG
+  AG -.-> OL
+  AG -.-> OAI
 ```
 
-**Multi-tenancy:** tenant context and farm-scoped queries are enforced via the `X-Farm-ID` header, `TenantProvider`, and `ensureFarmAccess()` on API routes. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+### Key surfaces
 
----
-
-## What ships in the app
-
-### Operations surfaces
-
-| Area | Routes | Notes |
+| Surface | Route | Role |
 | --- | --- | --- |
-| **Mission Control** | `/mission-control` | Farm-type-aware gauges, pipeline, live agent insight |
-| **Dashboard** | `/` | Operational KPIs |
-| **AI Command Center** | `/ai-dashboard` | Live batch scoring, yield, resources (`/api/ai/dashboard`) |
-| **AI Insights** | `/ai-insights` | Forecasting, analysis modals |
-| **Observability Hub** | `/observability` | Health, latency, `AI_*` audit trail |
-| **Production** | `/production/*` | Batches, seeds, environments, harvest, post-harvest |
-| **Planning** | `/planning/*` | Calendar, crops, resources, forecasting |
-| **Traceability** | `/traceability/*` | Seed-to-sale, lots, custody, recalls |
-| **Quality & compliance** | `/quality/*`, compliance pages | QC, USDA organic, FDA FSMA |
-| **Sales & inventory** | `/sales/*`, `/inventory/*` | Orders, stock |
-| **Admin** | `/admin/*`, `/settings` | Farms, users, feedback, AI model config |
+| Mission Control | `/mission-control` | Farm-type gauges, pipeline, live agent insight |
+| AI Command Center | `/ai-dashboard` | Live scoring, yield, resources (`GET /api/ai/dashboard`) |
+| Farm Agent chat | AI widgets / `POST /api/ai/assistant` | Tool chain visible per response |
+| Observability Hub | `/observability` | Health, latency, `AI_*` trail |
+| Operations Center | `/admin/operations` | Run agent, MCP, verify, and ops from UI |
+| Plant Vision Scan | `/mobile/plant-scan` | Camera capture → vision AI → optional `batchId` linkage |
+| Traceability | `/traceability/*` | Seed-to-sale, lots, custody, recalls |
 
-**Keyboard:** `⌘K` / `Ctrl+K` opens the command palette for navigation and farm switching.
+**Keyboard:** `⌘K` / `Ctrl+K` — command palette & farm switching
 
-### Agentic AI (Farm Agent)
-
-OFMS uses a **native orchestrator** — not LangGraph or an external agent framework. Flow:
-
-```
-User message (chat or API)
-  → classifyGoal() / LLM tool planner (Ollama when available)
-  → loadFarmContext(farmId) from Prisma
-  → execute domain tools (parallel per goal plan)
-  → synthesize answer (+ optional Ollama polish)
-  → logInference(AI_AGENT_RUN) → audit_logs
-  → saveConversationTurn
-```
-
-| Layer | Path | Role |
-| --- | --- | --- |
-| Orchestrator | `src/lib/ai/agent/orchestrator.ts` | Goal classification, multi-tool execution, synthesis |
-| Tools | `src/lib/ai/agent/tools.ts` | 11 Prisma-backed domain tools |
-| Tool planner | `src/lib/ai/agent/toolPlanner.ts` | Ollama LLM tool selection; falls back to `goalPlans.ts` |
-| Farm context | `src/lib/ai/farmContextService.ts` | DB-grounded batches, tasks, orders |
-| Inference log | `src/lib/ai/inferenceLogger.ts` | `AI_*` audit trail |
-| Conversation | `src/lib/ai/conversationMemory.ts` | Turn persistence via `audit_logs` |
-
-**Agent tools (live):**
+### Agent tools (live)
 
 `get_farm_overview` · `score_batches` · `predict_yield` · `generate_alerts` · `optimize_resources` · `get_demand_forecast` · `get_quality_summary` · `analyze_plant` · `get_plant_scan_history` · `get_weather` · `create_task`
 
-`create_task` writes real rows to `tasks`; alert acknowledgments persist via `POST /api/ai/alerts`.
-
-**APIs:**
-
-| Endpoint | Purpose |
+| API | Purpose |
 | --- | --- |
-| `POST /api/ai/agent` | Full agent run with `toolsUsed` trace |
-| `GET /api/ai/agent/tools` | MCP-compatible tool catalog |
-| `POST /api/ai/assistant` | Chat → agent + conversation memory |
-| `GET /api/ai/dashboard` | AI Command Center aggregate |
-| `POST /api/mcp` | Streamable HTTP MCP (JSON-RPC: `initialize`, `tools/list`, `tools/call`) |
+| `POST /api/ai/agent` | Full agent run + `toolsUsed` trace |
+| `POST /api/ai/assistant` | Chat + conversation memory |
+| `GET /api/ai/agent/tools` | MCP-compatible catalog |
+| `POST /api/mcp` | `initialize` · `tools/list` · `tools/call` |
+| `GET /api/operations` | Operations Center registry |
 
-External agents use the same session cookie + `X-Farm-ID` auth as the UI.
+Agent flow: `classifyGoal()` / LLM planner → `loadFarmContext()` → parallel tools → synthesize → `logInference(AI_AGENT_RUN)`. Code: `src/lib/ai/agent/`.
 
-**Buyer positioning:** [docs/features/AGENTIC_AI_DIFFERENTIATOR.md](docs/features/AGENTIC_AI_DIFFERENTIATOR.md)
+---
 
-### Mobile (iOS & Android)
-
-OFMS runs on phones and tablets via **Capacitor 8**. The native shell loads the same Next.js app from your server (local LAN IP or production HTTPS).
+## Mobile
 
 ```bash
 npm run mobile:configure   # LAN IP → .env → icons → cap sync
-npm run mobile:dev         # server on 0.0.0.0:3005
+npm run mobile:dev         # 0.0.0.0:3005 for devices on Wi‑Fi
 npm run mobile:open:ios    # or mobile:open:android
-npm run mobile:verify      # audit config, assets, TypeScript
 ```
 
-**Plant Vision Scan** (`/mobile/plant-scan`) — field workers photograph a plant; vision AI returns health gauges, findings, organic treatments, and a care timeline. Optional `batchId` links scan KDEs to traceability lots.
-
-- **API:** `POST /api/ai/plant-scan` with `{ imageDataUrl, cropType, farmZone?, notes?, batchId? }`
-- **AI stack:** Ollama vision (Qwen3) → OpenAI GPT-4o → structured fallback
-
-Full setup: [docs/MOBILE.md](docs/MOBILE.md)
-
-### Showcase demo farms
-
-| Farm | Type | Owner login |
-| --- | --- | --- |
-| **Curry Island Microgreens** | USDA organic microgreens | `kinkead@curryislandmicrogreens.com` |
-| **Shared Oxygen Farms** | Cannabis cultivation | `jay.cee@sharedoxygen.com` |
-
-```bash
-npm run seed:showcase    # upsert demo data; preserves existing users (OFMS_PRESERVE_USERS=1)
-npm run verify:agent     # agent smoke test on both farms
-npm run verify:all       # tsc + unit tests + farms + agent + MCP catalog
-```
-
-**Prospect demo flow:** sign in → `⌘K` switch farms → Mission Control → AI Command Center → Farm Agent chat (*"What should I focus on today?"*) → Traceability → Observability.
+Details: [docs/MOBILE.md](docs/MOBILE.md)
 
 ---
 
@@ -163,139 +168,52 @@ npm run verify:all       # tsc + unit tests + farms + agent + MCP catalog
 
 | Layer | Technology |
 | --- | --- |
-| **Framework** | Next.js 14, React 18, App Router |
-| **Language** | TypeScript 5 |
-| **Data** | PostgreSQL, Prisma 5, row-level `farm_id` |
-| **Auth** | JWT session cookie (`ofms_session`) + `ensureFarmAccess` |
-| **UI** | CSS modules, Instrument components (gauges, meters, pipelines), Recharts |
-| **Mobile** | Capacitor 8 (`@capacitor/camera`, network, splash, status bar) |
-| **Testing** | Jest, Playwright, MSW |
-| **AI (optional)** | Custom agent orchestrator; Ollama (local); OpenAI SDK (vision fallback); `ml-regression`, `simple-statistics` for deterministic models |
+| Framework | Next.js 14, React 18, App Router |
+| Data | PostgreSQL, Prisma 5, row-level `farm_id` |
+| Auth | JWT `ofms_session` + `ensureFarmAccess()` |
+| UI | Instrument gauges/meters/pipelines, Recharts, CSS modules |
+| Mobile | Capacitor 8, `@capacitor/camera` |
+| AI | Native orchestrator; Ollama; OpenAI SDK; statistical ML |
+| Testing | Jest, Playwright, MSW |
 
 ---
 
-## Quick start
-
-```bash
-git clone <repository-url>
-cd organic-farmer-app
-npm install
-cp .env.example .env   # configure DATABASE_URL at minimum
-npx prisma migrate dev
-npm run db:seed        # or npm run seed:showcase for demo farms
-npm run dev            # http://localhost:3005
-```
-
-### Prerequisites
-
-- **Node.js** 18+ and **npm** 9+
-- **PostgreSQL** 14+
-- **Optional:** Ollama for local LLM/vision; `OPENAI_API_KEY` for cloud vision fallback
-
-### Common npm scripts
+## npm scripts
 
 | Script | Purpose |
 | --- | --- |
-| `npm run dev` | Development server (port **3005**) |
-| `npm run build` / `npm start` | Production build and start |
-| `npm run lint` / `npm run type-check` | ESLint / TypeScript |
-| `npm test` / `npm run test:e2e` | Jest / Playwright |
-| `npm run db:migrate` / `db:seed` / `db:reset` | Prisma workflows |
-| `npm run db:health` / `db:integrity:check` | Database checks |
-| `npm run seed:showcase` | Curry Island + Shared Oxygen demo data |
-| `npm run verify:agent` / `verify:all` | Agent + full stack verification |
-| `npm run security:scan` | Scan repo for leaked credentials (read-only) |
-| `npm run docs:user-guide` / `docs:screenshots` | User guide generation / Playwright screenshots |
-| `npm run mobile:*` | Capacitor configure, sync, open, verify |
-
-### Optional: local Ollama
-
-```bash
-# Pull models referenced in .env.example
-ollama pull qwen3:latest
-ollama pull deepseek-r1:latest
-```
-
-Set `OLLAMA_BASE_URL`, `OLLAMA_VISION_MODEL`, and related vars in `.env`. OFMS auto-resolves installed model tags when exact names differ.
-
----
-
-## AI features (configurable)
-
-| Capability | Implementation | Requires |
-| --- | --- | --- |
-| **Farm Agent** | Custom orchestrator + 11 tools | Database seeded; Ollama optional for LLM planner/polish |
-| **Batch scoring** | `batchScoringAI` | Active batches in DB |
-| **Yield / demand forecast** | Statistical + heuristic models | Order/batch history |
-| **Alerts** | `alertEngine` + acknowledgment pipeline | Batch + resource context |
-| **Plant Vision Scan** | `plantVisionAnalysis` | Ollama vision and/or `OPENAI_API_KEY` |
-| **Weather** | `weatherService` | External API key when configured |
-
-> End-to-end behavior depends on **which keys and endpoints are configured**. Run `npm run verify:all` after seeding to validate agent paths. Do not cite fixed accuracy numbers without validating against your environment.
+| `npm run dev` | Dev server (**3005**) |
+| `npm run seed:showcase` | Demo farms (preserves users when `OFMS_PRESERVE_USERS=1`) |
+| `npm run verify:agent` / `verify:all` | Agent + full verification |
+| `npm run security:scan` | Credential leak scan |
+| `npm run mobile:*` | Capacitor configure, sync, verify |
+| `npm run docs:user-guide` / `docs:screenshots` | User guide & Playwright captures |
 
 ---
 
 ## Security
 
-- **Never commit `.env`** — it is gitignored; use `.env.example` as the template.
-- **Scan before release:** `npm run security:scan` checks for hardcoded database URLs, API keys, and known demo passwords.
-- **Legacy sanitization:** `bash scripts/sanitize-for-open-source.sh` replaces hardcoded credentials in older scripts.
-- **Git history cleanup:** `bash scripts/clean-git-history.sh` (destructive — rewrites history; use only when preparing a public release).
-- **Showcase passwords:** set `SHOWCASE_CURRY_PASSWORD`, `SHOWCASE_DEMO_PASSWORD`, and `TEST_*_PASSWORD` in `.env` for local demo accounts — never hardcode in source.
-
-If `security:scan` reports findings under `backups/pre-sanitization-*`, remove those paths from git tracking and rotate any exposed credentials.
+Never commit `.env`. Run `npm run security:scan` before release. Showcase passwords via `SHOWCASE_*` and `TEST_*` keys in `.env.example`. History purge: `OFMS_CONFIRM_HISTORY_REWRITE=yes npm run security:purge-history` (destructive — force-push + rotate credentials after).
 
 ---
 
-## Production deployment
+## Documentation
 
-```bash
-npm run build
-npm run db:migrate:prod   # against production DATABASE_URL
-npm start                 # configure HOST, PORT, NODE_ENV
-```
-
-Operational checklist: `npm run db:health`, `npm run db:integrity:check`, `npm run verify:all` (against staging).
-
-For mobile production: deploy Next.js to HTTPS, set `CAPACITOR_SERVER_URL`, run `npm run mobile:sync`, then archive in Xcode or sign APK/AAB in Android Studio.
-
-See [docs/INSTALLATION.md](docs/INSTALLATION.md) and [docs/guides/OPERATIONS.md](docs/guides/OPERATIONS.md).
-
----
-
-## Repository layout
-
-| Path | Role |
+| Doc | Contents |
 | --- | --- |
-| `src/app/` | App Router pages and API route handlers |
-| `src/components/` | React UI, Instrument widgets, mobile providers |
-| `src/lib/ai/` | Agent orchestrator, inference logging, vision, scoring |
-| `src/lib/mobile/` | Capacitor platform detection and init |
-| `prisma/` | Schema, migrations, seeds |
-| `scripts/` | Verification, mobile config, doc generation, `scan-secrets.mjs` |
-| `docs/` | Architecture, mobile, AI use cases, buyer differentiator |
-| `ios/`, `android/` | Capacitor native projects |
-| `automation/` | Playwright flows and test helpers |
-
----
-
-## Documentation index
-
-| Document | Contents |
-| --- | --- |
-| [docs/SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md) | OFMS 2.0 executive summary |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Request flow, modules, agent layer |
-| [docs/MOBILE.md](docs/MOBILE.md) | Capacitor setup, Plant Vision Scan |
-| [docs/features/AGENTIC_AI_DIFFERENTIATOR.md](docs/features/AGENTIC_AI_DIFFERENTIATOR.md) | Buyer positioning, honest boundaries |
-| [docs/features/AI_USE_CASES.md](docs/features/AI_USE_CASES.md) | Live vs roadmap AI scenarios |
-| [docs/INSTALLATION.md](docs/INSTALLATION.md) | Install and environment detail |
+| [SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md) | Executive summary |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Modules, request flow, agent layer |
+| [MOBILE.md](docs/MOBILE.md) | Capacitor & Plant Vision |
+| [AI_USE_CASES.md](docs/features/AI_USE_CASES.md) | Live vs roadmap |
+| [INSTALLATION.md](docs/INSTALLATION.md) | Deploy & environment |
 
 ---
 
 ## License
 
-[MIT License](LICENSE) — see the file for full terms.
+[MIT License](LICENSE)
 
----
-
-**Shared Oxygen, LLC** — *OFMS: traceability, compliance, agentic operations intelligence, and day-to-day farm management in one place.*
+<p align="center">
+  <strong>Shared Oxygen, LLC</strong><br/>
+  <sub>Traceability · compliance · agentic ops — in one place.</sub>
+</p>

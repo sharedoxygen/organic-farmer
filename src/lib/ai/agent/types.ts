@@ -5,6 +5,8 @@ export interface AgentContext {
   userId: string
   userName: string
   farmContext: FarmContext
+  /** When false, write tools return a pending proposal instead of mutating data. */
+  confirmWrites?: boolean
 }
 
 export interface ToolInvocation {

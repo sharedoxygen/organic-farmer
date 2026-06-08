@@ -43,8 +43,8 @@ program
 const options = program.opts();
 
 // Database connections
-const sourceDb = options.sourceDb || process.env.DATABASE_URL || 'postgresql://postgres:REDACTED_DB_PASSWORD@localhost:5432/afarm_d';
-const targetDb = options.targetDb || process.env.DATABASE_URL || 'postgresql://postgres:REDACTED_DB_PASSWORD@localhost:5432/afarm_d';
+const sourceDb = options.sourceDb || process.env.DATABASE_URL || 'process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database'';
+const targetDb = options.targetDb || process.env.DATABASE_URL || 'process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database'';
 
 const sourcePrisma = new PrismaClient({
   datasources: { db: { url: sourceDb } }
@@ -184,7 +184,7 @@ const CURRENT_AFARM_D_DATA = {
       permissions: JSON.stringify(['ALL']),
       isActive: true,
       employeeId: 'EMP001',
-      password: 'REDACTED_TEST_PASSWORD' // Will be hashed
+      password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'' // Will be hashed
     },
     {
       id: 'mgr-001',
@@ -198,7 +198,7 @@ const CURRENT_AFARM_D_DATA = {
       permissions: JSON.stringify(['MANAGE_PRODUCTION', 'MANAGE_USERS']),
       isActive: true,
       employeeId: 'EMP002',
-      password: 'REDACTED_TEST_PASSWORD'
+      password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password''
     },
     {
       id: 'grower-001',

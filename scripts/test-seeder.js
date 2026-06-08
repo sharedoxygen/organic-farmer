@@ -7,7 +7,7 @@
 const { PrismaClient } = require('@prisma/client');
 
 // Use the target database from environment or default
-const targetDb = process.env.DATABASE_URL || 'postgresql://postgres:REDACTED_DB_PASSWORD@localhost:5432/afarm_t';
+const targetDb = process.env.DATABASE_URL || 'process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database'';
 
 console.log('🌱 Testing OFMS Data Seeder');
 console.log(`Target database: ${targetDb}`);

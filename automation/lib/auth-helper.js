@@ -6,9 +6,9 @@
 class AuthHelper {
   constructor() {
     this.defaultCredentials = {
-      admin: { email: 'admin@ofms.com', password: 'REDACTED_TEST_PASSWORD' },
-      manager: { email: 'manager@ofms.com', password: 'REDACTED_TEST_PASSWORD' },
-      worker: { email: 'worker@ofms.com', password: 'REDACTED_TEST_PASSWORD' },
+      admin: { email: 'admin@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'' },
+      manager: { email: 'manager@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'' },
+      worker: { email: 'worker@ofms.com', password: 'process.env.TEST_ADMIN_PASSWORD || 'test_password'' },
     }
   }
 

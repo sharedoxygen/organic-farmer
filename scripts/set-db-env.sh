@@ -8,8 +8,8 @@
 
 # --- Configuration ---
 # IMPORTANT: Update these URLs if your database connection details are different.
-DEV_DB_URL="postgresql://postgres:REDACTED_DB_PASSWORD@localhost:5432/afarm_d"
-TEST_DB_URL="postgresql://postgres:REDACTED_DB_PASSWORD@localhost:5432/afarm_t"
+DEV_DB_URL="process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database'"
+TEST_DB_URL="process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database'"
 
 # --- Logic ---
 if [ "$1" == "dev" ]; then

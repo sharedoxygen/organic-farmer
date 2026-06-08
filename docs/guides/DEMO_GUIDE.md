@@ -37,17 +37,17 @@ All demo data is persisted in the PostgreSQL database with complete referential 
 
 ### Login URL: http://localhost:3005/auth/signin
 
-| Role | Email | Password | Responsibilities |
-|------|-------|----------|------------------|
-| **System Administrator** | admin@ofms.com | REDACTED_TEST_PASSWORD | Full system access, user management, system configuration |
-| **Farm Manager** | sarah.chen@ofms.com | REDACTED_TEST_PASSWORD | Operations oversight, planning, resource allocation |
-| **Operations Manager** | operations@ofms.com | REDACTED_TEST_PASSWORD | Daily operations, staff coordination |
-| **Production Lead** | production.lead@ofms.com | REDACTED_TEST_PASSWORD | Production scheduling, batch management |
-| **Quality Lead** | quality.lead@ofms.com | REDACTED_TEST_PASSWORD | Quality assurance, compliance management |
-| **Team Member** | team.member@ofms.com | REDACTED_TEST_PASSWORD | Daily production tasks |
-| **Quality Specialist** | quality@ofms.com | REDACTED_TEST_PASSWORD | Quality inspections, testing |
-| **Senior Grower** | grower@ofms.com | REDACTED_TEST_PASSWORD | Crop management, growing operations |
-| **Harvest Specialist** | harvest@ofms.com | REDACTED_TEST_PASSWORD | Harvesting operations, yield tracking |
+| Role | Email | Password (`.env`) | Responsibilities |
+|------|-------|-------------------|------------------|
+| **System Administrator** | admin@ofms.com | `TEST_ADMIN_PASSWORD` | Full system access, user management, system configuration |
+| **Farm Manager** | sarah.chen@ofms.com | `TEST_MANAGER_PASSWORD` | Operations oversight, planning, resource allocation |
+| **Operations Manager** | operations@ofms.com | `TEST_MANAGER_PASSWORD` | Daily operations, staff coordination |
+| **Production Lead** | production.lead@ofms.com | `TEST_LEAD_PASSWORD` | Production scheduling, batch management |
+| **Quality Lead** | quality.lead@ofms.com | `TEST_LEAD_PASSWORD` | Quality assurance, compliance management |
+| **Team Member** | team.member@ofms.com | `TEST_WORKER_PASSWORD` | Daily production tasks |
+| **Quality Specialist** | quality@ofms.com | `TEST_WORKER_PASSWORD` | Quality inspections, testing |
+| **Senior Grower** | grower@ofms.com | `TEST_WORKER_PASSWORD` | Crop management, growing operations |
+| **Harvest Specialist** | harvest@ofms.com | `TEST_WORKER_PASSWORD` | Harvesting operations, yield tracking |
 
 ---
 

@@ -76,6 +76,7 @@ These claims are backed by code and `npm run verify:agent` (both demo farms):
 3. Farm Agent chat — ask *“What should I focus on today?”* — show tool chain + answer.
 4. Traceability → Custody / Seed-to-Sale — same farm as agent context.
 5. Observability — `AI_*` events after agent runs.
+6. **Sales kit** — [AGENT_ONE_PAGER.md](./AGENT_ONE_PAGER.md) · [AGENT_DEMO_FLOW.md](./AGENT_DEMO_FLOW.md) · [AGENT_ARCHITECTURE_DILIGENCE.md](./AGENT_ARCHITECTURE_DILIGENCE.md)
 
 ---
 

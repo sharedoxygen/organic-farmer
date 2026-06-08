@@ -17,21 +17,21 @@
   "users": {
     "admin": {
       "email": "admin@ofms.com",
-      "password": "REDACTED_TEST_PASSWORD",
+      "password": "process.env.TEST_ADMIN_PASSWORD || 'test_password'",
       "firstName": "System",
       "lastName": "Administrator",
       "role": "ADMIN"
     },
     "manager": {
       "email": "manager@ofms.com",
-      "password": "REDACTED_TEST_PASSWORD",
+      "password": "process.env.TEST_ADMIN_PASSWORD || 'test_password'",
       "firstName": "Farm",
       "lastName": "Manager",
       "role": "MANAGER"
     },
     "worker": {
       "email": "worker@ofms.com",
-      "password": "REDACTED_TEST_PASSWORD",
+      "password": "process.env.TEST_ADMIN_PASSWORD || 'test_password'",
       "firstName": "Farm",
       "lastName": "Worker",
       "role": "WORKER"
@@ -258,7 +258,7 @@
   "testScenarios": {
     "login": {
       "validCredentials": [
-        { "email": "admin@ofms.com", "password": "REDACTED_TEST_PASSWORD" }
+        { "email": "admin@ofms.com", "password": "process.env.TEST_ADMIN_PASSWORD || 'test_password'" }
       ],
       "invalidCredentials": [
         { "email": "invalid@test.com", "password": "wrongpassword" },

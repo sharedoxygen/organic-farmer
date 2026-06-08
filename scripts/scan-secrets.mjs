@@ -174,6 +174,9 @@ function scanFile(rel) {
     if (rule.id === 'env-file-tracked') continue
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
+      if (/REDACTED_(?:DB_PASSWORD|TEST_PASSWORD|SHOWCASE_PASSWORD)/.test(line)) {
+        continue
+      }
       rule.re.lastIndex = 0
       let match
       while ((match = rule.re.exec(line)) !== null) {

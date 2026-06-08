@@ -397,6 +397,13 @@ export const agentTools: Record<string, AgentTool> = {
         ? new Date(String(params.dueDate))
         : new Date(Date.now() + 86400000)
 
+      if (!ctx.confirmWrites) {
+        return {
+          summary: `Proposed task: ${title}`,
+          data: { pending: true, title, description, dueDate: dueDate.toISOString() },
+        }
+      }
+
       const task = await prisma.tasks.create({
         data: {
           id: `task-agent-${Date.now()}`,
