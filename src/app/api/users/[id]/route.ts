@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 
 interface UpdateUserRequest {
@@ -160,11 +160,7 @@ export async function GET(
         return NextResponse.json(formattedUser);
 
     } catch (error) {
-        console.error('Error fetching user:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch user' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch user');
     }
 }
 
@@ -372,11 +368,7 @@ export async function DELETE(
         });
 
     } catch (error) {
-        console.error('Error deleting user:', error);
-        return NextResponse.json(
-            { error: 'Failed to delete user' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete user');
     }
 }
 

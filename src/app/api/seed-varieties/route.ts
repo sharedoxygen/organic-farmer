@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // 🔧 Fix Next.js static generation error
 // This route uses request.headers so it must be dynamic
@@ -119,16 +119,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error fetching seed varieties:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to fetch seed varieties',
-                data: []
-            },
-            { status: 500 }
-        );
-    }
+    return errorResponse(error, 'Failed to fetch seed varieties');
+  }
 }
 
 // POST /api/seed-varieties - Create new seed variety
@@ -202,15 +194,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error creating seed variety:', error);
-
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to create seed variety'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create seed variety');
     }
 }
 

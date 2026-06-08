@@ -73,10 +73,15 @@ async function checkKinkeadUser() {
         console.log(`   Length: ${passwordHash.length} characters`);
         
         if (isHashed) {
-            // Test the password
-            const testPassword = 'REDACTED_SHOWCASE_PASSWORD';
-            const isValid = await bcrypt.compare(testPassword, passwordHash);
-            console.log(`   Test password "${testPassword}": ${isValid ? '✅ VALID' : '❌ INVALID'}`);
+            const testPassword =
+                process.env.SHOWCASE_CURRY_PASSWORD ||
+                process.env.TEST_ADMIN_PASSWORD;
+            if (testPassword) {
+                const isValid = await bcrypt.compare(testPassword, passwordHash);
+                console.log(`   Env password check: ${isValid ? '✅ VALID' : '❌ INVALID'}`);
+            } else {
+                console.log('   Set SHOWCASE_CURRY_PASSWORD or TEST_ADMIN_PASSWORD to verify');
+            }
         }
 
         // Check farm associations

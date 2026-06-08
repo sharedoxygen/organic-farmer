@@ -1,64 +1,61 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
-import { ensureFarmAccess, HttpError } from '@/lib/middleware/requestGuards'
+import { NextRequest, NextResponse } from 'next/server';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
+import { createCustodyEvent, listCustodyEvents } from '@/lib/services/custodyService';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
-  try {
-    const { farmId } = await ensureFarmAccess(request)
-    const { searchParams } = new URL(request.url)
-    const entityType = searchParams.get('entityType') || undefined
-    const entityId = searchParams.get('entityId') || undefined
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '100')
+    try {
+        const { farmId } = await ensureFarmAccess(request);
+        const { searchParams } = new URL(request.url);
 
-    const where: any = { farm_id: farmId }
-    if (entityType) where.entityType = entityType
-    if (entityId) where.entityId = entityId
+        const entityType = searchParams.get('entityType') || undefined;
+        const entityId = searchParams.get('entityId') || undefined;
+        const page = parseInt(searchParams.get('page') || '1', 10);
+        const limit = parseInt(searchParams.get('limit') || '100', 10);
+        const order = (searchParams.get('order') === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc';
 
-    const [total, data] = await Promise.all([
-      prisma.custody_events.count({ where }),
-      prisma.custody_events.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { timestamp: 'asc' },
-      }),
-    ])
+        const result = await listCustodyEvents({
+            farmId,
+            entityType,
+            entityId,
+            page,
+            limit,
+            order,
+        });
 
-    return NextResponse.json({ success: true, data, pagination: { page, limit, total, pages: Math.ceil(total / limit) } })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to fetch custody events' }, { status })
-  }
+        return NextResponse.json({ success: true, ...result });
+    } catch (error) {
+        return errorResponse(error, 'Failed to fetch custody events', 'Error fetching custody events:');
+    }
 }
 
 export async function POST(request: NextRequest) {
-  try {
-    const { user, farmId } = await ensureFarmAccess(request)
-    const body = await request.json()
-    if (!body.entityType || !body.entityId || !body.stage) {
-      return NextResponse.json({ success: false, error: 'entityType, entityId and stage are required' }, { status: 400 })
+    try {
+        const { user, farmId } = await ensureFarmAccess(request);
+        const body = await request.json();
+
+        if (!body.entityType || !body.entityId || !body.stage) {
+            return NextResponse.json(
+                { success: false, error: 'entityType, entityId, and stage are required' },
+                { status: 400 }
+            );
+        }
+
+        const data = await createCustodyEvent({
+            farmId,
+            userId: user.id,
+            entityType: body.entityType,
+            entityId: body.entityId,
+            stage: body.stage,
+            location: body.location,
+            notes: body.notes,
+            signature: body.signature,
+            timestamp: body.timestamp ? new Date(body.timestamp) : undefined,
+        });
+
+        return NextResponse.json({ success: true, data });
+    } catch (error) {
+        return errorResponse(error, 'Failed to create custody event', 'Error creating custody event:');
     }
-    const created = await prisma.custody_events.create({
-      data: {
-        farm_id: farmId,
-        entityType: body.entityType,
-        entityId: body.entityId,
-        stage: body.stage,
-        timestamp: body.timestamp ? new Date(body.timestamp) : new Date(),
-        performedBy: user.id,
-        location: body.location ?? null,
-        signature: body.signature ?? null,
-        notes: body.notes ?? null,
-      },
-    })
-    return NextResponse.json({ success: true, data: created })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to create custody event' }, { status })
-  }
 }
-
-

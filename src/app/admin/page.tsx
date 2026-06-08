@@ -176,6 +176,17 @@ export default function AdminDashboard() {
     };
 
     const adminCategories = [
+        {
+            id: 'operations-center',
+            title: 'Operations Center',
+            description: 'Run OFMS CLI utilities from the UI — agent verify, mobile audit, seeds, MCP tools, and more.',
+            icon: '⚙️',
+            action: 'Open',
+            href: '/admin/operations',
+            category: 'Platform',
+            show: isAdmin || isGlobalAdmin,
+            stats: 'Parameterized CLI execution'
+        },
         // Farm Management
         {
             id: 'farm-management',

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import PartyService from '@/lib/services/partyService';
 import crypto from 'crypto';
 
@@ -368,14 +368,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error creating customer:', error);
-
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to create customer'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create customer');
     }
 } 

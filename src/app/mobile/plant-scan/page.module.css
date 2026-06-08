@@ -1,0 +1,251 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2.5rem;
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #059669;
+  margin-bottom: 0.35rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.header p {
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.95rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.capture {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.captureBtn {
+  width: 100%;
+  border: 2px dashed rgba(34, 197, 94, 0.4);
+  border-radius: 1rem;
+  background: rgba(34, 197, 94, 0.04);
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  min-height: 280px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.captureBtn:hover {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.capturePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 3rem 1.5rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.cameraIcon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.capturePlaceholder strong {
+  color: var(--text-primary, #111827);
+  font-size: 1.1rem;
+}
+
+.preview {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border-subtle, #e5e7eb);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.field select,
+.field textarea {
+  font-weight: 400;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle, #e5e7eb);
+  background: var(--bg-canvas, #fff);
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 3rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.primaryBtn {
+  flex: 1;
+  min-width: 10rem;
+  padding: 0.85rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #22c55e, #059669);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle, #e5e7eb);
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.analyzing {
+  text-align: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.analyzingPhoto {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 1rem;
+  margin: 0 auto 1.5rem;
+  display: block;
+  box-shadow: 0 8px 32px rgba(34, 197, 94, 0.25);
+}
+
+.scanPulse {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 1rem;
+  border: 2px solid #22c55e;
+  animation: pulse 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+}
+
+.analyzing h2 {
+  margin-bottom: 0.5rem;
+}
+
+.analyzing p {
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 1.25rem;
+}
+
+.analyzingSteps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.analyzingSteps span {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.1);
+  animation: fadeStep 2s ease-in-out infinite;
+}
+
+.analyzingSteps span:nth-child(2) { animation-delay: 0.4s; }
+.analyzingSteps span:nth-child(3) { animation-delay: 0.8s; }
+
+@keyframes fadeStep {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.resultsActions {
+  display: flex;
+  justify-content: center;
+}
+
+.batchLink {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 0.25rem;
+  padding: 0.75rem 1rem;
+  background: rgba(5, 150, 105, 0.08);
+  border-radius: 0.5rem;
+}
+
+.inlineLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #059669;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}

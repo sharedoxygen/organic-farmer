@@ -101,6 +101,39 @@ export default function PostHarvestHandlingPage() {
         });
     };
 
+    const handleViewDetails = (taskId: string) => {
+        router.push(`/production/batches/${taskId}`);
+    };
+
+    const handleUpdateStatus = async (taskId: string, newStatus: 'processing' | 'packaged' | 'stored') => {
+        if (!currentFarm?.id) return;
+
+        try {
+            const response = await fetch(`/api/batches/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Farm-ID': currentFarm.id,
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    status: newStatus === 'stored' ? 'STORED' : newStatus === 'packaged' ? 'PACKAGED' : 'PROCESSING'
+                })
+            });
+
+            if (response.ok) {
+                // Update local state
+                setTasks(prev => prev.map(task =>
+                    task.id === taskId ? { ...task, status: newStatus } : task
+                ));
+            } else {
+                console.error('Failed to update status');
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
     if (loading || isAuthLoading) {
         return (
             <div className={styles.container}>
@@ -220,15 +253,15 @@ export default function PostHarvestHandlingPage() {
                         </div>
                         <div className={styles.taskActions}>
                             {task.status === 'pending' && (
-                                <Button variant="primary" size="sm">Start Processing</Button>
+                                <Button variant="primary" size="sm" onClick={() => handleUpdateStatus(task.id, 'processing')}>Start Processing</Button>
                             )}
                             {task.status === 'processing' && (
-                                <Button variant="primary" size="sm">Mark as Packaged</Button>
+                                <Button variant="primary" size="sm" onClick={() => handleUpdateStatus(task.id, 'packaged')}>Mark as Packaged</Button>
                             )}
                             {task.status === 'packaged' && (
-                                <Button variant="primary" size="sm">Move to Storage</Button>
+                                <Button variant="primary" size="sm" onClick={() => handleUpdateStatus(task.id, 'stored')}>Move to Storage</Button>
                             )}
-                            <Button variant="secondary" size="sm">View Details</Button>
+                            <Button variant="secondary" size="sm" onClick={() => handleViewDetails(task.id)}>View Details</Button>
                         </div>
                     </Card>
                 ))}

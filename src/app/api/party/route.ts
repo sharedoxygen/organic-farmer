@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import PartyService from '@/lib/services/partyService';
 
 export const dynamic = 'force-dynamic';
@@ -97,14 +97,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error creating party:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to create party'
-      },
-      { status: 500 }
-    );
-  }
+        return errorResponse(error, 'Failed to create party');
+    }
 }
 

@@ -55,11 +55,7 @@ export default function DemandForecastingPage() {
                 const data = await response.json();
                 console.log('✅ Forecasts loaded:', data.count, 'forecasts');
 
-                // Since the API returns empty data with TODO, let's create some sample data structure
-                // for demonstration until the full system is implemented
-                const sampleForecasts: DemandForecast[] = [];
-
-                setForecasts(data.success ? data.data : sampleForecasts);
+                setForecasts(data.success ? data.data : []);
             } else {
                 console.error('Failed to fetch forecasts');
                 setForecasts([]);

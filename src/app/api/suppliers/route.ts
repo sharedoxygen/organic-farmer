@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 export async function GET(req: NextRequest) {
     try {
@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ success: true, data: supplier }, { status: 201 });
     } catch (error) {
-        console.error('POST /api/suppliers error:', error);
-        return NextResponse.json({ error: 'Failed to create supplier' }, { status: 500 });
+        return errorResponse(error, 'Failed to create supplier');
     }
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // 🔧 Fix Next.js static generation error
 // This route uses request.headers so it must be dynamic
@@ -60,11 +60,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error fetching growing environments:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to fetch growing environments' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch growing environments', 'Error fetching growing environments:');
     }
 }
 
@@ -124,25 +120,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error creating growing environment:', error);
-        const message = error instanceof Error ? error.message : 'Failed to create growing environment'
-        return NextResponse.json(
-            { success: false, error: message },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create growing environment', 'Error creating growing environment:');
     }
 }
 
 // PUT /api/environments/[id] - Update growing environment
 export async function PUT(request: NextRequest): Promise<NextResponse> {
     try {
-        const farmId = request.headers.get('X-Farm-ID');
-        if (!farmId) {
-            return NextResponse.json(
-                { success: false, error: 'Farm ID required' },
-                { status: 400 }
-            );
-        }
+        const { farmId } = await ensureFarmAccess(request);
 
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
@@ -189,24 +174,14 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error updating growing environment:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to update growing environment' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update growing environment', 'Error updating growing environment:');
     }
 }
 
 // DELETE /api/environments/[id] - Delete growing environment
 export async function DELETE(request: NextRequest): Promise<NextResponse> {
     try {
-        const farmId = request.headers.get('X-Farm-ID');
-        if (!farmId) {
-            return NextResponse.json(
-                { success: false, error: 'Farm ID required' },
-                { status: 400 }
-            );
-        }
+        const { farmId } = await ensureFarmAccess(request);
 
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
@@ -248,10 +223,6 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error deleting growing environment:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to delete growing environment' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete growing environment', 'Error deleting growing environment:');
     }
 } 

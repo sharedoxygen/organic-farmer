@@ -27,6 +27,13 @@ interface NavItem {
 const navigationItems: NavItem[] = [
     // ===== STEP 1: OVERVIEW =====
     {
+        id: 'mission-control',
+        label: 'Mission Control',
+        href: '/mission-control',
+        icon: '🎯',
+        badge: 'NEW',
+    },
+    {
         id: 'dashboard',
         label: 'Dashboard',
         href: '/dashboard',
@@ -364,6 +371,13 @@ const navigationItems: NavItem[] = [
         badge: 'NEW',
         children: [
             {
+                id: 'plant-scan',
+                label: 'Plant Vision Scan',
+                href: '/mobile/plant-scan',
+                icon: '📷',
+                badge: 'MOBILE',
+            },
+            {
                 id: 'ai-dashboard',
                 label: 'AI Command Center',
                 href: '/ai-dashboard',
@@ -375,6 +389,19 @@ const navigationItems: NavItem[] = [
                 label: 'Classic Insights',
                 href: '/ai-insights',
                 icon: '📊',
+            },
+            {
+                id: 'observability',
+                label: 'Observability Hub',
+                href: '/observability',
+                icon: '📡',
+            },
+            {
+                id: 'operations-center',
+                label: 'Operations Center',
+                href: '/admin/operations',
+                icon: '⚙️',
+                badge: 'CLI',
             },
         ],
     },

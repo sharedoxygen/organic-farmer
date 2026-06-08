@@ -39,6 +39,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
                                 farm_name: farm.farm_name,
                                 business_name: farm.business_name,
                                 owner_id: farm.owner_id,
+                                settings: typeof farm.settings === 'string' ? JSON.parse(farm.settings) : farm.settings,
                                 created_at: new Date(farm.created_at),
                                 updated_at: new Date(farm.updated_at)
                             }));
@@ -53,6 +54,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
                                 farm_name: farm.name,
                                 business_name: farm.businessName,
                                 owner_id: farm.ownerId,
+                                settings: typeof farm.settings === 'string' ? JSON.parse(farm.settings) : farm.settings,
                                 created_at: new Date(farm.createdAt),
                                 updated_at: new Date(farm.updatedAt)
                             }));

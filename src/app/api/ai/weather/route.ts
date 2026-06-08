@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import { weatherService } from '@/lib/ai/weatherService';
 
 export const dynamic = 'force-dynamic';
@@ -34,11 +34,7 @@ export async function GET(request: NextRequest) {
             timestamp: new Date().toISOString(),
             farmId
         });
-    } catch (error: any) {
-        console.error('❌ Weather API error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to fetch weather' },
-            { status: 500 }
-        );
+    } catch (error) {
+        return errorResponse(error, 'Failed to fetch weather');
     }
 }

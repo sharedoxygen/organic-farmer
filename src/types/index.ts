@@ -384,6 +384,14 @@ export interface PaginationParams {
 }
 
 // Multi-tenant types
+export interface FarmSettings {
+    timezone?: string;
+    currency?: string;
+    measurementSystem?: string;
+    location?: string; // e.g., "Naples, FL" or "New York, NY"
+    farm_type?: string; // e.g., "CANNABIS_CULTIVATION" or "ORGANIC_FARMING"
+}
+
 export interface Farm {
     id: string;
     farm_name: string;
@@ -393,7 +401,7 @@ export interface Farm {
     subscription_plan?: string;
     subscription_status?: string;
     trial_ends_at?: Date;
-    settings?: any;
+    settings?: FarmSettings;
     created_at: Date;
     updated_at: Date;
 }

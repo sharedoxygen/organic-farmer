@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -118,11 +118,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error fetching team assignments:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to fetch team assignments' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch team assignments');
     }
 }
 
@@ -291,11 +287,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error creating team assignment:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to create team assignment' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create team assignment');
     }
 }
 
@@ -419,11 +411,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error updating team assignment:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to update team assignment' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update team assignment');
     }
 }
 
@@ -483,10 +471,6 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error deleting team assignment:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to delete team assignment' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete team assignment');
     }
 } 

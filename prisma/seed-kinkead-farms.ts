@@ -84,7 +84,8 @@ async function main() {
                 settings: JSON.stringify({
                     timezone: 'America/New_York',
                     currency: 'USD',
-                    measurementSystem: 'imperial'
+                    measurementSystem: 'imperial',
+                    location: 'Kinkead, VA'
                 }),
                 created_at: new Date(),
                 updated_at: new Date()

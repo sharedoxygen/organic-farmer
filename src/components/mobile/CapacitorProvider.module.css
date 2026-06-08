@@ -1,0 +1,14 @@
+.offlineBanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  padding: 0.5rem 1rem;
+  padding-top: calc(0.5rem + env(safe-area-inset-top, 0px));
+  background: #b45309;
+  color: #fffbeb;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+}

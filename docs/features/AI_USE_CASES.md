@@ -1,310 +1,115 @@
-# 🤖 AI Use Cases by Farm Type
-**Comprehensive AI Showcase for OFMS Multi-Tenant Platform**
+# AI Use Cases — Live vs Roadmap
+
+**Aligned with repository as of June 2026.** Scenarios below map to **implemented APIs** where noted; aspirational vision scenarios are marked separately.
 
 ---
 
-## 🎯 **EXECUTIVE SUMMARY**
+## Live today (verified)
 
-OFMS delivers **industry-leading AI capabilities** tailored to each farm type, demonstrating real business value through intelligent automation, predictive analytics, and computer vision.
+| Use case | API / surface | Farm types |
+|----------|---------------|------------|
+| **Agent: daily priorities** | `POST /api/ai/agent`, Farm Agent chat | Organic + cannabis |
+| **Agent: batch health scoring** | Tool `score_batches` → `batchScoringAI` | Both |
+| **Agent: yield forecast** | Tool `predict_yield` → `yieldPredictionAI` | Both |
+| **Agent: proactive alerts** | Tool `generate_alerts` → `alertEngine` | Both |
+| **Agent: resource optimization** | Tool `optimize_resources` | Both |
+| **Agent: create task** | Tool `create_task` → `tasks` table | Both |
+| **AI Command Center** | `GET /api/ai/dashboard` | Both |
+| **Mission Control insight** | `GET /api/showcase/metrics` (agent summary) | Both |
+| **Demand forecast** | `POST /api/ai/demand-forecast`, planning modal | Both |
+| **Weather + growing score** | `GET /api/ai/weather` | Both |
+| **Ollama model admin** | `/admin/utilities/ai-models` | Per farm |
+| **MCP tool catalog** | `GET /api/ai/agent/tools` | External agent integration |
+| **Conversation memory** | `AI_CONVERSATION_TURN` in `audit_logs` | Per user per farm |
+| **Audit trail** | `AI_*` actions in Observability | Both |
 
-### **AI Technology Stack**
-- **OpenAI GPT-4 Vision**: Real computer vision for disease detection
-- **Statistical ML**: Advanced demand forecasting algorithms
-- **Predictive Analytics**: Market intelligence and price optimization
-- **Intelligent Fallback**: 100% uptime with advanced modeling
+Proof: `npm run verify:all`
 
 ---
 
-## 🥬 **MICROGREENS FARMS**
-*Example: Curry Island Microgreens*
+## Microgreens (Curry Island) — demo scenarios
 
-### **AI Disease Detection Use Cases**
+### Live: operational agent briefing
 
-#### **Scenario 1: Powdery Mildew Early Detection**
 ```
-📸 Image Upload: Arugula tray showing white spots
-🤖 AI Analysis: "Powdery mildew detected with 94% confidence"
-🎯 Business Impact: Prevent $2,400 crop loss through early intervention
-💡 AI Recommendations:
-   - Reduce humidity from 68% to 55%
-   - Increase air circulation in Zone A
-   - Apply organic neem oil treatment
-   - Quarantine affected trays immediately
+User: "What should I focus on today?"
+Agent tools: get_farm_overview → score_batches → generate_alerts → optimize_resources
+Output: Active batch count, health scores, alerts, savings estimate
+UI: AI Command Center + Farm Agent chat (tool chain visible)
 ```
 
-#### **Scenario 2: Optimal Harvest Timing**
+### Live: demand planning
+
 ```
-📸 Image Upload: Pea shoots at day 8
-🤖 AI Analysis: "Optimal harvest window - 92% confidence"
-🎯 Business Impact: Maximize yield and quality for premium pricing
-💡 AI Recommendations:
-   - Harvest within 12-18 hours for peak quality
-   - Expected yield: 4.2 oz per tray
-   - Premium market price: $18/lb achievable
+Surface: Planning → Forecasting → DemandForecastModal
+API: POST /api/ai/demand-forecast
+Data: Statistical ensemble on order history
 ```
 
-### **AI Demand Forecasting Use Cases**
+### Roadmap: vision disease detection
 
-#### **Weekly Production Planning**
 ```
-📊 AI Forecast: Next 14 days
-🔥 Hot Crops: Arugula (+40% demand), Basil (+25% demand)
-📉 Declining: Radish (-15% demand seasonal)
-💰 Revenue Optimization: $3,200 additional weekly revenue
-🎯 Production Recommendations:
-   - Increase arugula production by 35 trays
-   - Reduce radish by 10 trays
-   - Add basil specialty variety for restaurant clients
-```
-
-### **AI Market Intelligence Use Cases**
-
-#### **Restaurant Client Optimization**
-```
-🍽️ Client: Farm-to-Table Bistro
-📈 AI Insights: Menu seasonality analysis
-💡 Recommendations:
-   - Spring menu launch: Increase pea shoots 200%
-   - Summer demand: Add nasturtium microgreens
-   - Fall specialty: Beet microgreens for premium pricing
-🎯 Revenue Impact: +$8,400 annual contract value
+API exists: POST /api/ai/crop-analysis (requires imageUrl)
+Primary path: Ollama vision; OpenAI module present but not default route
+UI gap: image upload flow on ai-insights page
 ```
 
 ---
 
-## 🌿 **CANNABIS CULTIVATION**
-*Example: Shared Oxygen Farms*
+## Cannabis (Shared Oxygen) — demo scenarios
 
-### **AI Disease Detection Use Cases**
+### Live: compliance-aware ops briefing
 
-#### **Scenario 1: Bud Rot Prevention**
 ```
-📸 Image Upload: Blue Dream flower week 6
-🤖 AI Analysis: "Early botrytis signs detected - 91% confidence"
-🎯 Business Impact: Prevent $15,000 harvest loss
-💡 AI Recommendations:
-   - Immediate humidity reduction to 45%
-   - Increase ventilation by 50%
-   - Remove affected branches
-   - Apply organic fungicide spray
-   - Daily monitoring for 7 days
+User: "Any critical alerts?"
+Agent: generate_alerts on live batch + resource context
+Mission Control: cannabis gauges (BCC compliance, custody pipeline)
+Traceability: /traceability/custody, /traceability/seed-to-sale
 ```
 
-#### **Scenario 2: Nutrient Deficiency Detection**
+### Live: batch scoring for cultivation
+
 ```
-📸 Image Upload: OG Kush vegetation stage
-🤖 AI Analysis: "Nitrogen deficiency - yellowing pattern 89% match"
-🎯 Business Impact: Prevent 20% yield reduction
-💡 AI Recommendations:
-   - Increase organic nitrogen by 15%
-   - Check pH levels (target 6.2-6.8)
-   - Monitor for 3-5 days
-   - Expected recovery in 7 days
+Agent tool score_batches on active flowering/veg batches
+AI Dashboard: live scores from /api/ai/dashboard
 ```
 
-### **AI Demand Forecasting Use Cases**
+### Roadmap: METRC auto-submit
 
-#### **Strain-Specific Market Demand**
 ```
-📊 AI Forecast: California BCC Licensed Market
-🔥 High Demand Strains:
-   - Blue Dream: +60% demand (holiday season)
-   - OG Kush: +35% demand (medical patients)
-   - Wedding Cake: +45% demand (recreational)
-💰 Price Optimization:
-   - Blue Dream: $3,200/lb (+$400 premium)
-   - OG Kush: $2,800/lb (stable)
-   - Wedding Cake: $3,600/lb (+$600 premium)
-🎯 Production Strategy: Adjust flower room allocation
-```
-
-### **AI Market Intelligence Use Cases**
-
-#### **Compliance & Harvest Timing**
-```
-📋 Regulatory Analysis: California BCC Updates
-🤖 AI Insights:
-   - New testing requirements: Heavy metals screening
-   - Market window: Pre-holiday demand surge
-   - Optimal harvest: October 15-25 for premium pricing
-💡 Recommendations:
-   - Schedule early testing for compliance
-   - Target harvest for peak demand window
-   - Premium packaging for holiday market
-🎯 Revenue Impact: +$45,000 seasonal bonus
+Not implemented — custody data model exists; no state API integration
 ```
 
 ---
 
-## 🏭 **HYDROPONIC FACILITIES**
-*Example: Tech-Forward Hydroponic Farm*
+## Buyer demo script (5 proof points)
 
-### **AI Disease Detection Use Cases**
-
-#### **Scenario 1: Root Rot Detection**
-```
-📸 Image Upload: NFT system root mass
-🤖 AI Analysis: "Pythium root rot detected - 87% confidence"
-🎯 Business Impact: Prevent system-wide contamination
-💡 AI Recommendations:
-   - Immediate system flush with hydrogen peroxide
-   - Replace nutrient solution
-   - Increase water temperature to 68°F
-   - Add beneficial bacteria culture
-   - Isolate affected channels
-```
-
-#### **Scenario 2: Nutrient Burn Assessment**
-```
-📸 Image Upload: Lettuce leaves showing tip burn
-🤖 AI Analysis: "Nutrient burn from excess salts - 93% confidence"
-🎯 Business Impact: Optimize nutrient efficiency, reduce waste
-💡 AI Recommendations:
-   - Reduce EC from 1.8 to 1.4
-   - Increase water changes to twice weekly
-   - Monitor PPM daily for 5 days
-   - Expected recovery in 7-10 days
-```
-
-### **AI Market Intelligence Use Cases**
-
-#### **Automated Production Scheduling**
-```
-🤖 AI Coordination: Integration with NFT systems
-📊 Market Signals: Grocery chain demand patterns
-💡 Automated Adjustments:
-   - System 1A: Switch to buttercrunch lettuce (+15% premium)
-   - System 2B: Increase basil production (restaurant demand)
-   - DWC Units: Add specialty herbs for farmer's markets
-🎯 Efficiency Gains: 25% reduction in manual planning
-```
+1. `npm run verify:all`
+2. Sign in as `kinkead@…` or `jay.cee@…`
+3. **Mission Control** — farm-type gauges + agent insight
+4. **AI Command Center** — live dashboard API
+5. Farm Agent: *"What should I focus on today?"* → show tools
+6. **Traceability → Custody** + **Observability** `AI_*` events
 
 ---
 
-## 🏢 **VERTICAL FARMS**
-*Example: Urban Vertical Growing Facility*
+## Technology stack (accurate)
 
-### **AI Disease Detection Use Cases**
-
-#### **Scenario 1: LED Burn Detection**
-```
-📸 Image Upload: Level 3 kale showing light stress
-🤖 AI Analysis: "Light burn from excessive PPFD - 91% confidence"
-🎯 Business Impact: Optimize energy costs and plant health
-💡 AI Recommendations:
-   - Reduce LED intensity by 20% on Level 3
-   - Increase distance from 12" to 16"
-   - Monitor for bleaching reversal
-   - Energy savings: $240/month
-```
-
-### **AI Market Intelligence Use Cases**
-
-#### **Multi-Level Production Optimization**
-```
-🏗️ AI Analysis: 3-level tower system
-📊 Market Intelligence:
-   - Level 1 (High light): Tomatoes (+40% restaurant demand)
-   - Level 2 (Medium): Lettuce varieties (grocery steady)
-   - Level 3 (Lower): Herbs (farmer's market premium)
-🎯 Revenue Optimization: $12,000 monthly increase
-💡 Space Efficiency: 300% yield per square foot
-```
+| Component | Status |
+|-----------|--------|
+| Native agent orchestrator | **Live** |
+| Statistical ML (demand, yield heuristics) | **Live** |
+| Ollama LLM (optional polish) | **Live** when Ollama running |
+| OpenAI GPT-4o vision | **Module exists**; not default crop-analysis path |
+| IoT sensor fusion | **Not shipped** |
+| 24/7 autonomous agents | **Not shipped** |
 
 ---
 
-## 🎨 **AI SHOWCASE SCENARIOS**
+## Competitive positioning
 
-### **Live Demo Scenarios**
-
-#### **Disease Detection Demo**
-1. **Upload Image**: Show plant with visible disease
-2. **Real-Time Analysis**: AI processes in 3-5 seconds
-3. **Confidence Score**: Display 85-95% accuracy
-4. **Treatment Plan**: Organic, USDA-compliant recommendations
-5. **Cost Savings**: Quantify prevented losses
-
-#### **Market Intelligence Demo**
-1. **Current Market**: Show real-time price data
-2. **Demand Forecast**: 14-day prediction chart
-3. **Optimization**: Production recommendations
-4. **Revenue Impact**: Dollar amounts and percentages
-5. **Competitive Edge**: vs manual planning
-
-#### **Multi-Farm Comparison**
-```
-Farm Type         | AI ROI    | Accuracy | Use Cases
-================= | ========= | ======== | =========
-Microgreens       | 340% ROI  | 94%      | 12 scenarios
-Cannabis          | 580% ROI  | 91%      | 15 scenarios  
-Hydroponic        | 290% ROI  | 89%      | 10 scenarios
-Vertical          | 450% ROI  | 92%      | 14 scenarios
-```
+See [AGENTIC_AI_DIFFERENTIATOR.md](./AGENTIC_AI_DIFFERENTIATOR.md) — **Auditable Operations Intelligence** across organic + cannabis in one platform.
 
 ---
 
-## 💼 **BUSINESS VALUE PROPOSITION**
-
-### **Quantified AI Benefits**
-
-#### **Disease Prevention**
-- **Early Detection**: 3-7 days before visible symptoms
-- **Cost Savings**: 85% reduction in crop losses
-- **Accuracy**: 89-94% detection accuracy
-- **ROI**: 300-500% return on subscription
-
-#### **Demand Forecasting**
-- **Accuracy**: 87% prediction accuracy
-- **Revenue Increase**: 15-25% through optimization
-- **Waste Reduction**: 40% less overproduction
-- **Planning Efficiency**: 75% reduction in manual work
-
-#### **Market Intelligence**
-- **Price Optimization**: 10-20% premium pricing
-- **Timing**: Optimal harvest/sales windows
-- **Competitive Edge**: Data-driven decisions
-- **Market Share**: 15-30% growth in target segments
-
----
-
-## 🚀 **COMPETITIVE ADVANTAGES**
-
-### **vs Traditional Farm Management**
-✅ **Real AI** (not hardcoded rules)  
-✅ **Computer Vision** (vs visual inspection)  
-✅ **Predictive Analytics** (vs reactive management)  
-✅ **Multi-Tenant** (vs single-farm solutions)  
-✅ **100% Uptime** (intelligent fallback systems)  
-
-### **vs Other Farm Software**
-✅ **OpenAI Integration** (cutting-edge AI)  
-✅ **Industry-Specific** (not generic IoT)  
-✅ **Organic/Compliance Focus** (USDA/FDA ready)  
-✅ **Scalable Architecture** (1000+ farms)  
-✅ **Professional UI/UX** (modern, intuitive)  
-
----
-
-## 📊 **DEMO DATA REQUIREMENTS**
-
-### **For Each Farm Type, Generate:**
-1. **20+ Plant Images**: Various health states, diseases, optimal conditions
-2. **Historical Data**: 12 months of production/sales patterns
-3. **Market Data**: Pricing trends, demand cycles, seasonal patterns
-4. **Success Stories**: Before/after AI implementation
-5. **Live Scenarios**: Real-time detection and forecasting demos
-
-### **UI/UX Requirements**
-1. **Professional Design**: Modern, clean, business-appropriate
-2. **Real-Time Updates**: Live AI analysis and results
-3. **Interactive Charts**: Demand forecasting visualizations
-4. **Mobile Responsive**: Works on tablets/phones for field use
-5. **Export Capabilities**: PDF reports, data export for stakeholders
-
----
-
-**Next Steps:**
-1. ✅ Create comprehensive demo data for each farm type
-2. ✅ Design modern, professional AI showcase UI
-3. ✅ Build interactive demo scenarios
-4. ✅ Generate marketing materials and case studies 
+*Historical aspirational scenarios (disease photos, revenue % claims) retained in git history; do not cite in sales without live demo validation.*

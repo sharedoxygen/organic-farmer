@@ -56,41 +56,7 @@ export function AlertCenter({ farmId, maxAlerts = 10, onAlertClick }: AlertCente
                 }
             } catch (error) {
                 console.error('Failed to fetch alerts:', error);
-                // Use sample alerts for demo
-                setAlerts([
-                    {
-                        id: '1',
-                        type: 'HARVEST_OPTIMAL',
-                        severity: 'HIGH',
-                        title: 'Harvest Window: Arugula B-2024-45',
-                        message: 'Optimal harvest window is today. Quality score at 92%.',
-                        aiInsight: 'AI recommends harvesting before 10 AM for best freshness',
-                        actionRequired: true,
-                        createdAt: new Date(),
-                        acknowledged: false
-                    },
-                    {
-                        id: '2',
-                        type: 'WEATHER_WARNING',
-                        severity: 'MEDIUM',
-                        title: 'Temperature Drop Expected',
-                        message: 'Low of 38°F expected tonight. Frost risk for sensitive crops.',
-                        aiInsight: 'Cover basil and tomato seedlings',
-                        actionRequired: true,
-                        createdAt: new Date(Date.now() - 3600000),
-                        acknowledged: false
-                    },
-                    {
-                        id: '3',
-                        type: 'MARKET_OPPORTUNITY',
-                        severity: 'INFO',
-                        title: 'Price Surge: Microgreens',
-                        message: 'Local restaurant demand up 25% this week.',
-                        actionRequired: false,
-                        createdAt: new Date(Date.now() - 7200000),
-                        acknowledged: false
-                    }
-                ]);
+                setAlerts([]);
             } finally {
                 setLoading(false);
             }

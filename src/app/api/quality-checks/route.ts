@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -86,16 +86,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error fetching quality checks:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to fetch quality checks',
-                data: []
-            },
-            { status: 500 }
-        );
-    }
+    return errorResponse(error, 'Failed to fetch quality checks');
+  }
 }
 
 // POST /api/quality-checks - Create new quality check
@@ -190,14 +182,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error creating quality check:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to create quality check'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create quality check');
     }
 }
 
@@ -266,13 +251,6 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('Error updating quality check:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to update quality check'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update quality check');
     }
 } 

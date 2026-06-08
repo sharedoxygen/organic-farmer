@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import { batchScoringAI, BatchHealthMetrics } from '@/lib/ai/batchScoringAI';
+import { loadFarmContext } from '@/lib/ai/farmContextService';
 
 export const dynamic = 'force-dynamic';
 
@@ -70,34 +71,55 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString(),
             farmId
         });
-    } catch (error: any) {
-        console.error('❌ Batch scoring error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to calculate batch score' },
-            { status: 500 }
-        );
+    } catch (error) {
+        return errorResponse(error, 'Failed to calculate batch score');
     }
 }
 
-// GET /api/ai/batch-scoring/compare - Compare multiple batches
+// GET /api/ai/batch-scoring/compare - Compare active batches from live DB
 export async function GET(request: NextRequest) {
     try {
         const { farmId } = await ensureFarmAccess(request);
+        const { searchParams } = new URL(request.url);
+        const limit = Math.min(20, parseInt(searchParams.get('limit') || '10', 10));
 
-        console.log(`📊 Batch comparison requested for farm ${farmId}`);
+        const ctx = await loadFarmContext(farmId);
+        const batches = ctx.activeBatches.slice(0, limit);
 
-        // In production, fetch batch data from database and compare
-        // Return sample comparison structure
+        const scored = await Promise.all(
+            batches.map(async (b) => {
+                const score = await batchScoringAI.calculateBatchScore(
+                    b.id,
+                    b.batchNumber,
+                    b.cropType,
+                    b.metrics
+                );
+                return {
+                    batchId: b.id,
+                    batchNumber: b.batchNumber,
+                    cropType: b.cropType,
+                    score,
+                };
+            })
+        );
+
+        const comparison = batchScoringAI.compareBatches(scored);
+        const avgScore =
+            scored.length > 0
+                ? Math.round(
+                      scored.reduce((s, x) => s + x.score.overallScore, 0) / scored.length
+                  )
+                : 0;
+
         return NextResponse.json({
             success: true,
-            message: 'Use POST to submit batches for comparison',
-            farmId
+            comparison,
+            avgScore,
+            batchCount: scored.length,
+            farmId,
+            timestamp: new Date().toISOString(),
         });
-    } catch (error: any) {
-        console.error('❌ Batch comparison error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to compare batches' },
-            { status: 500 }
-        );
+    } catch (error) {
+        return errorResponse(error, 'Failed to compare batches');
     }
 }

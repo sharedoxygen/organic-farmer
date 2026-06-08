@@ -3,6 +3,7 @@
  * Leverages DeepSeek-R1 for complex reasoning and Qwen3 for vision tasks
  * Advanced model selection based on task complexity
  */
+import { resolveOllamaModels } from './ollamaModelResolver'
 
 interface OllamaConfig {
     baseUrl: string;
@@ -39,13 +40,14 @@ interface CropImage {
 
 export class OllamaService {
     private config: OllamaConfig;
+    private modelsResolved = false;
 
     constructor() {
         this.config = {
             baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
             reasoningModel: process.env.OLLAMA_REASONING_MODEL || 'deepseek-r1:latest',
             visionModel: process.env.OLLAMA_VISION_MODEL || 'qwen3:latest',
-            textModel: process.env.OLLAMA_TEXT_MODEL || 'gemma3:27b',
+            textModel: process.env.OLLAMA_TEXT_MODEL || 'qwen3:32b',
             timeout: 60000 // Increased to 60 seconds for complex reasoning
         };
 
@@ -54,6 +56,37 @@ export class OllamaService {
             vision: this.config.visionModel,
             text: this.config.textModel
         });
+    }
+
+    /** Map env model names to tags installed on the Ollama host */
+    async ensureModelsResolved(): Promise<void> {
+        if (this.modelsResolved) return
+        const resolved = await resolveOllamaModels(this.config.baseUrl, {
+            reasoning: this.config.reasoningModel,
+            vision: this.config.visionModel,
+            text: this.config.textModel,
+        })
+        if (resolved.available.length > 0) {
+            this.config.reasoningModel = resolved.reasoning
+            this.config.visionModel = resolved.vision
+            this.config.textModel = resolved.text
+            if (resolved.resolved) {
+                console.log('🐳 Ollama models aligned to installed tags:', {
+                    reasoning: resolved.reasoning,
+                    vision: resolved.vision,
+                    text: resolved.text,
+                })
+            }
+        }
+        this.modelsResolved = true
+    }
+
+    getActiveModels(): Pick<OllamaConfig, 'reasoningModel' | 'visionModel' | 'textModel'> {
+        return {
+            reasoningModel: this.config.reasoningModel,
+            visionModel: this.config.visionModel,
+            textModel: this.config.textModel,
+        }
     }
 
     /**
@@ -69,6 +102,7 @@ export class OllamaService {
             if (response.ok) {
                 const data = await response.json();
                 console.log('🐳 Ollama available models:', data.models?.map((m: any) => m.name) || []);
+                await this.ensureModelsResolved();
                 return true;
             }
             return false;
@@ -82,6 +116,7 @@ export class OllamaService {
      * Generate completion using local LLM
      */
     async generateCompletion(prompt: string, model?: string): Promise<string> {
+        await this.ensureModelsResolved();
         const selectedModel = model || this.config.textModel;
 
         try {
@@ -118,7 +153,8 @@ export class OllamaService {
      * Analyze image using advanced Qwen3 model
      */
     async analyzeImage(imageUrl: string, prompt: string): Promise<string> {
-        console.log('🔍 Using Qwen3 for advanced image analysis...');
+        await this.ensureModelsResolved();
+        console.log(`🔍 Using ${this.config.visionModel} for image analysis...`);
 
         try {
             const imageData = await this.prepareImageData(imageUrl);

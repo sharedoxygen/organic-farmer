@@ -3,11 +3,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './AIComponents.module.css';
 
+interface DataCard {
+    type: string;
+    title: string;
+    content: unknown;
+}
+
 interface Message {
     id: string;
     role: 'user' | 'assistant';
     content: string;
     timestamp: Date;
+    toolsUsed?: string[];
+    dataCards?: DataCard[];
 }
 
 interface FarmAssistantChatProps {
@@ -23,7 +31,7 @@ export function FarmAssistantChat({ farmId, farmName, location = 'New York, NY' 
         {
             id: '1',
             role: 'assistant',
-            content: `👋 Hello! I'm your OFMS Farm Assistant for ${farmName}. How can I help you today?`,
+            content: `👋 Hello! I'm your OFMS Farm Agent for ${farmName}. I orchestrate live batch scoring, alerts, forecasts, and tasks. How can I help?`,
             timestamp: new Date()
         }
     ]);
@@ -76,11 +84,18 @@ export function FarmAssistantChat({ farmId, farmName, location = 'New York, NY' 
 
             if (response.ok) {
                 const data = await response.json();
+                const tools = data.response?.agent?.toolsUsed
+                    ?.filter((t: { status: string }) => t.status === 'completed')
+                    ?.map((t: { tool: string }) => t.tool) || [];
                 const assistantMessage: Message = {
                     id: (Date.now() + 1).toString(),
                     role: 'assistant',
                     content: data.response.message,
-                    timestamp: new Date()
+                    timestamp: new Date(),
+                    toolsUsed: tools.length ? tools : undefined,
+                    dataCards: data.response.dataCards?.length
+                        ? data.response.dataCards
+                        : undefined,
                 };
                 setMessages(prev => [...prev, assistantMessage]);
 
@@ -119,8 +134,8 @@ export function FarmAssistantChat({ farmId, farmName, location = 'New York, NY' 
                     <div className={styles.chatHeader}>
                         <div className={styles.chatAvatar}>🤖</div>
                         <div className={styles.chatHeaderInfo}>
-                            <h3>Farm Assistant</h3>
-                            <p>{isLoading ? 'Thinking...' : 'Online'}</p>
+                            <h3>OFMS Farm Agent</h3>
+                            <p>{isLoading ? 'Running tools...' : 'Agentic · Live data'}</p>
                         </div>
                     </div>
 
@@ -134,6 +149,21 @@ export function FarmAssistantChat({ farmId, farmName, location = 'New York, NY' 
                                 <div dangerouslySetInnerHTML={{
                                     __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>')
                                 }} />
+                                {message.toolsUsed && message.toolsUsed.length > 0 && (
+                                    <div className={styles.agentTools}>
+                                        Tools: {message.toolsUsed.join(' → ')}
+                                    </div>
+                                )}
+                                {message.dataCards && message.dataCards.length > 0 && (
+                                    <div className={styles.dataCards}>
+                                        {message.dataCards.map((card, idx) => (
+                                            <div key={idx} className={styles.dataCard}>
+                                                <strong>{card.title}</strong>
+                                                <pre>{JSON.stringify(card.content, null, 2).slice(0, 600)}{JSON.stringify(card.content).length > 600 ? '…' : ''}</pre>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 <div className={styles.messageTime}>
                                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </div>

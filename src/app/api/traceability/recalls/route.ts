@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { ensureFarmAccess, HttpError } from '@/lib/middleware/requestGuards'
+import { ensureFarmAccess, HttpError , errorResponse } from '@/lib/middleware/requestGuards'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,9 +48,8 @@ export async function GET(request: NextRequest) {
     ])
 
     return NextResponse.json({ success: true, data, pagination: { page, limit, total, pages: Math.ceil(total / limit) } })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to fetch recall cases' }, { status })
+  } catch (error) {
+    return errorResponse(error, 'Failed to fetch recall cases')
   }
 }
 
@@ -104,9 +103,8 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json({ success: true, data: created })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to create recall case' }, { status })
+  } catch (error) {
+    return errorResponse(error, 'Failed to create recall case')
   }
 }
 

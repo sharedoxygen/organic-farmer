@@ -1,76 +1,72 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
-import { alertEngine, BatchHealthData, ResourceData } from '@/lib/ai/alertEngine';
+import { NextRequest, NextResponse } from 'next/server'
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards'
+import { loadFarmContext } from '@/lib/ai/farmContextService'
+import { alertEngine } from '@/lib/ai/alertEngine'
+import { acknowledgeAlert } from '@/lib/ai/alertAcknowledgmentService'
+import { finalizeFarmAlerts } from '@/lib/ai/alertPipeline'
+import { logInference } from '@/lib/ai/inferenceLogger'
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'
 
-// GET /api/ai/alerts - Get AI-generated alerts for the farm
 export async function GET(request: NextRequest) {
-    try {
-        const { farmId } = await ensureFarmAccess(request);
-        const { searchParams } = new URL(request.url);
-        const location = searchParams.get('location') || 'New York, NY';
+  try {
+    const { farmId, user } = await ensureFarmAccess(request)
+    const farmContext = await loadFarmContext(farmId)
 
-        console.log(`⚠️ Generating AI alerts for farm ${farmId}`);
+    const rawAlerts = await alertEngine.generateFarmAlerts(
+      farmId,
+      farmContext.alertBatchData,
+      farmContext.resourceData,
+      farmContext.location
+    )
 
-        // In production, fetch real batch and resource data from database
-        // For now, use sample data structure
-        const sampleBatches: BatchHealthData[] = [];
-        const sampleResources: ResourceData[] = [];
+    const alerts = await finalizeFarmAlerts(farmId, user.id, rawAlerts)
+    const stats = alertEngine.getAlertStats(alerts)
 
-        const alerts = await alertEngine.generateFarmAlerts(
-            farmId,
-            sampleBatches,
-            sampleResources,
-            location
-        );
-
-        const stats = alertEngine.getAlertStats(alerts);
-
-        return NextResponse.json({
-            success: true,
-            alerts,
-            stats,
-            timestamp: new Date().toISOString(),
-            farmId
-        });
-    } catch (error: any) {
-        console.error('❌ Alerts API error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to generate alerts' },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json({
+      success: true,
+      alerts,
+      stats,
+      timestamp: new Date().toISOString(),
+      farmId,
+    })
+  } catch (error) {
+    return errorResponse(error, 'Failed to generate alerts')
+  }
 }
 
-// POST /api/ai/alerts/acknowledge - Acknowledge an alert
 export async function POST(request: NextRequest) {
-    try {
-        const { farmId } = await ensureFarmAccess(request);
-        const { alertId, userId } = await request.json();
+  try {
+    const { farmId, user } = await ensureFarmAccess(request)
+    const body = await request.json()
+    const alertId = body.alertId
 
-        if (!alertId) {
-            return NextResponse.json(
-                { success: false, error: 'Alert ID is required' },
-                { status: 400 }
-            );
-        }
-
-        console.log(`✅ Acknowledging alert ${alertId} for farm ${farmId}`);
-
-        // In production, update alert status in database
-        return NextResponse.json({
-            success: true,
-            alertId,
-            acknowledgedAt: new Date().toISOString(),
-            acknowledgedBy: userId,
-            farmId
-        });
-    } catch (error: any) {
-        console.error('❌ Alert acknowledge error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to acknowledge alert' },
-            { status: 500 }
-        );
+    if (!alertId) {
+      return NextResponse.json(
+        { success: false, error: 'alertId is required' },
+        { status: 400 }
+      )
     }
+
+    await acknowledgeAlert(farmId, user.id, alertId)
+
+    await logInference({
+      farmId,
+      userId: user.id,
+      action: 'AI_ALERT_ACK',
+      entity: 'Alert',
+      entityId: alertId,
+      details: { acknowledged: true, alertId },
+    })
+
+    return NextResponse.json({
+      success: true,
+      alertId,
+      acknowledged: true,
+      acknowledgedAt: new Date().toISOString(),
+      farmId,
+    })
+  } catch (error) {
+    return errorResponse(error, 'Failed to acknowledge alert')
+  }
 }

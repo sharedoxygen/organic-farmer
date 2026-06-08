@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 export async function GET(
     req: NextRequest,
@@ -55,8 +55,7 @@ export async function PUT(
 
         return NextResponse.json({ success: true, data: supplier });
     } catch (error) {
-        console.error('PUT /api/suppliers/[id] error:', error);
-        return NextResponse.json({ error: 'Failed to update supplier' }, { status: 500 });
+        return errorResponse(error, 'Failed to update supplier');
     }
 }
 
@@ -80,7 +79,6 @@ export async function DELETE(
 
         return NextResponse.json({ success: true, message: 'Supplier deleted' });
     } catch (error) {
-        console.error('DELETE /api/suppliers/[id] error:', error);
-        return NextResponse.json({ error: 'Failed to delete supplier' }, { status: 500 });
+        return errorResponse(error, 'Failed to delete supplier');
     }
 }

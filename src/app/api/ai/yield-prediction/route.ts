@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import { yieldPredictionAI } from '@/lib/ai/yieldPredictionAI';
 import { BatchHealthMetrics } from '@/lib/ai/batchScoringAI';
+import { loadFarmContext } from '@/lib/ai/farmContextService';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,39 +57,45 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString(),
             farmId
         });
-    } catch (error: any) {
-        console.error('❌ Yield prediction error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to predict yield' },
-            { status: 500 }
-        );
+    } catch (error) {
+        return errorResponse(error, 'Failed to predict yield');
     }
 }
 
-// GET /api/ai/yield-prediction/farm-forecast - Get farm-wide yield forecast
+// GET /api/ai/yield-prediction — Farm-wide yield forecast from active batches
 export async function GET(request: NextRequest) {
     try {
         const { farmId } = await ensureFarmAccess(request);
         const { searchParams } = new URL(request.url);
-        const days = parseInt(searchParams.get('days') || '30');
-        const location = searchParams.get('location') || 'New York, NY';
+        const days = parseInt(searchParams.get('days') || '30', 10);
+        const ctx = await loadFarmContext(farmId);
+        const location = searchParams.get('location') || ctx.location;
 
-        console.log(`📈 Generating farm yield forecast for ${days} days`);
+        const forecast = await yieldPredictionAI.generateFarmForecast(
+            farmId,
+            ctx.activeBatches.map((b) => ({
+                batchId: b.id,
+                batchNumber: b.batchNumber,
+                cropType: b.cropType,
+                traysUsed: Math.max(1, Math.round(b.quantity)),
+                metrics: b.metrics,
+                expectedHarvestDate:
+                    b.expectedHarvestDate || new Date(Date.now() + 7 * 86400000),
+            })),
+            days,
+            location
+        );
 
-        // In production, fetch active batches from database
-        // For now, return structure for integration
         return NextResponse.json({
             success: true,
-            message: 'Submit active batches via POST for farm forecast',
+            forecast,
             forecastDays: days,
             location,
-            farmId
+            activeBatches: ctx.activeBatches.length,
+            farmId,
+            timestamp: new Date().toISOString(),
         });
-    } catch (error: any) {
-        console.error('❌ Farm forecast error:', error);
-        return NextResponse.json(
-            { success: false, error: error?.message || 'Failed to generate forecast' },
-            { status: 500 }
-        );
+    } catch (error) {
+        return errorResponse(error, 'Failed to generate forecast');
     }
 }

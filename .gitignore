@@ -133,6 +133,10 @@ temp/
 # Database backups
 *.backup
 backup_*.sql
+backups/pre-sanitization-*/
+
+# Internal security audits and pre-release docs (never publish)
+private/
 
 # Uploads
 /uploads/
@@ -153,4 +157,14 @@ playwright/.cache/
 # MSW
 /public/mockServiceWorker.js .DS_Store
 **/.DS_Store
+
+# Capacitor — keep ios/ and android/ in git; ignore derived build artifacts
+ios/App/Pods/
+ios/App/build/
+ios/DerivedData/
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/build/
 git_promote_script.py

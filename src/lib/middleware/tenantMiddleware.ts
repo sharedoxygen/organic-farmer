@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { Farm, FarmContext } from '@/types';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/db';
+import { Farm, FarmContext, FarmSettings } from '@/types';
 
 export interface TenantRequest extends NextRequest {
     farmContext?: FarmContext;
@@ -99,7 +97,7 @@ export class TenantMiddleware {
                     subscription_plan: farm.subscription_plan ?? undefined,
                     subscription_status: farm.subscription_status ?? undefined,
                     trial_ends_at: farm.trial_ends_at ?? undefined,
-                    settings: farm.settings,
+                    settings: (farm.settings as FarmSettings | null) ?? undefined,
                     created_at: farm.created_at,
                     updated_at: farm.updated_at
                 },

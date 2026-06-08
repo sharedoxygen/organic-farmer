@@ -16,6 +16,7 @@ interface UserEditModalProps {
     onClose: () => void;
     onSuccess: (userId: string, userData: any) => Promise<void>;
     currentUserRole: Role;
+    currentUserId: string;
     existingUsers: User[];
 }
 
@@ -24,6 +25,7 @@ export function UserEditModal({
     onClose,
     onSuccess,
     currentUserRole,
+    currentUserId,
     existingUsers
 }: UserEditModalProps) {
     const [formData, setFormData] = useState({
@@ -167,7 +169,7 @@ export function UserEditModal({
         return canCreateUserWithRole(currentUserRole, role);
     });
 
-    const canEditProfile = currentUserRole === Role.ADMIN || user.id === 'current-user-id'; // TODO: Get current user ID
+    const canEditProfile = currentUserRole === Role.ADMIN || user.id === currentUserId;
 
     return (
         <div className={styles.modalOverlay} onClick={onClose}>

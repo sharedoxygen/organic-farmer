@@ -181,11 +181,8 @@ export default function SettingsPage() {
         if (setting.category === 'System Utilities' && !isGlobalAdmin) {
             return false;
         }
-        // Feedback management is available to system admins and regular admins
         if (setting.id === 'feedback-management' && !isGlobalAdmin) {
-            // For now, let's make it visible to all users to test
-            // TODO: Add proper admin role check here
-            return true;
+            return false;
         }
         return true;
     });

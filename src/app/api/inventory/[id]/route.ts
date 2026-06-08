@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -34,8 +34,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             }
         });
     } catch (error) {
-        console.error('Error fetching inventory item:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 }
 
@@ -89,8 +88,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             }
         });
     } catch (error) {
-        console.error('Error updating inventory item:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 }
 
@@ -123,7 +121,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
             }
         });
     } catch (error) {
-        console.error('Error deleting inventory item:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 } 

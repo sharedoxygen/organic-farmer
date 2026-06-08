@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -69,11 +69,7 @@ export async function GET(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error fetching crop plans:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to fetch crop plans' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch crop plans');
     }
 }
 
@@ -169,11 +165,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error creating crop plan:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to create crop plan' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create crop plan');
     }
 }
 
@@ -304,11 +296,7 @@ export async function PUT(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error updating crop plan:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to update crop plan' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update crop plan');
     }
 }
 
@@ -355,10 +343,6 @@ export async function DELETE(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error deleting crop plan:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to delete crop plan' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete crop plan');
     }
 } 

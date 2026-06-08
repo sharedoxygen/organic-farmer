@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { getAuthUser, HttpError } from '@/lib/middleware/requestGuards';
-import { isSystemAdmin } from '@/lib/utils/systemAdmin';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/db';
+import { getAuthUser, errorResponse } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin, logSystemAdminAction } from '@/lib/utils/systemAdmin';
 
 // GET /api/farms/[farmId] - Get individual farm details
 export async function GET(
@@ -83,8 +81,6 @@ export async function GET(
             { error: 'Failed to fetch farm details', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -175,7 +171,10 @@ export async function PUT(
             }
         });
 
-        console.log('✅ Farm updated successfully:', updatedFarm.farm_name);
+        logSystemAdminAction(user.id, 'FARM_UPDATED', {
+            farmId,
+            farmName: updatedFarm.farm_name,
+        }, farmId);
 
         return NextResponse.json({
             success: true,
@@ -189,8 +188,6 @@ export async function PUT(
             { error: 'Failed to update farm', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -242,7 +239,10 @@ export async function DELETE(
             }
         });
 
-        console.log('✅ Farm deleted successfully');
+        logSystemAdminAction(user.id, 'FARM_DELETED', {
+            farmId,
+            farmName: existingFarm.farm_name,
+        }, farmId);
 
         return NextResponse.json({
             success: true,
@@ -255,7 +255,5 @@ export async function DELETE(
             { error: 'Failed to delete farm', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 } 

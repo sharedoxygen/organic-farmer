@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import DataIntegrityService from '@/lib/services/dataIntegrityService';
 
 // Force this route to be dynamic (not statically generated)
@@ -76,15 +76,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
   } catch (error) {
-    console.error('Error fetching batches:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch batches',
-        data: []
-      },
-      { status: 500 }
-    );
+    return errorResponse(error, 'Failed to fetch batches');
   }
 }
 
@@ -190,13 +182,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
   } catch (error) {
-    console.error('Error creating batch:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to create batch'
-      },
-      { status: 500 }
-    );
-  }
+        return errorResponse(error, 'Failed to create batch');
+    }
 }

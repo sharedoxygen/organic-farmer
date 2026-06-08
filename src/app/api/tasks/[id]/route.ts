@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -79,8 +79,7 @@ export async function GET(
             }
         });
     } catch (error) {
-        console.error('Error fetching task:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 }
 
@@ -189,8 +188,7 @@ export async function PUT(
             }
         });
     } catch (error) {
-        console.error('Error updating task:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 }
 
@@ -230,7 +228,6 @@ export async function DELETE(
             }
         });
     } catch (error) {
-        console.error('Error deleting task:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 } 

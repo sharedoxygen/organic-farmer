@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getAuthUser, HttpError } from '@/lib/middleware/requestGuards';
 import bcrypt from 'bcryptjs';
-import { isSystemAdmin } from '@/lib/utils/systemAdmin';
+import { isSystemAdmin, logSystemAdminAction } from '@/lib/utils/systemAdmin';
 
 // use shared prisma from lib/db
 
@@ -167,7 +167,11 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        console.log('✅ Farm created successfully:', farm.farm_name);
+        logSystemAdminAction(user.id, 'FARM_CREATED', {
+            farmId,
+            farmName: farm.farm_name,
+            ownerEmail: body.owner_email,
+        }, farmId);
 
         return NextResponse.json({
             success: true,
@@ -246,8 +250,6 @@ export async function PUT(request: NextRequest) {
             { error: 'Failed to update farm', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 }
 
@@ -292,7 +294,10 @@ export async function DELETE(request: NextRequest) {
             }
         });
 
-        console.log('✅ Farm deleted successfully');
+        logSystemAdminAction(user.id, 'FARM_DELETED', {
+            farmId,
+            farmName: existingFarm.farm_name,
+        }, farmId);
 
         return NextResponse.json({
             success: true,
@@ -305,7 +310,5 @@ export async function DELETE(request: NextRequest) {
             { error: 'Failed to delete farm', details: error instanceof Error ? error.message : 'Unknown error' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
 } 

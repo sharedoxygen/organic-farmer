@@ -1,94 +1,122 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ollamaService } from '@/lib/ai/ollamaService';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { analyzePlantImage } from '@/lib/ai/plantVisionAnalysis';
+import { fetchCropAnalysisHistory } from '@/lib/ai/cropAnalysisHistory';
+import { logPlantScanAudit, resolvePlantScanBatch } from '@/lib/ai/plantScanAudit';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
-// 🔧 Dynamic route - uses request headers
 export const dynamic = 'force-dynamic';
 
-// POST /api/ai/crop-analysis - Analyze crop image for diseases
+/**
+ * POST /api/ai/crop-analysis — Plant Vision analysis (unified with /api/ai/plant-scan)
+ * Accepts imageUrl or imageDataUrl, optional batchId for traceability linkage.
+ */
 export async function POST(request: NextRequest) {
     try {
-        // 🔒 Enforce auth + farm access
-        const { farmId } = await ensureFarmAccess(request);
+        const { farmId, user } = await ensureFarmAccess(request);
+        const body = await request.json();
+        const imageDataUrl = body.imageUrl || body.imageDataUrl;
+        const { cropType, farmZone, notes, batchId } = body;
 
-        const { imageUrl, cropType, farmZone } = await request.json();
-
-        if (!imageUrl || !cropType) {
+        if (!imageDataUrl || !cropType) {
             return NextResponse.json(
-                { error: 'Image URL and crop type are required' },
+                { error: 'Image (imageUrl or imageDataUrl) and crop type are required' },
                 { status: 400 }
             );
         }
 
-        console.log(`🔍 Ollama AI analyzing ${cropType} image for diseases in farm ${farmId}...`);
+        if (!String(imageDataUrl).startsWith('data:image/')) {
+            return NextResponse.json(
+                { error: 'Image must be a base64 data URL (data:image/...)' },
+                { status: 400 }
+            );
+        }
 
-        const analysis = await ollamaService.detectDisease({
-            imageUrl,
-            cropType,
-            uploadDate: new Date(),
-            farmZone: farmZone || 'Unknown'
+        const batch = batchId
+            ? await resolvePlantScanBatch(farmId, String(batchId))
+            : null;
+
+        if (batchId && !batch) {
+            return NextResponse.json(
+                { error: 'batchId does not belong to this farm' },
+                { status: 400 }
+            );
+        }
+
+        const result = await analyzePlantImage({
+            imageDataUrl: String(imageDataUrl),
+            cropType: batch?.cropType || String(cropType),
+            farmZone: farmZone ? String(farmZone) : undefined,
+            notes: notes ? String(notes) : undefined,
+        });
+
+        await logPlantScanAudit({
+            farmId,
+            userId: user.id,
+            cropType: batch?.cropType || String(cropType),
+            result,
+            batch,
+            farmZone: farmZone ? String(farmZone) : undefined,
+            source: 'crop_analysis',
         });
 
         return NextResponse.json({
             success: true,
-            analysis,
+            result,
+            analysis: {
+                diseaseType: result.summary.diagnosis,
+                confidence: result.summary.confidence,
+                severity: result.summary.severity,
+                recommendations: result.recommendations.map((r) => r.action),
+                affectedArea: result.affectedAreaPercent,
+                organicTreatments: result.organicTreatments,
+                aiAnalysis: result.aiModel,
+            },
+            batch: batch
+                ? { id: batch.id, batchNumber: batch.batchNumber, cropType: batch.cropType }
+                : null,
             timestamp: new Date().toISOString(),
-            aiModel: 'Ollama Local AI (Qwen3 + DeepSeek-R1)',
-            farmId  // Include farm context in response
+            aiModel: result.aiModel,
+            farmId,
         }, {
             headers: {
                 'Cache-Control': 'no-store, max-age=0',
-                'X-Farm-ID': farmId
-            }
+                'X-Farm-ID': farmId,
+            },
         });
-
     } catch (error) {
         console.error('❌ AI crop analysis error:', error);
-        return NextResponse.json(
-            { error: 'AI analysis failed', details: error instanceof Error ? error.message : 'Unknown error' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'AI crop analysis failed');
     }
 }
 
-// GET /api/ai/crop-analysis/history - Get disease analysis history for a zone
+/**
+ * GET /api/ai/crop-analysis — Deprecated; use /api/ai/crop-analysis/history
+ */
 export async function GET(request: NextRequest) {
     try {
-        // 🔒 Enforce auth + farm access
         const { farmId } = await ensureFarmAccess(request);
-
         const { searchParams } = new URL(request.url);
-        const zoneId = searchParams.get('zoneId');
-        const days = parseInt(searchParams.get('days') || '30');
 
-        if (!zoneId) {
-            return NextResponse.json(
-                { error: 'Zone ID is required' },
-                { status: 400 }
-            );
+        if (searchParams.get('legacy') === '1') {
+            const days = parseInt(searchParams.get('days') || '30', 10);
+            const batchId = searchParams.get('batchId') || undefined;
+            const history = await fetchCropAnalysisHistory(farmId, { days, batchId });
+            return NextResponse.json({
+                success: true,
+                history,
+                count: history.length,
+                farmId,
+                deprecated: true,
+            });
         }
 
-        // For now, return empty history since we're using Ollama local AI
-        // TODO: Implement disease history tracking with Ollama service
-        const history: any[] = [];
-
         return NextResponse.json({
-            success: true,
-            history,
-            timestamp: new Date().toISOString(),
-            farmId
-        }, {
-            headers: {
-                'Cache-Control': 'no-store, max-age=0',
-                'X-Farm-ID': farmId
-            }
-        });
-
+            success: false,
+            error: 'Use GET /api/ai/crop-analysis/history?days=30&batchId=...',
+            migration: '/api/ai/crop-analysis/history',
+            farmId,
+        }, { status: 410 });
     } catch (error) {
-        console.error('❌ AI disease history error:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch disease history' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch disease history');
     }
-} 
+}

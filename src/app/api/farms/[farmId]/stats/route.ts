@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
+import { getAuthUser } from '@/lib/middleware/requestGuards';
+import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 
-const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic';
 
 // GET /api/farms/[farmId]/stats - Get farm statistics
 export async function GET(
@@ -10,103 +12,75 @@ export async function GET(
 ) {
     try {
         const farmId = params.farmId;
+        const user = await getAuthUser(request);
 
-        if (!farmId) {
-            return NextResponse.json(
-                { error: 'Farm ID is required' },
-                { status: 400 }
-            );
+        if (!user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        console.log('📊 Fetching farm statistics for:', farmId);
+        if (!farmId) {
+            return NextResponse.json({ error: 'Farm ID is required' }, { status: 400 });
+        }
 
-        // Get user statistics
-        const userStats = await (prisma as any).farm_users.aggregate({
-            where: {
-                farm_id: farmId
-            },
-            _count: {
-                user_id: true
+        if (!isSystemAdmin(user)) {
+            const membership = await prisma.farm_users.findFirst({
+                where: {
+                    farm_id: farmId,
+                    user_id: user.id,
+                    is_active: true,
+                },
+            });
+
+            if (!membership) {
+                return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
             }
-        });
+        }
 
-        const activeUserStats = await (prisma as any).farm_users.aggregate({
-            where: {
-                farm_id: farmId,
-                is_active: true
-            },
-            _count: {
-                user_id: true
-            }
-        });
+        const [userStats, activeUserStats, batchStats, activeBatchStats, orderStats, latestBatch, latestOrder] =
+            await Promise.all([
+                prisma.farm_users.aggregate({
+                    where: { farm_id: farmId },
+                    _count: { user_id: true },
+                }),
+                prisma.farm_users.aggregate({
+                    where: { farm_id: farmId, is_active: true },
+                    _count: { user_id: true },
+                }),
+                prisma.batches.aggregate({
+                    where: { farm_id: farmId },
+                    _count: { id: true },
+                }),
+                prisma.batches.aggregate({
+                    where: { farm_id: farmId, status: 'active' },
+                    _count: { id: true },
+                }),
+                prisma.orders.aggregate({
+                    where: { farm_id: farmId },
+                    _count: { id: true },
+                    _sum: { total: true },
+                }),
+                prisma.batches.findFirst({
+                    where: { farm_id: farmId },
+                    orderBy: { createdAt: 'desc' },
+                    select: { createdAt: true },
+                }),
+                prisma.orders.findFirst({
+                    where: { farm_id: farmId },
+                    orderBy: { createdAt: 'desc' },
+                    select: { createdAt: true },
+                }),
+            ]);
 
-        // Get batch statistics
-        const batchStats = await (prisma as any).batches.aggregate({
-            where: {
-                farm_id: farmId
-            },
-            _count: {
-                id: true
-            }
-        });
-
-        const activeBatchStats = await (prisma as any).batches.aggregate({
-            where: {
-                farm_id: farmId,
-                status: 'active'
-            },
-            _count: {
-                id: true
-            }
-        });
-
-        // Get order statistics
-        const orderStats = await (prisma as any).orders.aggregate({
-            where: {
-                farm_id: farmId
-            },
-            _count: {
-                id: true
-            },
-            _sum: {
-                total_amount: true
-            }
-        });
-
-        // Get latest activity (most recent batch or order)
-        const latestBatch = await (prisma as any).batches.findFirst({
-            where: {
-                farm_id: farmId
-            },
-            orderBy: {
-                created_at: 'desc'
-            },
-            select: {
-                created_at: true
-            }
-        });
-
-        const latestOrder = await (prisma as any).orders.findFirst({
-            where: {
-                farm_id: farmId
-            },
-            orderBy: {
-                created_at: 'desc'
-            },
-            select: {
-                created_at: true
-            }
-        });
-
-        // Determine the most recent activity
-        let lastActivity = null;
+        let lastActivity: Date | null = null;
         if (latestBatch && latestOrder) {
-            lastActivity = latestBatch.created_at > latestOrder.created_at ?
-                latestBatch.created_at : latestOrder.created_at;
+            lastActivity =
+                latestBatch.createdAt > latestOrder.createdAt
+                    ? latestBatch.createdAt
+                    : latestOrder.createdAt;
         } else if (latestBatch) {
-            lastActivity = latestBatch.created_at;
+            lastActivity = latestBatch.createdAt;
         } else if (latestOrder) {
-            lastActivity = latestOrder.created_at;
+            lastActivity = latestOrder.createdAt;
         }
 
         const stats = {
@@ -114,25 +88,17 @@ export async function GET(
             activeUsers: activeUserStats._count.user_id || 0,
             totalBatches: batchStats._count.id || 0,
             activeBatches: activeBatchStats._count.id || 0,
-            totalOrders: orderStats._count.id || 0,
-            totalRevenue: orderStats._sum.total_amount || 0,
-            lastActivity: lastActivity ? lastActivity.toISOString() : null
+            totalOrders: orderStats._count?.id || 0,
+            totalRevenue: orderStats._sum?.total || 0,
+            lastActivity: lastActivity ? lastActivity.toISOString() : null,
         };
 
-        console.log('✅ Farm statistics retrieved:', stats);
-
-        return NextResponse.json({
-            success: true,
-            stats: stats
-        });
-
+        return NextResponse.json({ success: true, stats });
     } catch (error) {
-        console.error('❌ Error fetching farm statistics:', error);
+        console.error('Error fetching farm statistics:', error);
         return NextResponse.json(
-            { error: 'Failed to fetch farm statistics', details: error instanceof Error ? error.message : 'Unknown error' },
+            { error: 'Failed to fetch farm statistics' },
             { status: 500 }
         );
-    } finally {
-        await prisma.$disconnect();
     }
-} 
+}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { ensureFarmAccess, HttpError } from '@/lib/middleware/requestGuards'
+import { ensureFarmAccess, HttpError , errorResponse } from '@/lib/middleware/requestGuards'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,9 +10,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const data = await prisma.recall_cases.findFirst({ where: { id: params.id, farm_id: farmId }, include: { items: true } })
     if (!data) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 })
     return NextResponse.json({ success: true, data })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to get recall case' }, { status })
+  } catch (error) {
+    return errorResponse(error, 'Failed to get recall case')
   }
 }
 
@@ -35,9 +34,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       include: { items: true },
     })
     return NextResponse.json({ success: true, data: updated })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to update recall case' }, { status })
+  } catch (error) {
+    return errorResponse(error, 'Failed to update recall case')
   }
 }
 
@@ -48,9 +46,8 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     if (!existing) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 })
     await prisma.recall_cases.delete({ where: { id: params.id } })
     return NextResponse.json({ success: true })
-  } catch (error: any) {
-    const status = error instanceof HttpError ? error.status : 500
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to delete recall case' }, { status })
+  } catch (error) {
+    return errorResponse(error, 'Failed to delete recall case')
   }
 }
 

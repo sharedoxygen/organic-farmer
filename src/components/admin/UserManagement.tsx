@@ -457,6 +457,7 @@ export default function UserManagement({
                     onClose={() => setEditingUser(null)}
                     onSuccess={handleUpdateUser}
                     currentUserRole={currentUserRole}
+                    currentUserId={currentUserId}
                     existingUsers={users}
                 />
             )}

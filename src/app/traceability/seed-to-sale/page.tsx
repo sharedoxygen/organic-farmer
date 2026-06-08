@@ -63,11 +63,15 @@ export default function SeedToSalePage() {
                     ordersRes.json()
                 ]);
 
-                if (batchesRes.ok && ordersRes.ok) {
+                // Handle both {data: [...]} and direct array responses
+                const batches = batchesData?.data || batchesData || [];
+                const orders = ordersData?.data || ordersData || [];
+
+                if (Array.isArray(batches) && batches.length > 0) {
                     // Create traceability records from batches
-                    const records: TraceabilityRecord[] = batchesData.data.map((batch: any) => {
+                    const records: TraceabilityRecord[] = batches.map((batch: any) => {
                         // Find orders containing this batch's variety
-                        const relatedOrders = ordersData.data.filter((order: any) =>
+                        const relatedOrders = orders.filter((order: any) =>
                             order.order_items?.some((item: any) =>
                                 (item.seedVarietyId && item.seedVarietyId === batch.seedVarietyId) ||
                                 item.productName === batch.seed_varieties?.name

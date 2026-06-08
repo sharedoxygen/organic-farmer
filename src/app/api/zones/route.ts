@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -38,11 +38,7 @@ export async function GET(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error fetching zones:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to fetch zones' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch zones');
     }
 }
 
@@ -98,11 +94,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error creating zone:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to create zone' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create zone');
     }
 }
 
@@ -177,11 +169,7 @@ export async function PUT(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error updating zone:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to update zone' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update zone');
     }
 }
 
@@ -241,10 +229,6 @@ export async function DELETE(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ Error deleting zone:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to delete zone' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete zone');
     }
 } 

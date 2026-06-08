@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { isSystemAdmin } from '@/lib/utils/systemAdmin';
-import { getAuthUser } from '@/lib/middleware/requestGuards';
-
-const prisma = new PrismaClient();
+import { getAuthUser, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -75,12 +73,6 @@ export async function GET(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('Error fetching all farms:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
-    } finally {
-        // Let global client handle connection lifecycle; avoid disconnect thrash under Next.js
+        return errorResponse(error, 'Internal server error', 'Error fetching all farms:');
     }
 } 

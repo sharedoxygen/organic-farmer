@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess, HttpError } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, HttpError , errorResponse } from '@/lib/middleware/requestGuards';
 
 export const dynamic = 'force-dynamic';
 

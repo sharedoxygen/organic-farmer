@@ -127,8 +127,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
             return NextResponse.json({ error: 'Feedback not found' }, { status: 404 });
         }
 
-        // TODO: Verify user is admin or owner of feedback
-        // For now, allow responses
+        // POST restricted to farm admins / system admins above
 
         // Create response
         const response = await (prisma as any).feedback_responses.create({

@@ -62,10 +62,10 @@ const PRODUCTION_USERS = [
   { id: 'mgr-002', email: 'operations@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'MANAGER' },
   { id: 'tl-001', email: 'production.lead@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'TEAM_LEAD' },
   { id: 'sl-001', email: 'quality.lead@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'TEAM_LEAD' },
-  { id: 'tm-001', email: 'team.member@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'TEAM_MEMBER' },
-  { id: 'sp-001', email: 'quality@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'QUALITY_CONTROL' },
-  { id: 'tm-002', email: 'grower@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'GROWER' },
-  { id: 'tm-003', email: 'harvest@ofms.com', password: 'REDACTED_TEST_PASSWORD', role: 'HARVESTER' }
+  { id: 'tm-001', email: 'team.member@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'TEAM_MEMBER' },
+  { id: 'sp-001', email: 'quality@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'QUALITY_CONTROL' },
+  { id: 'tm-002', email: 'grower@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'GROWER' },
+  { id: 'tm-003', email: 'harvest@ofms.com', password: process.env.TEST_WORKER_PASSWORD || 'test_password', role: 'HARVESTER' }
 ];
 
 // Master Seed Data from afarm_d Database

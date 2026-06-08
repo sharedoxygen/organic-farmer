@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess, getAuthUser, HttpError } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, getAuthUser, HttpError , errorResponse } from '@/lib/middleware/requestGuards';
 import { isSystemAdmin } from '@/lib/utils/systemAdmin';
 import { rateLimiter } from '@/lib/rate-limiter';
 import { feedbackSchema } from '@/lib/validation/feedbackSchema';

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -100,11 +100,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error fetching tasks:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to fetch tasks' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch tasks');
     }
 }
 
@@ -234,11 +230,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error creating task:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to create task' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to create task');
     }
 }
 
@@ -357,11 +349,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error updating task:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to update task' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update task');
     }
 }
 
@@ -414,10 +402,6 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
         });
 
     } catch (error) {
-        console.error('❌ Error deleting task:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to delete task' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete task');
     }
 } 

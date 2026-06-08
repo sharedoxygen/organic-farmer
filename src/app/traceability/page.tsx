@@ -17,12 +17,15 @@ interface TraceabilityItem {
 }
 
 export default function TraceabilityPage(): JSX.Element {
-    const { currentFarm } = useTenant();
+    const { currentFarm, isLoading: isFarmLoading } = useTenant();
     const [traceabilityItems, setTraceabilityItems] = useState<TraceabilityItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchTraceabilityData = useCallback(async () => {
-        if (!currentFarm?.id) return;
+        if (!currentFarm?.id) {
+            setLoading(false);
+            return;
+        }
 
         try {
             setLoading(true);

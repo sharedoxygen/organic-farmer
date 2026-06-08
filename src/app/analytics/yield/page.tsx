@@ -57,11 +57,12 @@ export default function YieldAnalysisPage() {
                     console.log(`📊 Found ${data.data?.length || 0} harvested batches for farm ${currentFarm.farm_name}`);
 
                     // Transform batch data into yield analysis
+                    // Use quantity field for harvested batches (harvestQuantity doesn't exist in schema)
                     const transformedYieldData: YieldData[] = data.data
-                        .filter((batch: any) => batch.actualHarvestDate && batch.harvestQuantity)
+                        .filter((batch: any) => batch.actualHarvestDate && batch.quantity)
                         .map((batch: any) => {
-                            const plannedYield = batch.expectedYield || 100;
-                            const actualYield = batch.harvestQuantity || 0;
+                            const plannedYield = batch.expectedYield || batch.quantity || 100;
+                            const actualYield = batch.quantity || 0;
                             const area = batch.zones?.area || 50; // Default 50 sq ft if no zone area
                             const efficiency = plannedYield > 0 ? (actualYield / plannedYield) * 100 : 0;
 

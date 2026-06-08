@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import PartyService from '@/lib/services/partyService';
 
 // Force this route to be dynamic (not statically generated)
@@ -120,14 +120,7 @@ export async function GET(
         });
 
     } catch (error) {
-        console.error('Error fetching customer:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to fetch customer'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch customer');
     }
 }
 
@@ -255,14 +248,7 @@ export async function PUT(
         });
 
     } catch (error) {
-        console.error('Error updating customer:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to update customer'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update customer');
     }
 }
 
@@ -334,13 +320,6 @@ export async function DELETE(
         });
 
     } catch (error) {
-        console.error('Error deleting customer:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to delete customer'
-            },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete customer');
     }
 } 

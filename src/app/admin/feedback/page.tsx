@@ -60,6 +60,14 @@ export default function AdminFeedbackPage() {
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [selectedFeedback, setSelectedFeedback] = useState<FeedbackSubmission | null>(null);
     const [showResponseModal, setShowResponseModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editForm, setEditForm] = useState({
+        title: '',
+        description: '',
+        priority: 'NORMAL' as FeedbackSubmission['priority'],
+        category: '',
+    });
+    const [savingEdit, setSavingEdit] = useState(false);
     const [filters, setFilters] = useState({
         type: '',
         status: '',
@@ -192,6 +200,61 @@ export default function AdminFeedbackPage() {
             }
         } catch (error) {
             console.error('Error updating feedback status:', error);
+        }
+    };
+
+    const openEditModal = (item: FeedbackSubmission) => {
+        setSelectedFeedback(item);
+        setEditForm({
+            title: item.title,
+            description: item.description,
+            priority: item.priority,
+            category: item.category || '',
+        });
+        setShowEditModal(true);
+    };
+
+    const handleEditFeedback = async () => {
+        if (!selectedFeedback) return;
+
+        setSavingEdit(true);
+        try {
+            const headers: Record<string, string> = {
+                'Content-Type': 'application/json',
+            };
+
+            const farmHeader = selectedFeedback.farm_id || currentFarm?.id || availableFarms[0]?.id;
+            if (!farmHeader) throw new Error('No farm context available');
+            headers['X-Farm-ID'] = farmHeader;
+
+            const response = await fetch(`/api/feedback/${selectedFeedback.id}`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers,
+                body: JSON.stringify({
+                    title: editForm.title.trim(),
+                    description: editForm.description.trim(),
+                    priority: editForm.priority,
+                    category: editForm.category.trim() || undefined,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update feedback');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                setFeedback(prev =>
+                    prev.map(f => (f.id === selectedFeedback.id ? { ...f, ...data.data } : f))
+                );
+                setShowEditModal(false);
+                setSelectedFeedback(null);
+            }
+        } catch (error) {
+            console.error('Error updating feedback:', error);
+        } finally {
+            setSavingEdit(false);
         }
     };
 
@@ -474,10 +537,7 @@ export default function AdminFeedbackPage() {
                                     <Button
                                         variant="secondary"
                                         size="sm"
-                                        onClick={() => {
-                                            setSelectedFeedback(item);
-                                            // TODO: Implement edit modal
-                                        }}
+                                        onClick={() => openEditModal(item)}
                                     >
                                         Edit
                                     </Button>
@@ -561,6 +621,64 @@ export default function AdminFeedbackPage() {
                 }}
                 initialCategory="Admin Submission"
             />
+
+            {/* Edit Modal */}
+            {showEditModal && selectedFeedback && (
+                <div className={styles.modalOverlay} onClick={() => setShowEditModal(false)}>
+                    <div className={styles.editModal} onClick={e => e.stopPropagation()}>
+                        <h3>Edit Feedback</h3>
+                        <label>
+                            Title
+                            <input
+                                value={editForm.title}
+                                onChange={e => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+                            />
+                        </label>
+                        <label>
+                            Description
+                            <textarea
+                                value={editForm.description}
+                                onChange={e => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                                rows={5}
+                            />
+                        </label>
+                        <label>
+                            Priority
+                            <select
+                                value={editForm.priority}
+                                onChange={e => setEditForm(prev => ({
+                                    ...prev,
+                                    priority: e.target.value as FeedbackSubmission['priority'],
+                                }))}
+                            >
+                                <option value="LOW">Low</option>
+                                <option value="NORMAL">Normal</option>
+                                <option value="HIGH">High</option>
+                                <option value="URGENT">Urgent</option>
+                            </select>
+                        </label>
+                        <label>
+                            Category
+                            <input
+                                value={editForm.category}
+                                onChange={e => setEditForm(prev => ({ ...prev, category: e.target.value }))}
+                            />
+                        </label>
+                        <div className={styles.editModalActions}>
+                            <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="primary"
+                                onClick={handleEditFeedback}
+                                disabled={savingEdit || !editForm.title.trim() || !editForm.description.trim()}
+                            >
+                                {savingEdit ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Response Modal */}
             {showResponseModal && selectedFeedback && (

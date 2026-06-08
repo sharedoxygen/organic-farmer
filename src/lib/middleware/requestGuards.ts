@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { isSystemAdmin } from '@/lib/utils/systemAdmin'
 import jwt from 'jsonwebtoken'
@@ -20,9 +20,30 @@ export class HttpError extends Error {
   }
 }
 
+/** Map guard/service errors to consistent API JSON responses. */
+export function errorResponse(
+  error: unknown,
+  fallbackMessage: string,
+  logLabel?: string
+): NextResponse {
+  if (logLabel) {
+    console.error(logLabel, error)
+  }
+  if (error instanceof HttpError) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: error.status }
+    )
+  }
+  return NextResponse.json(
+    { success: false, error: fallbackMessage },
+    { status: 500 }
+  )
+}
+
 /**
  * Extract bearer token user from Authorization header and load active user
- * Current placeholder implementation; replace with JWT/session validation later.
+ * Validates JWT session cookie or bearer token and loads the active user.
  */
 export async function getAuthUser(request: NextRequest): Promise<AuthUser | null> {
   try {

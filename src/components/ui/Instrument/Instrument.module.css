@@ -1,0 +1,217 @@
+.gauge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gauge svg {
+  display: block;
+}
+
+.track {
+  fill: none;
+  stroke: var(--bg-tertiary, #e5e7eb);
+}
+
+.fill {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.excellent .fill {
+  stroke: #10b981;
+}
+.good .fill {
+  stroke: #059669;
+}
+.watch .fill {
+  stroke: #f59e0b;
+}
+.critical .fill {
+  stroke: #ef4444;
+}
+
+.gaugeCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.gaugeIcon {
+  font-size: 1.1rem;
+}
+
+.gaugeValue {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.gaugeValue small {
+  font-size: 0.65rem;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.gaugeTrend {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.gaugeLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.lg .gaugeValue {
+  font-size: 1.75rem;
+}
+.sm .gaugeValue {
+  font-size: 1rem;
+}
+
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.meterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.meterLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.meterValue {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.meterTrack {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-tertiary, #e5e7eb);
+  overflow: hidden;
+}
+
+.meterFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.excellent .meterFill {
+  background: linear-gradient(90deg, #34d399, #10b981);
+}
+.good .meterFill {
+  background: linear-gradient(90deg, #6ee7b7, #059669);
+}
+.watch .meterFill {
+  background: linear-gradient(90deg, #fcd34d, #f59e0b);
+}
+.critical .meterFill {
+  background: linear-gradient(90deg, #fca5a5, #ef4444);
+}
+
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.pipelineItem {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 100px;
+}
+
+.pipelineStep {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.pipelineStep:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.pipelineStep.complete {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.pipelineStep.active {
+  background: rgba(5, 150, 105, 0.15);
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+}
+
+.pipelineStep.pending {
+  background: var(--bg-secondary);
+  border-color: var(--border-color, #e5e7eb);
+  opacity: 0.75;
+}
+
+.pipelineCount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.pipelineLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.pipelineStatus {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.pipelineConnector {
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, #059669, #34d399);
+  flex-shrink: 0;
+  margin: 0 2px;
+}

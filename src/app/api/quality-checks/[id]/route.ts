@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
 export const dynamic = 'force-dynamic';
@@ -53,11 +53,7 @@ export async function GET(
         });
 
     } catch (error) {
-        console.error('Error fetching quality check:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch quality check' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to fetch quality check');
     }
 }
 
@@ -141,11 +137,7 @@ export async function PUT(
         });
 
     } catch (error) {
-        console.error('Error updating quality check:', error);
-        return NextResponse.json(
-            { error: 'Failed to update quality check' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to update quality check');
     }
 }
 
@@ -188,10 +180,6 @@ export async function DELETE(
         });
 
     } catch (error) {
-        console.error('Error deleting quality check:', error);
-        return NextResponse.json(
-            { error: 'Failed to delete quality check' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to delete quality check');
     }
 } 

@@ -5,6 +5,7 @@
 
 import { weatherService, WeatherAlert } from './weatherService';
 import { ollamaService } from './ollamaService';
+import { buildStableAlertId } from './alertAcknowledgmentService';
 
 export type AlertType =
     | 'DISEASE_OUTBREAK'
@@ -187,8 +188,7 @@ export class AIAlertEngine {
         const harvestAlerts = await this.generateHarvestAlerts(farmId, batches);
         alerts.push(...harvestAlerts);
 
-        // Filter by cooldown
-        return alerts.filter(alert => this.checkCooldown(alert));
+        return alerts;
     }
 
     /**
@@ -202,7 +202,11 @@ export class AIAlertEngine {
 
             for (const wa of weatherAlerts) {
                 alerts.push({
-                    id: `weather_${wa.id}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'WEATHER_WARNING',
+                        farmId,
+                        weatherId: wa.id,
+                    }),
                     type: 'WEATHER_WARNING',
                     severity: this.mapWeatherSeverity(wa.severity),
                     title: wa.title,
@@ -248,7 +252,11 @@ export class AIAlertEngine {
                 const aiInsight = await this.getAIBatchInsight(batch);
 
                 alerts.push({
-                    id: `batch_health_${batch.batchId}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'BATCH_ATTENTION',
+                        farmId,
+                        batchId: `health_${batch.batchId}`,
+                    }),
                     type: 'BATCH_ATTENTION',
                     severity: batch.healthScore < 50 ? 'HIGH' : 'MEDIUM',
                     title: `Batch ${batch.batchNumber} Needs Attention`,
@@ -288,7 +296,11 @@ export class AIAlertEngine {
             // Environmental issues
             if (batch.temperature && (batch.temperature < 55 || batch.temperature > 85)) {
                 alerts.push({
-                    id: `batch_temp_${batch.batchId}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'BATCH_ATTENTION',
+                        farmId,
+                        batchId: `temp_${batch.batchId}`,
+                    }),
                     type: 'BATCH_ATTENTION',
                     severity: 'MEDIUM',
                     title: `Temperature Alert: Batch ${batch.batchNumber}`,
@@ -326,7 +338,11 @@ export class AIAlertEngine {
                 const urgency = batch.daysToHarvest === 0 ? 'HIGH' : 'MEDIUM';
 
                 alerts.push({
-                    id: `harvest_${batch.batchId}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'HARVEST_OPTIMAL',
+                        farmId,
+                        batchId: batch.batchId,
+                    }),
                     type: 'HARVEST_OPTIMAL',
                     severity: urgency,
                     title: batch.daysToHarvest === 0
@@ -382,7 +398,11 @@ export class AIAlertEngine {
                     : 'MEDIUM';
 
                 alerts.push({
-                    id: `resource_${resource.resourceType}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'RESOURCE_LOW',
+                        farmId,
+                        resourceType: resource.resourceType,
+                    }),
                     type: 'RESOURCE_LOW',
                     severity,
                     title: `Low Stock: ${resource.resourceType}`,
@@ -427,7 +447,11 @@ export class AIAlertEngine {
             // Price increase opportunity
             if (market.priceChange >= 10) {
                 alerts.push({
-                    id: `market_${market.cropType}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'MARKET_OPPORTUNITY',
+                        farmId,
+                        cropType: `price_${market.cropType}`,
+                    }),
                     type: 'MARKET_OPPORTUNITY',
                     severity: 'INFO',
                     title: `📈 Price Surge: ${market.cropType}`,
@@ -460,7 +484,11 @@ export class AIAlertEngine {
             // High demand alert
             if (market.demandTrend === 'increasing' && market.competitorActivity === 'low') {
                 alerts.push({
-                    id: `demand_${market.cropType}_${Date.now()}`,
+                    id: buildStableAlertId({
+                        type: 'MARKET_OPPORTUNITY',
+                        farmId,
+                        cropType: `demand_${market.cropType}`,
+                    }),
                     type: 'MARKET_OPPORTUNITY',
                     severity: 'INFO',
                     title: `🎯 Market Opportunity: ${market.cropType}`,

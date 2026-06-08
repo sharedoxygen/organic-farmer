@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ollamaService } from '@/lib/ai/ollamaService';
 import { demandForecastingAI } from '@/lib/ai/demandForecastingAI'; // Keep for fallback
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // 🔧 Dynamic route - uses request headers
 export const dynamic = 'force-dynamic';
@@ -26,7 +26,8 @@ export async function POST(request: NextRequest) {
         const forecast = await demandForecastingAI.generateForecast(
             cropType,
             daysAhead,
-            currentMarketData
+            currentMarketData,
+            farmId
         );
 
         return NextResponse.json({
@@ -94,10 +95,6 @@ export async function GET(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('❌ AI market insights error:', error);
-        return NextResponse.json(
-            { error: 'Failed to generate insights' },
-            { status: 500 }
-        );
+        return errorResponse(error, 'Failed to generate insights');
     }
 } 

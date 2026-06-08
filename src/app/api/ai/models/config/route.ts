@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import { prisma } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
@@ -31,8 +31,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ success: true, config: config || null });
     } catch (error) {
-        console.error('❌ Failed to load AI config:', error);
-        return NextResponse.json({ success: false, error: 'Failed to load config' }, { status: 500 });
+        return errorResponse(error, 'Failed to load config');
     }
 }
 

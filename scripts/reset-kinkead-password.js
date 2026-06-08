@@ -19,7 +19,15 @@ async function resetKinkeadPassword() {
 
     try {
         const email = 'kinkead@curryislandmicrogreens.com';
-        const newPassword = 'REDACTED_SHOWCASE_PASSWORD';
+        const newPassword =
+            process.env.SHOWCASE_CURRY_PASSWORD ||
+            process.env.TEST_ADMIN_PASSWORD;
+        if (!newPassword) {
+            console.error(
+                '❌ Set SHOWCASE_CURRY_PASSWORD or TEST_ADMIN_PASSWORD in .env'
+            );
+            process.exit(1);
+        }
         
         // Check if user exists
         const user = await prisma.users.findUnique({
@@ -62,10 +70,9 @@ async function resetKinkeadPassword() {
         
         if (isValid) {
             console.log('✅ Password verification SUCCESSFUL!');
-            console.log('\n📋 Login Credentials:');
-            console.log('   Email:', email);
-            console.log('   Password:', newPassword);
-            console.log('\n🎉 You can now login with these credentials!');
+            console.log('\n📋 Login with email:', email);
+            console.log('   (password from SHOWCASE_CURRY_PASSWORD / TEST_ADMIN_PASSWORD)');
+            console.log('\n🎉 Password reset complete.');
         } else {
             console.log('❌ Password verification FAILED!');
         }

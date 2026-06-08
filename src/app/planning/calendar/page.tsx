@@ -169,6 +169,44 @@ export default function ProductionCalendarPage() {
         setSaveError(null);
     };
 
+    const persistCalendarEvent = async (eventId: string, payload: Record<string, unknown>) => {
+        if (!currentFarm?.id) {
+            throw new Error('No farm context available');
+        }
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-Farm-ID': currentFarm.id,
+        };
+
+        if (eventId.startsWith('batch-plant-') || eventId.startsWith('batch-harvest-')) {
+            const batchId = eventId.replace(/^batch-(plant|harvest)-/, '');
+            const response = await fetch(`/api/batches/${batchId}`, {
+                method: 'PUT',
+                headers,
+                credentials: 'include',
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update batch');
+            }
+            return;
+        }
+
+        if (eventId.startsWith('order-delivery-')) {
+            const orderId = eventId.replace('order-delivery-', '');
+            const response = await fetch(`/api/orders/${orderId}`, {
+                method: 'PUT',
+                headers,
+                credentials: 'include',
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update order');
+            }
+        }
+    };
+
     const handleSaveEvent = async () => {
         if (!editingEvent) return;
 
@@ -176,7 +214,15 @@ export default function ProductionCalendarPage() {
         setSaveError(null);
 
         try {
-            // Update the local events array immediately for UI responsiveness
+            const eventDate = editingEvent.start;
+            if (editingEvent.id.startsWith('batch-plant-')) {
+                await persistCalendarEvent(editingEvent.id, { plantDate: eventDate });
+            } else if (editingEvent.id.startsWith('batch-harvest-')) {
+                await persistCalendarEvent(editingEvent.id, { expectedHarvestDate: eventDate });
+            } else if (editingEvent.id.startsWith('order-delivery-')) {
+                await persistCalendarEvent(editingEvent.id, { deliveryDate: eventDate });
+            }
+
             const updatedEvents = events.map(event => {
                 if (event.id === editingEvent.id) {
                     return {
@@ -194,20 +240,12 @@ export default function ProductionCalendarPage() {
 
             setEvents(updatedEvents);
 
-            // Update selectedEvent if it's the one being edited
             if (selectedEvent && selectedEvent.id === editingEvent.id) {
                 setSelectedEvent(updatedEvents.find(e => e.id === editingEvent.id) || null);
             }
 
-            // TODO: In a real implementation, you would make an API call here
-            // For now, we'll simulate a successful save
-            await new Promise(resolve => setTimeout(resolve, 500));
-
             setIsEditing(false);
             setEditingEvent(null);
-
-            // Show success message
-            console.log('Event updated successfully!');
 
         } catch (error) {
             setSaveError('Failed to save event. Please try again.');
@@ -219,6 +257,15 @@ export default function ProductionCalendarPage() {
 
     const handleMarkComplete = async (event: ProductionEvent) => {
         try {
+            if (event.id.startsWith('batch-harvest-')) {
+                await persistCalendarEvent(event.id, {
+                    actualHarvestDate: new Date().toISOString(),
+                    status: 'harvested',
+                });
+            } else if (event.id.startsWith('order-delivery-')) {
+                await persistCalendarEvent(event.id, { status: 'DELIVERED' });
+            }
+
             const updatedEvents = events.map(e =>
                 e.id === event.id ? { ...e, status: 'completed' as const } : e
             );
@@ -227,9 +274,6 @@ export default function ProductionCalendarPage() {
             if (selectedEvent && selectedEvent.id === event.id) {
                 setSelectedEvent({ ...selectedEvent, status: 'completed' });
             }
-
-            // TODO: API call to update status
-            console.log('Event marked as completed!');
         } catch (error) {
             console.error('Error marking event complete:', error);
         }

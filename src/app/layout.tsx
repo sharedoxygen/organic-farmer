@@ -10,7 +10,10 @@ import { HelpModal } from '@/components/ui/HelpModal/HelpModal'
 import { TutorialOverlay } from '@/components/ui/TutorialOverlay/TutorialOverlay'
 
 import { Toaster } from 'react-hot-toast';
+import { CommandPalette } from '@/components/CommandPalette/CommandPalette';
+import { CapacitorProvider } from '@/components/mobile/CapacitorProvider';
 import './globals.css'
+import '@/styles/mobile.css'
 
 export const metadata: Metadata = {
     title: 'Organic Farm Management System (OFMS)',
@@ -32,6 +35,11 @@ export const metadata: Metadata = {
 
 export const viewport = {
     themeColor: '#22C55E',
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover',
 }
 
 export default function RootLayout({
@@ -71,7 +79,8 @@ export default function RootLayout({
                     }}
                 />
             </head>
-            <body>
+            <body className="capacitor-safe-x">
+                <CapacitorProvider>
                 <QueryProvider>
                     <ThemeProvider>
                         <AuthProvider>
@@ -84,12 +93,14 @@ export default function RootLayout({
                                         <HelpModal />
                                         <TutorialOverlay />
                                         <Toaster />
+                                        <CommandPalette />
                                     </HelpProvider>
                                 </FeedbackProvider>
                             </TenantProvider>
                         </AuthProvider>
                     </ThemeProvider>
                 </QueryProvider>
+                </CapacitorProvider>
             </body>
         </html>
     )

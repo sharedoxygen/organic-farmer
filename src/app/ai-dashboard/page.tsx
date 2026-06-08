@@ -148,10 +148,56 @@ export default function AIDashboardPage() {
         ]
     });
 
+    const [heroStats, setHeroStats] = useState({ accuracy: 92, savings: 15000, alerts: 3 });
+
     useEffect(() => {
         if (!isAuthLoading && isAuthenticated && currentFarm) {
-            // Simulate loading
-            setTimeout(() => setLoading(false), 500);
+            const load = async () => {
+                try {
+                    const res = await fetch('/api/ai/dashboard', {
+                        headers: { 'X-Farm-ID': currentFarm.id },
+                        credentials: 'include',
+                    });
+                    const data = await res.json();
+                    if (data.success && data.data) {
+                        const d = data.data;
+                        setHeroStats({
+                            accuracy: d.heroStats?.accuracy ?? 88,
+                            savings: d.heroStats?.savings ?? 12000,
+                            alerts: d.heroStats?.alerts ?? 0,
+                        });
+                        setDashboardData({
+                            batchScores: d.batchScores || [],
+                            yieldForecast: d.yieldForecast || {
+                                totalYield: 0,
+                                yieldUnit: 'lbs',
+                                confidence: 0,
+                                byCrop: [],
+                                byWeek: [],
+                            },
+                            qualityAssessment: d.qualityAssessment || {
+                                overallGrade: 'B',
+                                scores: { appearance: 0, color: 0, size: 0, uniformity: 0, freshness: 0 },
+                                defects: [],
+                                harvestReady: false,
+                            },
+                            resourceOptimization: d.resourceOptimization || {
+                                totalMonthlySavings: 0,
+                                totalAnnualSavings: 0,
+                                water: { currentUsage: 0, optimizedUsage: 0, savingsPercentage: 0, costSavings: 0 },
+                                labor: { currentHours: 0, optimizedHours: 0, savingsPercentage: 0, costSavings: 0 },
+                                inputs: { currentCost: 0, optimizedCost: 0, savingsPercentage: 0, costSavings: 0 },
+                                equipment: [],
+                                recommendations: [],
+                            },
+                            insights: d.insights || [],
+                        });
+                    }
+                } finally {
+                    setLoading(false);
+                }
+            };
+            void load();
         }
     }, [isAuthLoading, isAuthenticated, currentFarm]);
 
@@ -189,26 +235,29 @@ export default function AIDashboardPage() {
                         <p>Intelligent insights for {currentFarm.farm_name}</p>
                     </div>
                     <div className={styles.heroActions}>
+                        <Button variant="primary" onClick={() => router.push('/mobile/plant-scan')}>
+                            📷 Plant Vision
+                        </Button>
                         <Button variant="secondary" onClick={() => router.push('/ai-insights')}>
                             Classic View
                         </Button>
-                        <Button variant="primary" onClick={() => router.push('/dashboard')}>
+                        <Button variant="secondary" onClick={() => router.push('/dashboard')}>
                             Dashboard
                         </Button>
                     </div>
                 </div>
                 <div className={styles.heroStats}>
                     <div className={styles.heroStat}>
-                        <span className={styles.heroStatValue}>92%</span>
-                        <span className={styles.heroStatLabel}>AI Accuracy</span>
+                        <span className={styles.heroStatValue}>{heroStats.accuracy}%</span>
+                        <span className={styles.heroStatLabel}>Ops Health Score</span>
                     </div>
                     <div className={styles.heroStat}>
-                        <span className={styles.heroStatValue}>$15K</span>
-                        <span className={styles.heroStatLabel}>Annual Savings</span>
+                        <span className={styles.heroStatValue}>${(heroStats.savings / 1000).toFixed(0)}K</span>
+                        <span className={styles.heroStatLabel}>Est. Annual Savings</span>
                     </div>
                     <div className={styles.heroStat}>
-                        <span className={styles.heroStatValue}>3</span>
-                        <span className={styles.heroStatLabel}>Active Alerts</span>
+                        <span className={styles.heroStatValue}>{heroStats.alerts}</span>
+                        <span className={styles.heroStatLabel}>Active Pipelines</span>
                     </div>
                 </div>
             </div>
@@ -238,7 +287,7 @@ export default function AIDashboardPage() {
                             <div className={styles.weatherSection}>
                                 <WeatherWidget
                                     farmId={currentFarm.id}
-                                    location={'New York, NY'}
+                                    location={currentFarm.settings?.location || 'New York, NY'}
                                 />
                             </div>
                             <div className={styles.alertSection}>
@@ -263,12 +312,16 @@ export default function AIDashboardPage() {
                                         content={insight.content}
                                         metrics={insight.metrics}
                                         primaryAction={{
-                                            label: 'Take Action',
-                                            onClick: () => console.log('Action clicked')
+                                            label: insight.title === 'Agent Priority' ? 'Open Farm Agent' : 'View Batches',
+                                            onClick: () => router.push(
+                                                insight.title === 'Agent Priority'
+                                                    ? '/ai-dashboard'
+                                                    : '/production/batches'
+                                            ),
                                         }}
                                         secondaryAction={{
-                                            label: 'Learn More',
-                                            onClick: () => console.log('Learn more clicked')
+                                            label: 'Plant Vision',
+                                            onClick: () => router.push('/mobile/plant-scan'),
                                         }}
                                     />
                                 ))}
@@ -350,7 +403,7 @@ export default function AIDashboardPage() {
             <FarmAssistantChat
                 farmId={currentFarm.id}
                 farmName={currentFarm.farm_name}
-                location={'New York, NY'}
+                location={currentFarm.settings?.location || 'New York, NY'}
             />
         </div>
     );

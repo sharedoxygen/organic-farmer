@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 import PartyService from '@/lib/services/partyService';
 
 export const dynamic = 'force-dynamic';
@@ -35,15 +35,8 @@ export async function GET(
     });
 
   } catch (error) {
-    console.error('Error fetching party:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch party'
-      },
-      { status: 500 }
-    );
-  }
+        return errorResponse(error, 'Failed to fetch party');
+    }
 }
 
 /**
@@ -74,15 +67,8 @@ export async function PUT(
     });
 
   } catch (error) {
-    console.error('Error updating party:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to update party'
-      },
-      { status: 500 }
-    );
-  }
+        return errorResponse(error, 'Failed to update party');
+    }
 }
 
 /**
@@ -107,14 +93,7 @@ export async function DELETE(
     });
 
   } catch (error) {
-    console.error('Error deleting party:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to delete party'
-      },
-      { status: 500 }
-    );
-  }
+        return errorResponse(error, 'Failed to delete party');
+    }
 }
 

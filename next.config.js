@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
+  images: {
     domains: ['localhost'],
+    remotePatterns: [
+      { protocol: 'http', hostname: '**' },
+      { protocol: 'https', hostname: '**' },
+    ],
   },
+  // Allow Capacitor WebView and LAN devices to reach the dev server
+  allowedDevOrigins: ['*'],
   // App router is now default in Next.js 14, no experimental config needed
   reactStrictMode: true,
   eslint: {
@@ -15,4 +21,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig

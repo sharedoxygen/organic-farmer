@@ -212,7 +212,7 @@ const CURRENT_AFARM_D_DATA = {
       permissions: JSON.stringify(['MANAGE_BATCHES', 'MANAGE_INVENTORY']),
       isActive: true,
       employeeId: 'EMP003',
-      password: 'REDACTED_TEST_PASSWORD'
+      password: process.env.TEST_WORKER_PASSWORD || 'test_password'
     }
   ],
 

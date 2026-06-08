@@ -137,24 +137,54 @@ export default function AIInsightsPage() {
 
             console.log('🤖 Loading AI insights for farm:', currentFarm.farm_name);
 
-            // Load disease analysis
-            const diseaseResponse = await fetch('/api/ai/crop-analysis', {
+            // Load recent plant vision / crop analysis history
+            const historyResponse = await fetch('/api/ai/crop-analysis/history?days=30', {
+                credentials: 'include',
+                headers,
+            });
+
+            if (historyResponse.ok) {
+                const historyData = await historyResponse.json();
+                const match = (historyData.history || []).find(
+                    (h: { cropType?: string }) =>
+                        !selectedCrop || h.cropType === selectedCrop
+                ) || historyData.history?.[0];
+
+                if (match) {
+                    setDiseaseAnalysis({
+                        diseaseType: String(match.diagnosis || 'Recent scan'),
+                        confidence: Number(match.confidence) || 0.85,
+                        severity: match.severity || 'LOW',
+                        recommendations: [
+                            'Review full report in Plant Vision Scan',
+                            'Re-scan if conditions changed',
+                        ],
+                        affectedArea: 0,
+                        organicTreatments: ['Follow organic treatment plan from scan'],
+                        aiAnalysis: `Latest ${match.cropType} scan (${new Date(match.timestamp).toLocaleDateString()})`,
+                    });
+                    setIsAiPowered(true);
+                } else {
+                    setDiseaseAnalysis(null);
+                }
+            }
+
+            // Agent summary for crop health context
+            const agentResponse = await fetch('/api/ai/agent', {
                 method: 'POST',
                 credentials: 'include',
                 headers,
                 body: JSON.stringify({
-                    // imageUrl: 'https://example.com/sample-plant.jpg', // TODO: Use actual image from file upload
-                    cropType: selectedCrop,
-                    farmZone: selectedZone || 'Zone A'
-                })
+                    message: `Assess ${selectedCrop} batch health and any plant vision concerns`,
+                    goal: 'batches',
+                    useLlm: false,
+                }),
             });
-
-            if (diseaseResponse.ok) {
-                const diseaseData = await diseaseResponse.json();
-                setDiseaseAnalysis(diseaseData.analysis);
-                setIsAiPowered(diseaseData.analysis.aiAnalysis?.includes('Qwen3') ||
-                    diseaseData.analysis.aiAnalysis?.includes('DeepSeek-R1') ||
-                    diseaseData.analysis.aiAnalysis?.includes('Ollama'));
+            if (agentResponse.ok) {
+                const agentData = await agentResponse.json();
+                if (agentData.result?.insights?.length) {
+                    setIsAiPowered(true);
+                }
             }
 
             // Load market insights
@@ -503,6 +533,20 @@ export default function AIInsightsPage() {
                         </div>
                     </Card>
                 </div>
+            )}
+
+            {activeView === 'disease' && !diseaseAnalysis && !loading && (
+                <Card className={styles.analysisCard}>
+                    <div className={styles.analysisHeader}>
+                        <h3>📷 Plant Vision Scan</h3>
+                    </div>
+                    <p style={{ marginBottom: '1rem', color: 'var(--text-secondary, #64748b)' }}>
+                        Capture a plant photo for AI disease and health analysis. Past scans appear here automatically.
+                    </p>
+                    <Button onClick={() => router.push('/mobile/plant-scan')}>
+                        Open Plant Vision Scan
+                    </Button>
+                </Card>
             )}
 
             {activeView === 'disease' && diseaseAnalysis && (

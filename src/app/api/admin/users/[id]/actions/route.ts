@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { isSystemAdmin } from '@/lib/utils/systemAdmin';
+import { isSystemAdmin, logSystemAdminAction } from '@/lib/utils/systemAdmin';
 import { getAuthUser } from '@/lib/middleware/requestGuards';
 
 // Force this route to be dynamic (not statically generated)
@@ -119,7 +119,21 @@ export async function POST(
                 );
         }
 
-        console.log(`✅ User action "${action}" completed successfully`);
+        const membership = await prisma.farm_users.findFirst({
+            where: { user_id: userId, is_active: true },
+            select: { farm_id: true },
+        });
+
+        logSystemAdminAction(
+            requestingUser.id,
+            `USER_${action.toUpperCase()}`,
+            {
+                targetUserId: userId,
+                targetEmail: targetUser.email,
+                performedBy: requestingUser.email,
+            },
+            membership?.farm_id
+        );
 
         return NextResponse.json({
             success: true,

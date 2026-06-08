@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { ensureFarmAccess } from '@/lib/middleware/requestGuards';
+import { ensureFarmAccess, errorResponse } from '@/lib/middleware/requestGuards';
 
 // 🔧 Fix Next.js static generation error
 // This route uses request.headers so it must be dynamic
@@ -49,8 +49,7 @@ export async function GET(request: NextRequest) {
             }
         });
     } catch (error) {
-        console.error('❌ Error fetching inventory:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 }
 
@@ -101,7 +100,6 @@ export async function POST(request: NextRequest) {
             }
         });
     } catch (error) {
-        console.error('❌ Error creating inventory item:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return errorResponse(error, 'Internal server error');
     }
 } 

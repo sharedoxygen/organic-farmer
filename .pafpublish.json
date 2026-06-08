@@ -1,0 +1,23 @@
+{
+  "projectName": "organic-farmer-app",
+  "defaultSectionPath": [
+    "Docs",
+    "organic-farmer-app"
+  ],
+  "skipSourceRootInPath": true,
+  "pathSegmentMap": {
+    "engineering": "Engineering",
+    "gtm": "GTM",
+    "inbox": "Inbox",
+    "fundraising": "Fundraising",
+    "series-a": "Series-A",
+    "series-b": "Series-B"
+  },
+  "sourceRoots": [
+    {
+      "label": "private-docs",
+      "path": "private-docs",
+      "recursive": true
+    }
+  ]
+}

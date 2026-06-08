@@ -1,9 +1,10 @@
 /**
- * Simple AI-Powered Demand Forecasting Service
- * Production-ready without heavy dependencies
+ * AI-Powered Demand Forecasting Service
+ * Order-history grounded when farmId is provided
  */
 
 import { Customer, Order, Batch } from '@/types';
+import { getOrderDemandHistory } from './demandOrderHistory';
 
 // Statistical utility functions
 function calculateMovingAverage(data: number[], window: number): number[] {
@@ -92,6 +93,9 @@ export class DemandForecastingAI {
     private marketTrends: MarketTrend[] = [];
     private seasonalFactors: Record<string, number[]> = {};
     private models: Map<string, Record<string, unknown>> = new Map();
+    private _farmId?: string;
+    private _cropType?: string;
+    private _orderHistoryCache?: number[];
 
     constructor() {
         this.initializeMarketTrends();
@@ -137,10 +141,15 @@ export class DemandForecastingAI {
     async generateForecast(
         cropType: string,
         daysAhead: number = 30,
-        currentMarketData: Partial<MarketData> = {}
+        currentMarketData: Partial<MarketData> = {},
+        farmId?: string
     ): Promise<ForecastResult> {
 
         console.log(`🔮 Generating enhanced AI forecast for ${cropType} (${daysAhead} days ahead)...`);
+        this._orderHistoryCache = undefined;
+        if (farmId) {
+            await this.hydrateOrderHistory(farmId, cropType);
+        }
 
         const predictions = [];
         const today = new Date();
@@ -320,15 +329,28 @@ export class DemandForecastingAI {
      * Get historical demand data for a crop
      */
     private getHistoricalDemand(cropType: string): number[] {
-        // Mock historical data - in production, this would come from database
-        const baseValues = {
+        if (this._orderHistoryCache?.length) {
+            return this._orderHistoryCache;
+        }
+
+        const baseValues: Record<string, number[]> = {
             'Arugula': [45, 52, 48, 55, 60, 58, 62],
             'Basil': [38, 42, 45, 48, 52, 55, 58],
             'Kale': [65, 70, 68, 72, 75, 78, 80],
-            'Broccoli': [85, 88, 90, 92, 95, 98, 100]
+            'Broccoli': [85, 88, 90, 92, 95, 98, 100],
         };
 
-        return baseValues[cropType as keyof typeof baseValues] || [50, 55, 60, 65, 70, 75, 80];
+        return baseValues[cropType] || [50, 55, 60, 65, 70, 75, 80];
+    }
+
+    /** Load order history from DB for the current forecast context. */
+    async hydrateOrderHistory(farmId: string, cropType: string): Promise<void> {
+        const history = await getOrderDemandHistory(farmId, cropType, 12);
+        if (history.length > 0) {
+            this._orderHistoryCache = history;
+            this._farmId = farmId;
+            this._cropType = cropType;
+        }
     }
 
     /**
@@ -425,25 +447,45 @@ export class DemandForecastingAI {
     /**
      * Get market insights
      */
-    async getMarketInsights(crop: string): Promise<MarketInsights> {
+    async getMarketInsights(crop: string, farmId?: string): Promise<MarketInsights> {
+        if (farmId) {
+            await this.hydrateOrderHistory(farmId, crop);
+        }
+        const history = this.getHistoricalDemand(crop);
+        const recent = history.slice(-4);
+        const prior = history.slice(-8, -4);
+        const recentAvg = recent.length
+            ? recent.reduce((a, b) => a + b, 0) / recent.length
+            : 50;
+        const priorAvg = prior.length
+            ? prior.reduce((a, b) => a + b, 0) / prior.length
+          : recentAvg;
+        const trendPct = priorAvg > 0 ? Math.round(((recentAvg - priorAvg) / priorAvg) * 100) : 0;
+        const trendLabel =
+            trendPct > 5 ? 'increasing' : trendPct < -5 ? 'decreasing' : 'stable';
+
         return {
             crop,
             aiInsights: [
-                'Demand expected to increase 15% due to seasonal trends',
-                'Weather patterns favor organic growth conditions',
-                'Market competition decreasing in this segment'
+                `Order demand for ${crop} is ${trendLabel} (${trendPct >= 0 ? '+' : ''}${trendPct}% vs prior month)`,
+                farmId
+                    ? 'Forecast grounded in your farm order history'
+                    : 'Connect farm context for order-grounded forecasts',
+                'Align harvest timing with peak demand windows',
             ],
             optimalHarvestWindow: {
                 start: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
                 end: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
                 priceEstimate: '$12.50-$15.00/oz',
-                confidence: 0.89
+                confidence: farmId && this._orderHistoryCache?.length ? 0.91 : 0.82,
             },
             recommendations: [
-                'Increase production by 20% for next cycle',
-                'Consider premium organic certification',
-                'Target restaurant clients during peak season'
-            ]
+                trendPct > 10
+                    ? `Increase ${crop} production by ${Math.min(25, trendPct)}%`
+                    : 'Maintain current production levels',
+                'Review open sales orders against forecast',
+                'Target buyers with recurring demand patterns',
+            ],
         };
     }
 

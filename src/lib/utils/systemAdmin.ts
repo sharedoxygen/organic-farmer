@@ -3,6 +3,8 @@
  * Clean detection logic based on database fields only
  */
 
+import AuditService from '@/lib/services/auditService';
+
 // User interface for system admin detection
 interface SystemAdminUser {
     id: string;
@@ -155,5 +157,7 @@ export function logSystemAdminAction(
         timestamp: new Date().toISOString(),
     });
 
-    // TODO: Implement proper audit logging to database
+    void AuditService.logSystemAdminAction(userId, action, details, farmId).catch((error) => {
+        console.error('Failed to persist system admin audit log:', error);
+    });
 } 

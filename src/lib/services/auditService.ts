@@ -223,6 +223,29 @@ export class AuditService {
     }
 
     /**
+     * Log system-admin actions (cross-farm / platform operations).
+     * Requires farm_id for persistence; skips DB write when absent.
+     */
+    static async logSystemAdminAction(
+        userId: string,
+        action: string,
+        details: Record<string, unknown>,
+        farmId?: string
+    ): Promise<void> {
+        if (!farmId) return;
+        await prisma.audit_logs.create({
+            data: {
+                action: `SYSTEM_ADMIN_${action}`,
+                entity: 'System',
+                entityId: userId,
+                userId,
+                farm_id: farmId,
+                details: details as Prisma.InputJsonValue,
+            },
+        });
+    }
+
+    /**
      * CRITICAL: Generic audit logging for any entity
      */
     static async logGenericOperation(
