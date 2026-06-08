@@ -1,21 +1,16 @@
 <p align="center">
-  <strong>Organic Farm Management System</strong><br/>
-  <em>Seed-to-sale ops · audit-ready traceability · agentic intelligence</em>
-</p>
-
-<p align="center">
   <a href="LICENSE">MIT</a> ·
   Next.js 14 · TypeScript · PostgreSQL · Capacitor 8 ·
   <a href="docs/SYSTEM_OVERVIEW.md">Docs</a>
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/ai-dashboard.png" alt="OFMS AI Command Center — live batch scoring and ops metrics" width="680"/>
+  <img src="docs/screenshots/ofms-splash-dark.svg" alt="OFMS — Organic Farm Management System" width="720"/>
 </p>
 
 ```mermaid
 flowchart TB
-  subgraph Surface["Grow · Ship · Prove it"]
+  subgraph Surface["Operations"]
     direction LR
     MC[Mission Control] --- PR[Production]
     PR --- TR[Traceability]
@@ -23,7 +18,7 @@ flowchart TB
     QC --- SL[Sales & Analytics]
   end
 
-  subgraph Agent["Farm Agent — auditable by design"]
+  subgraph Agent["Farm Agent"]
     direction TB
     P[Plan goals] --> T[11 live tools]
     T --> S[Synthesize answer]
@@ -42,8 +37,10 @@ flowchart TB
   MCP[MCP /api/mcp] --> Agent
   CHAT[Assistant chat] --> Agent
 
-  style Agent fill:#ecfdf5,stroke:#22c55e
-  style DB fill:#f0f9ff,stroke:#0ea5e9
+  style Agent fill:#1f1f1f,stroke:#34d399,color:#ebebeb
+  style DB fill:#232323,stroke:#60a5fa,color:#ebebeb
+  style Surface fill:#191919,stroke:#3d3d3d,color:#a3a3a3
+  style Field fill:#191919,stroke:#3d3d3d,color:#a3a3a3
 ```
 
 **OFMS** is one operating picture for regulated farm businesses — production, **traceability**, **compliance** (USDA organic & FDA FSMA workflows), **sales**, and **analytics** on a single **PostgreSQL** model. **OFMS 2.0** adds **Auditable Operations Intelligence**: a native **Farm Agent** that scores batches, forecasts yield, raises alerts, optimizes resources, and **creates tasks** on live data — every tool call logged for diligence. Same platform, **organic microgreens** and **cannabis** demo farms.
@@ -53,7 +50,7 @@ flowchart TB
 | **Product** | Organic Farm Management System (OFMS) |
 | **Company** | **Shared Oxygen, LLC** |
 | **Scale** | **85** App Router pages · **77** API route handlers · **11** agent tools |
-| **Pattern** | Modular monolith — custom TypeScript agent orchestrator (not LangGraph) |
+| **Pattern** | Modular monolith — custom TypeScript agent orchestrator |
 
 ---
 
@@ -61,15 +58,12 @@ flowchart TB
 
 | Capability | What you get |
 | --- | --- |
-| **Unified ops** | Batches → harvest → custody → orders in one DB — no spreadsheet reconciliation at audit time |
-| **Farm Agent** | Multi-step workflow: goal → tool chain → answer; visible in chat (`Workflow:` line) |
-| **Task creation** | Agent `create_task` writes real rows to `tasks` — write-tool classification in `toolClassification.ts` |
-| **Observability** | `AI_AGENT_RUN`, `AI_MCP_TOOL_CALL`, plant scans in `audit_logs` — real counts in `/observability` |
-| **Mobile** | Capacitor iOS/Android + **Plant Vision Scan** in the field (camera → AI health report → optional lot link) |
+| **Unified ops** | Batches → harvest → custody → orders in one database |
+| **Farm Agent** | Multi-step workflow: goal → tool chain → answer |
+| **Task creation** | Agent `create_task` writes operational tasks to the database |
+| **Observability** | `AI_*` inference events in `audit_logs` and `/observability` |
+| **Mobile** | Capacitor iOS/Android and Plant Vision Scan in the field |
 | **MCP** | Streamable HTTP JSON-RPC at `POST /api/mcp` for external agent integrations |
-
-**Buyer narrative:** [AGENTIC_AI_DIFFERENTIATOR](docs/features/AGENTIC_AI_DIFFERENTIATOR.md) · [One-pager](docs/features/AGENT_ONE_PAGER.md) · [Demo flow](docs/features/AGENT_DEMO_FLOW.md)
-
 ---
 
 ## Quick start
@@ -84,7 +78,7 @@ npm run verify:all       # tsc + tests + agent on both farms
 npm run dev              # http://localhost:3005
 ```
 
-**Showcase logins:** `kinkead@curryislandmicrogreens.com` · `jay.cee@sharedoxygen.com` (passwords in your `.env` / seed — never committed)
+**Showcase logins:** `kinkead@curryislandmicrogreens.com` · `jay.cee@sharedoxygen.com`
 
 **5-minute demo:** `⌘K` switch farms → **Mission Control** → **AI Command Center** → Farm Agent *“What should I focus on today?”* → **Traceability → Custody** → **Observability**
 
@@ -148,7 +142,7 @@ flowchart LR
 | `POST /api/mcp` | `initialize` · `tools/list` · `tools/call` |
 | `GET /api/operations` | Operations Center registry |
 
-Agent flow: `classifyGoal()` / LLM planner → `loadFarmContext()` → parallel tools → synthesize → `logInference(AI_AGENT_RUN)`. Code: `src/lib/ai/agent/`.
+Agent flow: `classifyGoal()` → `loadFarmContext()` → tools → synthesize → `logInference(AI_AGENT_RUN)`.
 
 ---
 
@@ -193,7 +187,7 @@ Details: [docs/MOBILE.md](docs/MOBILE.md)
 
 ## Security
 
-Never commit `.env`. Run `npm run security:scan` before release. Showcase passwords via `SHOWCASE_*` and `TEST_*` keys in `.env.example`. History purge: `OFMS_CONFIRM_HISTORY_REWRITE=yes npm run security:purge-history` (destructive — force-push + rotate credentials after).
+Never commit `.env`. Run `npm run security:scan` before release. Showcase passwords use `SHOWCASE_*` and `TEST_*` keys in `.env.example`.
 
 ---
 
